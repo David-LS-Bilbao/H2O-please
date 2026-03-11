@@ -1,50 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/styles.css" type="text/css" />
-    <script src="scripts/main.js" defer></script>
-    <title>H2O Please</title>
+    <title>Aguita App</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <header>
-        <nav>
 
-        </nav>
+    <header class="header-top">
+        <output class="weather-api">API DEL TIEMPO</output>
+        <button class="alarm-icon">:bell:</button>
     </header>
 
-    <main>
-        <div class="main-container">
+    <main class="app-layout">
+        
+        <progress class="side-progress" value="0" min="0" max="100">
+            
+        </progress>
+            
+        <p class="stat-card">HAS BEBIDO</p>
+            <p id="total">ml</p>
+                    
+        <p class="stat-card">3500 ml</p>
+        <p>OBJETIVO DEL DÍA</p>
+            
+        <time id="countdown">45:03</time>
+            <p>CUENTA ATRÁS / SIGUIENTE ALARMA</p>
+            
 
-            <div class="user-options">
-                <div class="user-login">
-                    <form action="" method="post" class="login-form">
-                        <label for="input-name">Usuario:<input type="text"></label>
-                    </form>
-                </div>
-                <div class="register">
-                    <form action="" method="post" class="login-form">
-                        <label for="input-name">Contraseña:<input type="password"></label>
-                    </form>
-                </div>
-            </div>
+        <form class="input-container">
+             <label for="amount">Ingrese la cantidad</label>
+             <input type="number" id="amount" placeholder="200">
+             <button type="button" id="add-btn">+ BEBER</button>
+            </form>
 
-            <section class="content">
-                <h1>H2O Please</h1>
-                <p>Bienvenidos a H2O.</p>
-                <p>Esta es la aplicación de referencia para gestionar sus tomas cotidianas de agua y asegurarnos de que
-                    su
-                    hidratación sea óptima para una vida saludable.</p>
-            </section>
-        </div>
+        
     </main>
 
     <footer>
-
+        <nav class="bottom-navigation">
+        <button>HOY</button>
+        <button>HISTORIAL</button>
+        <button>YO</button>
+    </nav>
     </footer>
-</body>
 
+    
+
+    <script src="script.js"></script>
+</body>
 </html>
