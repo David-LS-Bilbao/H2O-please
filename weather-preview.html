@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/weather-preview.css" type="text/css" />
+    <script src="scripts/config/weatherRuntimeConfig.local.js"></script>
+    <script type="module" src="scripts/features/weather-api/weatherPreviewPage.js"></script>
+    <title>H2O Please | Weather Preview</title>
+</head>
+
+<body>
+    <main class="weather-preview">
+        <section class="weather-card weather-card--compact" aria-live="polite">
+            <div class="weather-card__header">
+                <div>
+                    <p class="weather-card__eyebrow">Clima local</p>
+                    <h1 class="weather-card__title" id="weather-city">Ubicacion actual</h1>
+                </div>
+                <p class="weather-card__status" id="weather-status">Preparando vista previa...</p>
+            </div>
+
+            <div class="weather-card__content">
+                <div class="weather-card__temperature-block">
+                    <p class="weather-card__label">Temperatura</p>
+                    <p class="weather-card__temperature" id="weather-temperature">-- °C</p>
+                </div>
+
+                <div class="weather-card__datetime">
+                    <div>
+                        <p class="weather-card__label">Fecha local</p>
+                        <p class="weather-card__value" id="weather-date">--/--/----</p>
+                    </div>
+                    <div>
+                        <p class="weather-card__label">Hora local</p>
+                        <p class="weather-card__value" id="weather-time">--:--:--</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="weather-card__footer">
+                <p class="weather-card__hint">
+                    Si falta la API key, guarda en consola
+                    <code>localStorage.setItem("H2O_PLEASE_WEATHER_API_KEY", "tu-api-key")</code>
+                    y recarga.
+                </p>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

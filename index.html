@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/styles.css" type="text/css" />
+    <script src="scripts/config/weatherRuntimeConfig.local.js"></script>
     <script src="scripts/main.js" defer></script>
+    <script type="module" src="scripts/pages/indexWeatherDemo.js"></script>
     <title>H2O Please</title>
 </head>
 
@@ -18,6 +20,34 @@
 
     <main>
         <div class="main-container">
+            <!-- Ejemplo de integracion: la UI vive en esta pagina, pero los datos llegan desde scripts/features/weather-api/. -->
+            <section class="weather-card weather-card--compact" aria-live="polite">
+                <div class="weather-card__header">
+                    <div>
+                        <p class="weather-card__eyebrow">Clima local</p>
+                        <h2 id="weather-city">Ubicacion actual</h2>
+                    </div>
+                    <p id="weather-status" class="weather-card__status">Cargando clima...</p>
+                </div>
+
+                <div class="weather-card__content">
+                    <div class="weather-card__temperature-block">
+                        <p class="weather-card__label">Temperatura</p>
+                        <p id="weather-temperature" class="weather-card__temperature">-- °C</p>
+                    </div>
+
+                    <div class="weather-card__datetime">
+                        <div>
+                            <p class="weather-card__label">Fecha local</p>
+                            <p id="weather-date" class="weather-card__value">--/--/----</p>
+                        </div>
+                        <div>
+                            <p class="weather-card__label">Hora local</p>
+                            <p id="weather-time" class="weather-card__value">--:--:--</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <div class="user-options">
                 <div class="user-login">
