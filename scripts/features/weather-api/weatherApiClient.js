@@ -1,5 +1,7 @@
 import { WEATHER_API_BASE_URL, getWeatherApiKey } from "./weatherConfig.js";
 
+// Construye la URL final para consultar el tiempo actual en OpenWeather.
+// La key se obtiene desde el modulo de configuracion para no duplicar logica.
 function buildWeatherForecastUrl({ latitude, longitude, units = "metric", lang = "es" }) {
   const url = new URL(WEATHER_API_BASE_URL);
 
@@ -12,6 +14,8 @@ function buildWeatherForecastUrl({ latitude, longitude, units = "metric", lang =
   return url.toString();
 }
 
+// Ejecuta la peticion HTTP a la API del tiempo y devuelve el JSON crudo.
+// Aqui no se transforma el dato: esa responsabilidad queda en weatherService.js.
 async function fetchWeatherForecast(options) {
   const requestUrl = buildWeatherForecastUrl(options);
   const response = await fetch(requestUrl);
@@ -23,6 +27,8 @@ async function fetchWeatherForecast(options) {
   return response.json();
 }
 
+// Envuelve la geolocalizacion del navegador en una Promise para poder usar async/await.
+// Devuelve solo las coordenadas que necesita la API del clima.
 function getUserLocation(options = {}) {
   const geolocationOptions = {
     enableHighAccuracy: false,

@@ -1,3 +1,5 @@
+// Punto de entrada publico de la feature.
+// Reexporta toda la API para que las paginas importen desde un unico lugar.
 export {
   WEATHER_API_BASE_URL,
   WEATHER_RUNTIME_CONFIG_KEY,

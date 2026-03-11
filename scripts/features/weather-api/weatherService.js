@@ -1,5 +1,7 @@
 import { fetchWeatherForecast, getUserLocation } from "./weatherApiClient.js";
 
+// Convierte la respuesta cruda de la API en un objeto limpio y estable para la UI.
+// Aqui se centraliza la estructura del "snapshot" que consumen las paginas.
 function mapWeatherSnapshot(weatherData, location) {
   const temperatureCelsius = weatherData.main?.temp;
 
@@ -17,6 +19,8 @@ function mapWeatherSnapshot(weatherData, location) {
   };
 }
 
+// Orquesta la obtencion completa del clima local:
+// primero coordenadas del usuario y despues consulta a OpenWeather.
 async function getLocalWeatherSnapshot() {
   const location = await getUserLocation();
   const weatherData = await fetchWeatherForecast(location);
