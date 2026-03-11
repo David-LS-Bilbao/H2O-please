@@ -2,6 +2,95 @@
 
 Esta carpeta contiene solo la capa de consumo de la API del tiempo.
 
+## Diagrama visual
+
+```mermaid
+classDiagram
+direction TB
+
+class WeatherFeatureIndex {
+  <<facade>>
+  +getWeatherApiKey()
+  +getStoredWeatherApiKey()
+  +buildWeatherForecastUrl()
+  +fetchWeatherForecast()
+  +getUserLocation()
+  +getStoredLocalWeatherSnapshot()
+  +saveLocalWeatherSnapshot(snapshot)
+  +clearStoredLocalWeatherSnapshot()
+  +formatTemperature(value)
+  +formatWeatherDate(date)
+  +formatWeatherTime(date)
+  +mapWeatherSnapshot(weatherData, location)
+  +getLocalWeatherSnapshot()
+  +getWeatherStatusIcon(description, date)
+  +getWeatherTimePeriod(date)
+}
+
+class WeatherConfig {
+  <<module>>
+  +getStoredWeatherApiKey()
+  +getWeatherApiKey()
+}
+
+class WeatherApiClient {
+  <<module>>
+  +buildWeatherForecastUrl(coords)
+  +fetchWeatherForecast(options)
+  +getUserLocation(options)
+}
+
+class WeatherCache {
+  <<module>>
+  +saveLocalWeatherSnapshot(snapshot)
+  +getStoredLocalWeatherSnapshot()
+  +clearStoredLocalWeatherSnapshot()
+}
+
+class WeatherFormatters {
+  <<module>>
+  +formatTemperature(value)
+  +formatWeatherDate(date)
+  +formatWeatherTime(date)
+}
+
+class WeatherService {
+  <<module>>
+  +mapWeatherSnapshot(weatherData, location)
+  +getLocalWeatherSnapshot()
+}
+
+class WeatherVisuals {
+  <<module>>
+  +getWeatherStatusIcon(description, date)
+  +getWeatherTimePeriod(date)
+}
+
+class WeatherPreviewPage {
+  <<page-controller>>
+  +initWeatherPreviewPage()
+  +renderLocalDateTime()
+  +renderWeatherCard(snapshot)
+  +renderWeatherError(message)
+  +syncWeatherCard()
+}
+
+WeatherFeatureIndex ..> WeatherConfig : reexporta
+WeatherFeatureIndex ..> WeatherApiClient : reexporta
+WeatherFeatureIndex ..> WeatherCache : reexporta
+WeatherFeatureIndex ..> WeatherFormatters : reexporta
+WeatherFeatureIndex ..> WeatherService : reexporta
+WeatherFeatureIndex ..> WeatherVisuals : reexporta
+
+WeatherApiClient ..> WeatherConfig : usa
+WeatherService ..> WeatherApiClient : consulta API
+WeatherPreviewPage ..> WeatherFeatureIndex : importa API publica
+WeatherPreviewPage ..> WeatherCache : usa cache
+WeatherPreviewPage ..> WeatherFormatters : formatea UI
+WeatherPreviewPage ..> WeatherVisuals : resuelve icono y periodo
+```
+
+
 Objetivo de esta feat:
 - encapsular geolocalizacion
 - encapsular llamada HTTP a OpenWeather
