@@ -11,6 +11,7 @@ Su responsabilidad es:
 - consultar OpenWeather
 - guardar y recuperar cache local
 - exponer utilidades para pintar una card de clima
+- centralizar el render del DOM en un DomManager reutilizable
 
 No intenta cerrar todavia la UI final del dashboard.
 
@@ -25,6 +26,7 @@ No intenta cerrar todavia la UI final del dashboard.
 - Cache local en `localStorage`.
 - Formateadores de temperatura, fecha y hora.
 - Capa visual para decidir icono y estado dia/noche.
+- DomManager compartido para renderizar la card sin duplicar codigo.
 - Pantalla de preview para validar la feature aislada.
 - Integracion de ejemplo en `index.html`.
 - Rediseño de la card con jerarquia visual mejorada y estilo glassmorphism.
@@ -52,6 +54,8 @@ H2O-please/
 │  ├─ features/
 │  │  └─ weather-api/
 │  │     ├─ README.md
+│  │     ├─ dom/
+│  │     │  └─ weatherDomManager.js
 │  │     ├─ index.js
 │  │     ├─ weatherApiClient.js
 │  │     ├─ weatherCache.js
@@ -112,11 +116,12 @@ Funciones disponibles:
 - `formatWeatherTime(date)`
 - `getWeatherStatusIcon(description, date)`
 - `getWeatherTimePeriod(date)`
+- `createWeatherDomManager(root)`
 
 Idea clave:
 - la pagina importa desde `index.js`
-- la pagina pinta la UI
-- la feature se encarga de datos, cache y utilidades
+- la pagina crea el DomManager
+- la feature se encarga de datos, cache, utilidades y render compartido
 
 ---
 
@@ -124,13 +129,14 @@ Idea clave:
 
 1. La pagina carga `weatherRuntimeConfig.local.js`.
 2. El script de la pagina importa la feature desde `scripts/features/weather-api/index.js`.
-3. La pagina intenta leer un snapshot previo desde `localStorage`.
-4. Si existe cache, lo pinta primero para evitar pantalla vacia.
-5. La pagina arranca el reloj local.
-6. La feature pide la ubicacion del usuario.
-7. La feature consulta OpenWeather.
-8. La feature calcula iconografia y periodo visual dia/noche.
-9. La pagina pinta el resultado y guarda el snapshot actualizado.
+3. La pagina crea `createWeatherDomManager()` para reutilizar el pintado.
+4. La pagina intenta leer un snapshot previo desde `localStorage`.
+5. Si existe cache, el DomManager lo pinta primero para evitar pantalla vacia.
+6. El DomManager arranca el reloj local.
+7. La feature pide la ubicacion del usuario.
+8. La feature consulta OpenWeather.
+9. La feature calcula iconografia y periodo visual dia/noche.
+10. La pagina pinta el resultado a traves del DomManager y guarda el snapshot actualizado.
 
 ---
 
@@ -154,11 +160,14 @@ Formatea temperatura, fecha y hora para la interfaz.
 ### `scripts/features/weather-api/weatherVisuals.js`
 Resuelve el icono meteorologico y el modo visual dia/noche para la card.
 
+### `scripts/features/weather-api/dom/weatherDomManager.js`
+Centraliza el acceso al DOM, el reloj local y el render de la card del clima.
+
 ### `scripts/features/weather-api/weatherPreviewPage.js`
-Usa la feature en una pantalla dedicada de preview.
+Usa la feature en una pantalla dedicada de preview y delega el render en el DomManager.
 
 ### `scripts/pages/indexWeatherDemo.js`
-Ejemplo de integracion en una pagina real del proyecto.
+Ejemplo de integracion en una pagina real del proyecto usando el mismo DomManager.
 
 ---
 
@@ -196,6 +205,7 @@ Cuando llegue el momento de llevarlo a `dashboard.html`, el patron recomendado e
 
 La referencia actual para hacerlo es:
 - `weather-preview.html`
+- `scripts/features/weather-api/dom/weatherDomManager.js`
 - `scripts/features/weather-api/weatherPreviewPage.js`
 - `index.html`
 - `scripts/pages/indexWeatherDemo.js`

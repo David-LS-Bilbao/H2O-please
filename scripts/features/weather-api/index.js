@@ -31,3 +31,8 @@ export {
   getWeatherStatusIcon,
   getWeatherTimePeriod,
 } from "./weatherVisuals.js";
+export {
+  getWeatherCardElements,
+  hasWeatherCardElements,
+  createWeatherDomManager,
+} from "./dom/weatherDomManager.js";

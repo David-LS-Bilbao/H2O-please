@@ -66,12 +66,27 @@ class WeatherVisuals {
   +getWeatherTimePeriod(date)
 }
 
+class WeatherDomManager {
+  <<dom-manager>>
+  +getWeatherCardElements(root)
+  +hasWeatherCardElements(elements)
+  +createWeatherDomManager(root)
+  +renderLocalDateTime()
+  +startLocalClock()
+  +stopLocalClock()
+  +renderWeatherCard(snapshot)
+  +renderWeatherError(message)
+}
+
 class WeatherPreviewPage {
   <<page-controller>>
   +initWeatherPreviewPage()
-  +renderLocalDateTime()
-  +renderWeatherCard(snapshot)
-  +renderWeatherError(message)
+  +syncWeatherCard()
+}
+
+class IndexWeatherDemo {
+  <<page-controller>>
+  +initIndexWeatherDemo()
   +syncWeatherCard()
 }
 
@@ -81,13 +96,16 @@ WeatherFeatureIndex ..> WeatherCache : reexporta
 WeatherFeatureIndex ..> WeatherFormatters : reexporta
 WeatherFeatureIndex ..> WeatherService : reexporta
 WeatherFeatureIndex ..> WeatherVisuals : reexporta
+WeatherFeatureIndex ..> WeatherDomManager : reexporta
 
 WeatherApiClient ..> WeatherConfig : usa
 WeatherService ..> WeatherApiClient : consulta API
+WeatherDomManager ..> WeatherFormatters : formatea UI
+WeatherDomManager ..> WeatherVisuals : resuelve icono y periodo
 WeatherPreviewPage ..> WeatherFeatureIndex : importa API publica
-WeatherPreviewPage ..> WeatherCache : usa cache
-WeatherPreviewPage ..> WeatherFormatters : formatea UI
-WeatherPreviewPage ..> WeatherVisuals : resuelve icono y periodo
+WeatherPreviewPage ..> WeatherDomManager : delega render
+IndexWeatherDemo ..> WeatherFeatureIndex : importa API publica
+IndexWeatherDemo ..> WeatherDomManager : delega render
 ```
 
 
@@ -96,6 +114,7 @@ Objetivo de esta feat:
 - encapsular llamada HTTP a OpenWeather
 - encapsular cache local
 - dejar utilidades listas para una futura pantalla con card de clima
+- centralizar el pintado del DOM en un DomManager reutilizable
 - encapsular una capa visual reutilizable para iconos y modo dia/noche
 
 ### API publica
@@ -109,6 +128,7 @@ Objetivo de esta feat:
 - `formatWeatherTime(date)`
 - `getWeatherStatusIcon(description, date)`
 - `getWeatherTimePeriod(date)`
+- `createWeatherDomManager(root)`
 
 ### Configuracion
 
@@ -145,8 +165,9 @@ Cuando se cree la pantalla final de clima, esa pantalla solo tendra que:
 
 1. pedir `getLocalWeatherSnapshot()`
 2. guardar o leer cache local si hace falta
-3. resolver icono y periodo visual
-4. pintar la card con temperatura, clima, fecha y hora local
+3. crear `createWeatherDomManager()`
+4. resolver icono y periodo visual
+5. pintar la card con temperatura, clima, fecha y hora local
 
 ### Estado visual actual
 
@@ -154,6 +175,7 @@ La feature ya tiene una base visual utilizable:
 - card redisenada con mejor jerarquia visual
 - pildora de estado con icono minimalista
 - modo visual dia/noche
+- DomManager compartido para reutilizar el render de la card
 - preview aislada para revisar UI sin tocar el dashboard
 
 La UI se deja fuera de esta feat a proposito para poder unir esta rama a `dev`
