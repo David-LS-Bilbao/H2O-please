@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aguita App</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/styles.css" type="text/css" />
+    <title>H2O Please</title>
 </head>
-<body>
 
+<body>
+   
     <header class="header-top">
         <output class="weather-api">API DEL TIEMPO</output>
-        <button class="alarm-icon">:bell:</button>
+        <button class="alarm-icon">🔔</button>
     </header>
 
     <main class="app-layout">
@@ -19,20 +21,20 @@
             
         </progress>
             
-        <p class="acumulated">HAS BEBIDO</p>
+        <p class="accumulated">HAS BEBIDO</p>
             <p id="total">ml</p>
                     
         <p class="stat-card">3500 ml</p>
         <p>OBJETIVO DEL DÍA</p>
             
-        <time id="countdown">45:03</time>
+        <time id="countdown">00:00</time>
             <p>CUENTA ATRÁS / SIGUIENTE ALARMA</p>
             
 
         <form class="input-container">
              <label for="amount">Ingrese la cantidad</label>
              <input type="number" id="amount" placeholder="200">
-             <button type="button" id="add-btn">+ BEBER</button>
+             <button type="button" class="drink-button" id="add-btn">+ BEBER</button>
             </form>
 
         
@@ -48,6 +50,6 @@
 
     
 
-    <script src="script.js"></script>
+    <script type="module" src="scripts/index.js"></script>
 </body>
 </html>
