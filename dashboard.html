@@ -5,26 +5,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/styles.css" type="text/css" />
-    <script src="scripts/main.js" defer></script>
     <title>H2O Please</title>
 </head>
 
-<body>
-    <header>
-        <nav>
-                 
-        </nav>
-    </header>
+<body data-page="dashboard">
+  <header class="header-top">
+    <output class="weather-api" id="weather-output">API DEL TIEMPO</output>
+    <button class="alarm-icon" id="alarm-button">🔔</button>
+  </header>
 
-    <main>
-        <div class="main-container">
+  <main class="app-layout">
+    <progress class="side-progress" id="progress" value="0" min="0" max="100"></progress>
 
-        </div>
-    </main>
+    <p class="acumulated">HAS BEBIDO</p>
+    <p id="total">0 ml</p>
 
-    <footer>
+    <p class="stat-card" id="daily-target">2300 ml</p>
+    <p>OBJETIVO DEL DÍA</p>
 
-    </footer>
+    <time id="countdown">00:00</time>
+    <p>CUENTA ATRÁS / SIGUIENTE ALARMA</p>
+
+    <form class="input-container" id="drink-form">
+      <label for="amount">Ingrese la cantidad</label>
+      <input type="number" id="amount" placeholder="200">
+      <button type="submit" class="drink-button" id="add-btn">+ BEBER</button>
+    </form>
+  </main>
+
+  <footer>
+    <nav class="bottom-navigation">
+      <button>HOY</button>
+      <button>HISTORIAL</button>
+      <button>YO</button>
+    </nav>
+  </footer>
+
+  <script type="module" src="./scripts/dashboard.js"></script>
 </body>
 
 </html>
