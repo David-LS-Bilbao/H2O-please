@@ -16,7 +16,7 @@ async function syncWeatherCard() {
     weatherDomManager.renderWeatherCard(snapshot);
   } catch (error) {
     weatherDomManager.renderWeatherError(error.message);
-    console.error("No se pudo cargar el clima del index de prueba.", error);
+    console.warn("No se pudo cargar el clima del index de prueba.", error);
   }
 }
 
