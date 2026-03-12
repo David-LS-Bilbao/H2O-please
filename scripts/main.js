@@ -24,11 +24,57 @@ function UnixToTime(input) {
     return hora;
 }
 
+// function getLocation() {
+//     navigator.geolocation.getCurrentPosition((position) => {
+//         return console.table(position.coords.longitude);
+//     });
+// }
+
+function getUserLocation(options = {}) {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error("La geolocalizacion no esta disponible."));
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        resolve({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      (err) => {
+        reject(new Error("No se pudo obtener la ubicacion del usuario: " + err.message));
+      },
+      options
+    );
+  });
+}
+
+const salida = [];
+
+async function init() {
+  try {
+    const { latitude, longitude } = await getUserLocation();
+    salida.push(latitude, longitude);
+    console.log("Salida:", salida);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+init();
+
 // when the document is loaded
 document.addEventListener('DOMContentLoaded', function () {
 
     const maindiv = document.querySelector('.main-container');
-    maindiv.innerHTML = `<h1>H2O Please!</h1><div class="accumulated">${userConsomation.username} ha bebido ${userConsomation.waterConsumed}ml.</div><div class="objective">Su objetivo personal es ${userConsomation.consumptionTarget}ml</div><div class="next-alarm"> ${userConsomation.nextAlarm ? `Siguiente alarma en ${userConsomation.nextAlarm}` : "no hay primera toma"}</div><button class="drink">Beber</button>`
+    maindiv.innerHTML = `<h1>H2O Please!</h1>
+    <div class="objective">Su objetivo personal es ${userConsomation.consumptionTarget}ml</div>
+    <div class="accumulated">${userConsomation.username} ha bebido ${userConsomation.waterConsumed}ml.</div>
+    <div class="next-alarm"> ${userConsomation.nextAlarm ? `Siguiente alarma en ${userConsomation.nextAlarm}` : "No hay primera toma registrada."}</div>
+    <button class="drink">Beber</button>`
 
     const button = document.querySelector(".drink");
     if (button) {
@@ -42,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(userConsomation)
         };
     }
-
+})
     /* reloj normal actualización cada segundo
     const hora = document.querySelector('.next-alarm');
 
@@ -52,4 +98,3 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     setInterval(updateTime, 1000)
     */
-})
