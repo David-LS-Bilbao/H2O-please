@@ -19,6 +19,53 @@ const WEATHER_CARD_SELECTORS = {
   time: "#weather-time",
 };
 
+// Plantilla HTML reutilizable de la card para poder insertarla desde JS.
+const WEATHER_CARD_MARKUP = `
+  <section class="weather-card weather-card--compact" aria-live="polite">
+    <div class="weather-card__header">
+      <div>
+        <p class="weather-card__eyebrow">Clima local</p>
+        <h2 id="weather-city">Ubicacion actual</h2>
+      </div>
+      <p id="weather-status" class="weather-card__status">Cargando clima...</p>
+    </div>
+
+    <div class="weather-card__content">
+      <div class="weather-card__temperature-block">
+        <p class="weather-card__label">Temperatura</p>
+        <p id="weather-temperature" class="weather-card__temperature">-- °C</p>
+      </div>
+
+      <div class="weather-card__datetime">
+        <div>
+          <p class="weather-card__label">Fecha local</p>
+          <p id="weather-date" class="weather-card__value">--/--/----</p>
+        </div>
+        <div>
+          <p class="weather-card__label">Hora local</p>
+          <p id="weather-time" class="weather-card__value">--:--:--</p>
+        </div>
+      </div>
+    </div>
+  </section>
+`;
+
+// Inserta la card del clima en el contenedor que indique la pagina.
+export function mountWeatherCard(targetElement, position = "afterbegin") {
+  if (!targetElement) {
+    return null;
+  }
+
+  const existingCard = document.querySelector(WEATHER_CARD_SELECTORS.card);
+
+  if (existingCard) {
+    return existingCard;
+  }
+
+  targetElement.insertAdjacentHTML(position, WEATHER_CARD_MARKUP.trim());
+  return document.querySelector(WEATHER_CARD_SELECTORS.card);
+}
+
 // Devuelve las referencias del DOM que la feature necesita para pintar la card.
 export function getWeatherCardElements(root = document) {
   return {

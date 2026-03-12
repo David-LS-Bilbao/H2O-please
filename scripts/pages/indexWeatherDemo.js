@@ -2,25 +2,38 @@ import {
   createWeatherDomManager,
   getLocalWeatherSnapshot,
   getStoredLocalWeatherSnapshot,
+  mountWeatherCard,
   saveLocalWeatherSnapshot,
 } from "../features/weather-api/index.js";
 
-// Ejemplo real de integracion: la pagina usa el DomManager compartido y deja la
-// logica de render de la card dentro de la propia feature.
-const weatherDomManager = createWeatherDomManager();
-
-async function syncWeatherCard() {
+// funcion asincrona que sincroniza la card del clima.
+async function syncWeatherCard(weatherDomManager) {
   try {
     const snapshot = await getLocalWeatherSnapshot();
     saveLocalWeatherSnapshot(snapshot);
     weatherDomManager.renderWeatherCard(snapshot);
   } catch (error) {
     weatherDomManager.renderWeatherError(error.message);
-    console.error("No se pudo cargar el clima del index de prueba.", error);
+    console.error("No se pudo cargar el clima.", error);
   }
 }
 
 function initIndexWeatherDemo() {
+  // En esta pagina la card no vive en el HTML. Se monta desde la feature para
+  // simular una integracion tipo import desde un archivo propio.
+  const weatherMountTarget =
+    document.querySelector(".header-top") ?? document.querySelector(".app-layout");
+
+  if (!weatherMountTarget) {
+    return;
+  }
+
+  mountWeatherCard(weatherMountTarget, "afterend");
+
+  // Ejemplo real de integracion: la pagina usa el DomManager compartido y deja la
+  // logica de render de la card dentro de la propia feature.
+  const weatherDomManager = createWeatherDomManager();
+
   if (!weatherDomManager.hasRequiredElements) {
     return;
   }
@@ -34,7 +47,7 @@ function initIndexWeatherDemo() {
   }
 
   weatherDomManager.startLocalClock();
-  syncWeatherCard();
+  syncWeatherCard(weatherDomManager);
 }
 
 initIndexWeatherDemo();
