@@ -1,14 +1,19 @@
 // Punto de entrada publico de la feature.
 // Reexporta toda la API para que las paginas importen desde un unico lugar.
 export {
+  OPEN_METEO_API_BASE_URL,
+  REVERSE_GEOCODE_API_BASE_URL,
   WEATHER_API_BASE_URL,
   WEATHER_RUNTIME_CONFIG_KEY,
   WEATHER_STORAGE_CONFIG_KEY,
+  getOptionalWeatherApiKey,
+  hasWeatherApiKey,
   getStoredWeatherApiKey,
   getWeatherApiKey,
 } from "./weatherConfig.js";
 export {
   buildWeatherForecastUrl,
+  fetchLocationDetails,
   fetchWeatherForecast,
   getUserLocation,
 } from "./weatherApiClient.js";

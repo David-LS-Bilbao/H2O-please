@@ -15,6 +15,18 @@ async function syncWeatherCard() {
     saveLocalWeatherSnapshot(snapshot);
     weatherDomManager.renderWeatherCard(snapshot);
   } catch (error) {
+    const storedSnapshot = getStoredLocalWeatherSnapshot();
+
+    if (storedSnapshot) {
+      weatherDomManager.renderWeatherCard(storedSnapshot);
+      weatherDomManager.renderWeatherRefreshWarning(error.message);
+      console.warn(
+        "No se pudo refrescar el clima del index de prueba. Se muestra el ultimo dato guardado.",
+        error
+      );
+      return;
+    }
+
     weatherDomManager.renderWeatherError(error.message);
     console.warn("No se pudo cargar el clima del index de prueba.", error);
   }
