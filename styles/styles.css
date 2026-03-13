@@ -58,7 +58,7 @@ main.app-layout {
 
     div {
         display: flex;
-        flex-direction: column-reverse;
+
 
         .side-progress {
             width: 2rem;
@@ -66,7 +66,20 @@ main.app-layout {
             margin: 0.5rem 1rem;
             border-radius: 1rem;
             background: var(--primary-color);
+            writing-mode: vertical-lr;
+            direction: rtl;
         }
+
+        .side-progress::-webkit-progress-bar {
+            background: #eee;
+            border-radius: 1rem;
+        }
+
+        .side-progress::-webkit-progress-value {
+            background: var(--primary-color);
+            border-radius: 1rem;
+        }
+
     }
 
     section {
@@ -85,7 +98,8 @@ main.app-layout {
         }
 
         h3 {
-            letter-spacing: 0.05rem;;
+            letter-spacing: 0.05rem;
+            ;
         }
 
         #daily-target,
