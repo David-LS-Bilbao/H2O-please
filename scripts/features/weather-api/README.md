@@ -111,7 +111,7 @@ IndexWeatherDemo ..> WeatherDomManager : delega render
 
 Objetivo de esta feat:
 - encapsular geolocalizacion
-- encapsular llamada HTTP a OpenWeather
+- encapsular llamada HTTP al proveedor del clima
 - encapsular cache local
 - dejar utilidades listas para una futura pantalla con card de clima
 - centralizar el pintado del DOM en un DomManager reutilizable
@@ -132,7 +132,8 @@ Objetivo de esta feat:
 
 ### Configuracion
 
-Antes de usar esta feature, define la key en runtime:
+La feature funciona sin key usando un fallback automatico con Open-Meteo.
+Si quieres forzar OpenWeather, define la key en runtime:
 
 ```html
 <script>
@@ -158,6 +159,8 @@ En pantallas que usen el clima, carga antes este script:
 ```html
 <script src="scripts/config/weatherRuntimeConfig.local.js"></script>
 ```
+
+Si ese archivo no define ninguna key, la card seguira funcionando con el fallback.
 
 ### Integracion futura
 

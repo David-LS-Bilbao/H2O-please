@@ -13,8 +13,20 @@ async function syncWeatherCard(weatherDomManager) {
     saveLocalWeatherSnapshot(snapshot);
     weatherDomManager.renderWeatherCard(snapshot);
   } catch (error) {
+    const storedSnapshot = getStoredLocalWeatherSnapshot();
+
+    if (storedSnapshot) {
+      weatherDomManager.renderWeatherCard(storedSnapshot);
+      weatherDomManager.renderWeatherRefreshWarning(error.message);
+      console.warn(
+        "No se pudo refrescar el clima del index de prueba. Se muestra el ultimo dato guardado.",
+        error
+      );
+      return;
+    }
+
     weatherDomManager.renderWeatherError(error.message);
-    console.error("No se pudo cargar el clima.", error);
+    console.error("No se pudo cargar el clima del index de prueba.", error);
   }
 }
 
@@ -28,7 +40,11 @@ function initIndexWeatherDemo() {
     return;
   }
 
-  mountWeatherCard(weatherMountTarget, "afterend");
+  const weatherCard = mountWeatherCard(weatherMountTarget, "afterend");
+
+  if (weatherCard) {
+    weatherCard.classList.add("dashboard-weather-card");
+  }
 
   // Ejemplo real de integracion: la pagina usa el DomManager compartido y deja la
   // logica de render de la card dentro de la propia feature.

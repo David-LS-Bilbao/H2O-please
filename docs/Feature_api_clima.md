@@ -8,7 +8,7 @@ en `dev` y `main`, sin acoplarla todavia a una pantalla definitiva.
 Su responsabilidad es:
 - leer la API key desde una configuracion local
 - obtener la ubicacion del usuario
-- consultar OpenWeather
+- consultar un proveedor del clima
 - guardar y recuperar cache local
 - exponer utilidades para pintar una card de clima
 - centralizar el render del DOM en un DomManager reutilizable
@@ -20,9 +20,9 @@ No intenta cerrar todavia la UI final del dashboard.
 ## 2. Alcance actual
 
 ### Incluido
-- Configuracion local para la API key.
+- Configuracion local opcional para la API key.
 - Servicio de geolocalizacion del navegador.
-- Cliente HTTP para OpenWeather.
+- Cliente HTTP para OpenWeather con fallback automatico a Open-Meteo.
 - Cache local en `localStorage`.
 - Formateadores de temperatura, fecha y hora.
 - Capa visual para decidir icono y estado dia/noche.
@@ -76,6 +76,7 @@ H2O-please/
 ## 4. Punto unico de configuracion
 
 La key real no debe viajar en Git.
+Ahora es opcional: si no existe, la feature usa el fallback automatico.
 
 Para eso se usa:
 - `scripts/config/weatherRuntimeConfig.example.js` como plantilla trackeada
@@ -134,7 +135,7 @@ Idea clave:
 5. Si existe cache, el DomManager lo pinta primero para evitar pantalla vacia.
 6. El DomManager arranca el reloj local.
 7. La feature pide la ubicacion del usuario.
-8. La feature consulta OpenWeather.
+8. La feature consulta OpenWeather si hay key y, si no, usa Open-Meteo.
 9. La feature calcula iconografia y periodo visual dia/noche.
 10. La pagina pinta el resultado a traves del DomManager y guarda el snapshot actualizado.
 
@@ -146,7 +147,7 @@ Idea clave:
 Lee la configuracion de la API key desde `window` o `localStorage`.
 
 ### `scripts/features/weather-api/weatherApiClient.js`
-Construye la URL y hace la peticion HTTP a OpenWeather.
+Construye la URL y hace la peticion HTTP al proveedor activo del clima.
 
 ### `scripts/features/weather-api/weatherService.js`
 Compone la llamada completa y devuelve un snapshot util para la UI.
@@ -190,6 +191,7 @@ Que deberia ocurrir:
 - la condicion aparecera en una pildora con icono
 - la card cambiara ligeramente segun franja horaria
 - el snapshot se guardara en `localStorage`
+- si no hay key local, seguira funcionando con el fallback automatico
 
 ---
 

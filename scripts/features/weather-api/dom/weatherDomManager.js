@@ -88,20 +88,55 @@ export function hasWeatherCardElements(elements) {
 export function createWeatherDomManager(root = document) {
   const elements = getWeatherCardElements(root);
   let currentWeatherDescription = "";
+  let currentTimeZone = null;
+  let currentTimeZoneOffsetSeconds = null;
   let localClockTimerId = null;
+
+  function getLocalDateTimeContext(baseDate = new Date()) {
+    if (typeof currentTimeZone === "string" && currentTimeZone.trim() !== "") {
+      return {
+        date: baseDate,
+        timeZone: currentTimeZone,
+      };
+    }
+
+    if (typeof currentTimeZoneOffsetSeconds === "number") {
+      return {
+        date: new Date(baseDate.getTime() + currentTimeZoneOffsetSeconds * 1000),
+        useUtc: true,
+      };
+    }
+
+    return {
+      date: baseDate,
+    };
+  }
 
   function renderLocalDateTime() {
     if (!hasWeatherCardElements(elements)) {
       return;
     }
 
-    const now = new Date();
-    elements.card.dataset.period = getWeatherTimePeriod(now);
-    elements.date.textContent = formatWeatherDate(now);
-    elements.time.textContent = formatWeatherTime(now);
+    const dateTimeContext = getLocalDateTimeContext();
+    elements.card.dataset.period = getWeatherTimePeriod(
+      dateTimeContext.date,
+      dateTimeContext
+    );
+    elements.date.textContent = formatWeatherDate(
+      dateTimeContext.date,
+      dateTimeContext
+    );
+    elements.time.textContent = formatWeatherTime(
+      dateTimeContext.date,
+      dateTimeContext
+    );
 
     if (currentWeatherDescription) {
-      elements.status.dataset.icon = getWeatherStatusIcon(currentWeatherDescription, now);
+      elements.status.dataset.icon = getWeatherStatusIcon(
+        currentWeatherDescription,
+        dateTimeContext.date,
+        dateTimeContext
+      );
     }
   }
 
@@ -135,10 +170,31 @@ export function createWeatherDomManager(root = document) {
     }
 
     currentWeatherDescription = snapshot.weatherDescription ?? "";
+    currentTimeZone =
+      typeof snapshot.timezone === "string" && snapshot.timezone.trim() !== ""
+        ? snapshot.timezone
+        : null;
+    currentTimeZoneOffsetSeconds =
+      typeof snapshot.timezoneOffsetSeconds === "number"
+        ? snapshot.timezoneOffsetSeconds
+        : null;
     elements.city.textContent = snapshot.city ?? "Ubicacion actual";
     elements.status.textContent = snapshot.weatherDescription ?? "Clima actual";
-    elements.status.dataset.icon = getWeatherStatusIcon(currentWeatherDescription, new Date());
     elements.temperature.textContent = formatTemperature(snapshot.temperatureCelsius);
+    renderLocalDateTime();
+  }
+
+  function renderWeatherRefreshWarning(message) {
+    if (!hasWeatherCardElements(elements)) {
+      return;
+    }
+
+    const warningMessage =
+      typeof message === "string" && message.trim() !== ""
+        ? `Ultimo dato guardado. ${message.trim()}`
+        : "Ultimo dato guardado. No se pudo actualizar el clima.";
+
+    elements.status.textContent = warningMessage;
   }
 
   function renderWeatherError(message) {
@@ -159,6 +215,7 @@ export function createWeatherDomManager(root = document) {
     startLocalClock,
     stopLocalClock,
     renderWeatherCard,
+    renderWeatherRefreshWarning,
     renderWeatherError,
   };
 }
