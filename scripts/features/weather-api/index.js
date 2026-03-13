@@ -32,6 +32,7 @@ export {
   getWeatherTimePeriod,
 } from "./weatherVisuals.js";
 export {
+  mountWeatherCard,
   getWeatherCardElements,
   hasWeatherCardElements,
   createWeatherDomManager,
