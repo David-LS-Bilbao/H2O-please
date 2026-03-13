@@ -4,56 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aguita App</title>
     <link rel="stylesheet" href="styles/styles.css" type="text/css" />
+    <title>H2O Please</title>
 </head>
 
-<body>
+<body data-page="login">
+  <main class="login-layout">
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Usuario" required />
+      <button type="submit">Entrar</button>
+    </form>
 
-    <header class="header-top">
-        <output class="weather-api">API DEL TIEMPO</output>
-        <button class="alarm-icon" type="button">:bell:</button>
-    </header>
-    <!-- La card del clima se inserta desde scripts/pages/indexWeatherDemo.
-     js justo debajo de este header. -->
+    <form id="register-form">
+      <input type="text" id="new-username" placeholder="Nuevo usuario" required />
+      <button type="submit">Registrarse</button>
+    </form>
+  </main>
 
-    <main class="app-layout">
-
-        <progress class="side-progress" value="0" min="0" max="100">
-
-        </progress>
-
-        <p class="stat-card">HAS BEBIDO</p>
-        <p id="total">ml</p>
-
-        <p class="stat-card">3500 ml</p>
-        <p>OBJETIVO DEL DÍA</p>
-
-        <time id="countdown">45:03</time>
-        <p>CUENTA ATRÁS / SIGUIENTE ALARMA</p>
-
-
-        <form class="input-container">
-            <label for="amount">Ingrese la cantidad</label>
-            <input type="number" id="amount" placeholder="200">
-            <button type="button" id="add-btn">+ BEBER</button>
-        </form>
-
-
-    </main>
-
-    <footer>
-        <nav class="bottom-navigation">
-            <button>HOY</button>
-            <button>HISTORIAL</button>
-            <button>YO</button>
-        </nav>
-    </footer>
-
-    <script src="scripts/config/weatherRuntimeConfig.local.js"></script>
-    <script src="scripts/main.js"></script>
-    <script type="module" src="scripts/pages/indexWeatherDemo.js"></script>
-    
+  <script type="module" src="scripts/index.js"></script>
 </body>
 
 </html>
