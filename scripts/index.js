@@ -22,8 +22,11 @@ function initLoginPage() {
       const username = document.querySelector("#new-username").value.trim();
       if (!username) return;
 
-      register(username);
-      window.location.href = "dashboard.html";
+      try {register(username);
+      window.location.href = "dashboard.html";}
+      catch{
+        
+      }
     });
   }
 }

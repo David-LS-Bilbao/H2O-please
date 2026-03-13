@@ -1,468 +1,176 @@
-/* Base general de la pagina: reset minimo, tipografia y fondo del proyecto. */
+/* ==================== IMPORTED FONTS ==================== */
+@font-face {
+    font-family: 'Poppins-Medium';
+    src: url('../assets/fonts/poppins-medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins-Bold';
+    src: url('../assets/fonts/poppins-bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ==================== VARIABLES ==================== */
+:root {
+    --primary-color: #0476ae;
+    --primary-font: 'Poppins-Medium', sans-serif;
+    --primary-font-bold: 'Poppins-Bold', sans-serif;
+
+}
+
+/* ==================== GENERAL STYLES ==================== */
+* {
+    box-sizing: border-box;
+}
+
+html,
 body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background:
-    radial-gradient(circle at top left, rgba(88, 164, 176, 0.25), transparent 30%),
-    linear-gradient(180deg, #eef8fb 0%, #dfeef4 100%);
-  color: #13323a;
+    margin: 0;
+    padding: 0;
+    font-family: var(--primary-font);
 }
 
-/* Contenedor principal de la vista, con altura completa y espaciado exterior. */
-main {
-  min-height: 100vh;
-  padding: 32px 16px 48px;
+
+body {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
 }
 
-/* Columna central que organiza los bloques del index de prueba. */
-.main-container {
-  width: min(960px, 100%);
-  min-height: calc(100vh - 80px);
-  margin: 0 auto;
-  display: grid;
-  gap: 24px;
+header {
+    position: sticky;
+    top: 0;
+    padding: 1rem;
 }
 
-/* Fila flexible para los bloques simples de acceso del ejemplo. */
-.user-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+main.app-layout {
+    display: flex;
+
+    h1,
+    h2 {
+        display: none;
+    }
+
+    div {
+        display: flex;
+
+
+        .side-progress {
+            width: 2rem;
+            height: calc(100% - 1rem);
+            margin: 0.5rem 1rem;
+            border-radius: 1rem;
+            background: var(--primary-color);
+            writing-mode: vertical-lr;
+            direction: rtl;
+        }
+
+        .side-progress::-webkit-progress-bar {
+            background: #eee;
+            border-radius: 1rem;
+        }
+
+        .side-progress::-webkit-progress-value {
+            background: var(--primary-color);
+            border-radius: 1rem;
+        }
+
+    }
+
+    section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 0.5rem;
+
+        .weather-api {
+            /* MODIFICAR TAMAÑO DE API CUANDO SE TENGA LA CARD DEFINITIVA */
+            width: 100%;
+            height: 7rem;
+            background-color: #58b5e3;
+            border-radius: 2rem;
+        }
+
+        h3 {
+            letter-spacing: 0.05rem;
+            ;
+        }
+
+        #daily-target,
+        #total {
+            font-size: 4rem;
+            font-family: var(--primary-font-bold);
+            margin: 0;
+            color: var(--primary-color);
+        }
+    }
 }
 
-/* Tarjetas base para login, registro y contenido introductorio. */
-.user-login,
-.register,
-.content {
-  padding: 20px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 12px 30px rgba(19, 50, 58, 0.08);
-  backdrop-filter: blur(8px);
+footer {
+    position: sticky;
+    bottom: 0;
+
+    nav {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-top: 0.1rem solid var(--primary-color);
+
+        button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 0.5rem 0.5rem 0 0.5rem;
+            border: 0;
+            background: white;
+            cursor: pointer;
+
+            svg {
+                width: 2.3rem;
+                height: auto;
+                fill: var(--primary-color);
+            }
+
+            p {
+                font-weight: 700;
+                color: var(--primary-color);
+            }
+        }
+
+        button:nth-of-type(1),
+        button:nth-of-type(2) {
+            border-right: 0.1rem solid var(--primary-color);
+
+        }
+
+        button:nth-of-type(1) {
+            svg {
+                transform: scale(1.2);
+            }
+        }
+    }
 }
 
-/* Ajuste de separacion entre la etiqueta y el campo de formulario. */
-.login-form input {
-  margin-left: 8px;
-}
-
-/* Evita espacio superior sobrante en el titulo del bloque de contenido. */
-.content h1 {
-  margin-top: 0;
-}
-
-/* Card principal del clima: contenedor visual con degradado, borde y profundidad. */
 .weather-card {
-  position: relative;
-  padding: 24px;
-  border-radius: 24px;
-  overflow: hidden;
-  isolation: isolate;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background:
-    radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.18), transparent 24%),
-    linear-gradient(155deg, #0a5b69 0%, #0f7a8d 45%, #1eb3cf 100%);
-  color: #f5fcff;
-  box-shadow:
-    0 20px 44px rgba(8, 53, 61, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
-}
-
-/* Variante nocturna con fondo algo mas profundo para acompanar el icono de luna. */
-.weather-card[data-period="night"] {
-  background:
-    radial-gradient(circle at 18% 18%, rgba(201, 225, 255, 0.12), transparent 24%),
-    linear-gradient(155deg, #083649 0%, #0c5370 44%, #177ca1 100%);
-}
-
-/* Capa decorativa inferior con formas suaves tipo nubes para dar atmosfera. */
-.weather-card::before {
-  content: "";
-  position: absolute;
-  inset: auto -8% -18% 36%;
-  height: 58%;
-  background:
-    radial-gradient(circle at 18% 56%, rgba(255, 255, 255, 0.16) 0 18%, transparent 19%),
-    radial-gradient(circle at 30% 46%, rgba(255, 255, 255, 0.14) 0 16%, transparent 17%),
-    radial-gradient(circle at 42% 58%, rgba(255, 255, 255, 0.1) 0 18%, transparent 19%),
-    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.13) 0 15%, transparent 16%),
-    radial-gradient(circle at 90% 62%, rgba(255, 255, 255, 0.1) 0 13%, transparent 14%);
-  filter: blur(6px);
-  opacity: 0.95;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Capa decorativa superior con brillo tipo sol para enriquecer la card. */
-.weather-card::after {
-  content: "";
-  position: absolute;
-  top: -58px;
-  right: -26px;
-  width: 170px;
-  height: 170px;
-  background: radial-gradient(
-    circle,
-    rgba(255, 245, 196, 0.7) 0 16%,
-    rgba(255, 214, 120, 0.34) 17%,
-    rgba(255, 255, 255, 0.08) 36%,
-    transparent 62%
-  );
-  filter: blur(2px);
-  opacity: 0.95;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* En modo nocturno el brillo se enfria para sugerir una luz lunar. */
-.weather-card[data-period="night"]::after {
-  background: radial-gradient(
-    circle,
-    rgba(234, 244, 255, 0.66) 0 14%,
-    rgba(182, 214, 255, 0.22) 15%,
-    rgba(255, 255, 255, 0.06) 36%,
-    transparent 60%
-  );
-}
-
-/* Mantiene el contenido real por encima de las capas decorativas. */
-.weather-card > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* Variante compacta usada en movil y en demos donde la card debe ocupar menos alto. */
-.weather-card--compact {
-  min-height: 0;
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-/* Reduce separacion del encabezado dentro de la variante compacta. */
-.weather-card--compact .weather-card__header {
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-/* Ajusta el texto auxiliar de la variante compacta para ahorrar altura. */
-.weather-card--compact .weather-card__eyebrow,
-.weather-card--compact .weather-card__label {
-  margin: 0 0 4px;
-  font-size: 0.72rem;
-}
-
-/* Escala del titulo en la version compacta. */
-.weather-card--compact h2 {
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
-}
-
-/* Ajuste fino del texto de estado en la version compacta. */
-.weather-card--compact .weather-card__status {
-  font-size: 0.85rem;
-}
-
-/* Reduce el espacio interno entre bloques cuando la card va compacta. */
-.weather-card--compact .weather-card__content {
-  gap: 16px;
-  align-items: center;
-}
-
-/* Temperatura mas contenida para no disparar la altura del componente compacto. */
-.weather-card--compact .weather-card__temperature {
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-}
-
-/* Bloque de fecha y hora algo mas estrecho en la variante compacta. */
-.weather-card--compact .weather-card__datetime {
-  gap: 10px;
-  min-width: 180px;
-}
-
-/* Valores secundarios ligeramente menores en la card compacta. */
-.weather-card--compact .weather-card__value {
-  font-size: 0.9rem;
-}
-
-/* Encabezado general de la card con distribucion entre ubicacion y estado. */
-.weather-card__header {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: flex-start;
-  margin-bottom: 20px;
-}
-
-/* Estilo comun para etiquetas pequenas de contexto dentro de la card. */
-.weather-card__eyebrow,
-.weather-card__label {
-  margin: 0 0 8px;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  opacity: 0.8;
-}
-
-/* Titulo principal de la ubicacion dentro de la card. */
-.weather-card h2 {
-  margin: 0;
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
-}
-
-/* Pildora del estado meteorologico actual. */
-.weather-card__status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  margin: 0;
-  padding: 0.5rem 0.8rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.1));
-  backdrop-filter: blur(12px);
-  text-align: right;
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
-}
-
-/* Icono minimalista del estado meteorologico, controlado por data attributes desde JS. */
-.weather-card__status::before {
-  content: "•";
-  flex: 0 0 auto;
-  font-size: 1rem;
-  line-height: 1;
-  color: #ffe18c;
-  text-shadow: 0 0 18px rgba(255, 225, 140, 0.22);
-}
-
-.weather-card__status[data-icon="sun"]::before {
-  content: "☼";
-}
-
-.weather-card__status[data-icon="moon"]::before {
-  content: "☾";
-  color: #dcecff;
-  text-shadow: 0 0 18px rgba(220, 236, 255, 0.24);
-}
-
-.weather-card__status[data-icon="cloud"]::before {
-  content: "☁";
-  color: #f2fbff;
-  text-shadow: none;
-}
-
-.weather-card__status[data-icon="rain"]::before {
-  content: "☂";
-  color: #d2f2ff;
-  text-shadow: none;
-}
-
-.weather-card__status[data-icon="storm"]::before {
-  content: "ϟ";
-  color: #ffe6a3;
-  text-shadow: 0 0 16px rgba(255, 230, 163, 0.22);
-}
-
-.weather-card__status[data-icon="snow"]::before {
-  content: "✦";
-  color: #f2fbff;
-  text-shadow: 0 0 14px rgba(242, 251, 255, 0.2);
-}
-
-.weather-card__status[data-icon="mist"]::before {
-  content: "≋";
-  color: #edf9ff;
-  text-shadow: none;
-}
-
-.weather-card__status[data-icon="error"]::before {
-  content: "!";
-  color: #ffe2a3;
-  text-shadow: none;
-}
-
-/* Zona principal con temperatura y bloque de fecha/hora. */
-.weather-card__content {
-  display: grid;
-  gap: 14px;
-  align-items: end;
-}
-
-/* Tarjeta interna que resalta el dato de temperatura. */
-.weather-card__temperature-block {
-  display: grid;
-  gap: 0.35rem;
-  justify-items: end;
-  align-content: center;
-  width: min(100%, 260px);
-  margin-left: auto;
-  padding: 14px 16px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
-  backdrop-filter: blur(12px);
-}
-
-/* Valor grande de temperatura destacado visualmente. */
-.weather-card__temperature {
-  margin: 0;
-  font-size: clamp(2.8rem, 8vw, 4.8rem);
-  font-weight: 700;
-  line-height: 1;
-}
-
-/* Columna de informacion temporal con fecha y hora local. */
-.weather-card__datetime {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0;
-  padding: 10px 12px;
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
-  backdrop-filter: blur(10px);
-}
-
-/* Cada bloque temporal se organiza como un mini grupo de etiqueta + valor. */
-.weather-card__datetime > div {
-  display: grid;
-  gap: 0.28rem;
-}
-
-/* Separador vertical para diferenciar fecha y hora sin cargar el layout. */
-.weather-card__datetime > div + div {
-  padding-left: 12px;
-  border-left: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-/* Valor visible de fecha u hora dentro del bloque temporal. */
-.weather-card__value {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-/* Adaptaciones responsive para movil: contenedor flexible y card compacta. */
-@media (max-width: 768px) {
-  /* En movil el contenedor ya no necesita forzar altura minima. */
-  .main-container {
-    min-height: auto;
-  }
-
-  /* Los bloques principales se apilan verticalmente en pantallas estrechas. */
-  .weather-card__header,
-  .weather-card__content,
-  .user-options {
-    flex-direction: column;
-  }
-
-  /* La version compacta fija una altura visual corta para la card en movil. */
-  .weather-card--compact {
-    min-height: 25vh;
-    padding: 10px 12px;
+    position: relative;
+    padding: 24px;
+    border-radius: 24px;
     overflow: hidden;
-  }
-
-  /* El bloque temporal pasa a ocupar todo el ancho disponible. */
-  .weather-card--compact .weather-card__datetime {
-    min-width: auto;
-    width: 100%;
-  }
-
-  /* El encabezado compacto se reorganiza en dos columnas para ahorrar alto. */
-  .weather-card--compact .weather-card__header {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px 12px;
-    margin-bottom: 8px;
-    align-items: start;
-  }
-
-  /* Etiquetas auxiliares aun mas pequenas en movil compacto. */
-  .weather-card--compact .weather-card__eyebrow,
-  .weather-card--compact .weather-card__label {
-    font-size: 0.62rem;
-    margin-bottom: 2px;
-  }
-
-  /* Titulo ligeramente mayor para mantener legibilidad en movil. */
-  .weather-card--compact h2 {
-    font-size: 1.08rem;
-  }
-
-  /* Pildora de estado adaptada al espacio horizontal de movil. */
-  .weather-card--compact .weather-card__status {
-    padding: 0.28rem 0.48rem;
-    font-size: 0.8rem;
-    line-height: 1.2;
-    text-align: right;
-  }
-
-  /* Cuerpo compacto en dos columnas: datos temporales y temperatura. */
-  .weather-card--compact .weather-card__content {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px 12px;
-    align-items: center;
-  }
-
-  /* Coloca el bloque de temperatura en la columna derecha del layout compacto. */
-  .weather-card--compact .weather-card__temperature-block {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    padding: 8px 10px;
-    text-align: right;
-    align-self: center;
-  }
-
-  /* Aumenta legibilidad de la temperatura sin romper la altura total. */
-  .weather-card--compact .weather-card__temperature {
-    font-size: 1.85rem;
-  }
-
-  /* Fecha y hora quedan agrupadas en la columna izquierda del layout compacto. */
-  .weather-card--compact .weather-card__datetime {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    grid-template-columns: 1fr;
-    gap: 6px;
-    padding: 8px 10px;
-  }
-
-  /* Valores de fecha y hora con tamaño equilibrado para movil. */
-  .weather-card--compact .weather-card__value {
-    font-size: 0.9rem;
-    line-height: 1.2;
-  }
-
-  /* En la card compacta movil el separador vertical deja paso a una pila limpia. */
-  .weather-card--compact .weather-card__datetime > div + div {
-    padding-left: 0;
-    padding-top: 6px;
-    border-left: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-  }
-
-  /* En el layout general movil, el estado pasa a alinearse a la izquierda. */
-  .weather-card__status {
-    text-align: left;
-  }
-
-  /* El bloque temporal general puede ocupar todo el ancho en pequeno formato. */
-  .weather-card__datetime {
-    min-width: auto;
-    width: 100%;
-  }
-}
-
-.history-entry {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(19, 50, 58, 0.12);
+    isolation: isolate;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background:
+        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.18), transparent 24%),
+        linear-gradient(155deg, #0a5b69 0%, #0f7a8d 45%, #1eb3cf 100%);
+    color: #f5fcff;
+    box-shadow:
+        0 20px 44px rgba(8, 53, 61, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
