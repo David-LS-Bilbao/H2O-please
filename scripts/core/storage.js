@@ -22,6 +22,12 @@ export function loadUser(username) {
   return new UserConsumption(username, data);
 }
 
+export function userExists(username) {
+  const raw = localStorage.getItem(STORAGE_KEY_PREFIX + username);
+  if (raw) return true;
+  return false
+}
+
 export function loadCurrentUser() {
   const username = localStorage.getItem("currentUser");
   if (!username) return null;

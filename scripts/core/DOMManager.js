@@ -20,7 +20,7 @@ class DOMManager {
 
   renderInitialUI(user) {
     const { totalText, dailyTarget, progress, countdown } = this.elements;
-
+ 
     if (totalText) totalText.textContent = `${user.waterConsumed} ml`;
     if (dailyTarget) dailyTarget.textContent = `${user.consumptionTarget} ml`;
     if (progress) progress.value = Math.min(

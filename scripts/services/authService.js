@@ -10,6 +10,8 @@ export function login(username) {
 }
 
 export function register(username) {
+  const userExist = loadUser(username);
+  if (userExist) return alert("El usuario ya existe");
   let user = new UserConsumption(username);
   saveUser(user);
   localStorage.setItem("currentUser", username);
