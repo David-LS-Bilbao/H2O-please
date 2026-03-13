@@ -15,17 +15,30 @@ class UserConsumption {
     this.lastTimeConsumed = new Date();
     this.waterConsumed += amount;
     this.nextAlarm = nowUnix + 1800;
-    this.history.unshift({
+    // El historial se centraliza en el modelo para no duplicar entradas desde App.
+    this.history.unshift(this.createHistoryEntry(amount));
+  }
+
+  removeWater(amount) {
+    const removedAmount = Math.min(this.waterConsumed, amount);
+
+    if (removedAmount <= 0) {
+      return;
+    }
+
+    this.waterConsumed -= removedAmount;
+    // Guardamos la correccion como valor negativo para reflejarla en historial.
+    this.history.unshift(this.createHistoryEntry(-removedAmount));
+  }
+
+  createHistoryEntry(amount) {
+    return {
       hora: new Date().toLocaleTimeString("es-ES", {
         hour: "2-digit",
         minute: "2-digit",
       }),
       cantidad: amount,
-    });
-  }
-
-  removeWater(amount) {
-    this.waterConsumed = Math.max(0, this.waterConsumed - amount);
+    };
   }
 }
 

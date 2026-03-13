@@ -10,50 +10,57 @@
 
 <body data-page="dashboard">
   <header class="header-top">
+    <!-- Cierra la sesion actual y obliga a volver por la pantalla de login. -->
+    <button type="button" class="logout-button" id="logout-btn">Cerrar sesión</button>
     <!-- <button class="alarm-icon" id="alarm-button">🔔</button> -->
   </header>
 
   <main class="app-layout">
-    <section id="view-today">
-      <h1>Progreso de hidratación del día</h1>
-      <div>
+    <section id="view-today" class="dashboard-view dashboard-view--today">
+      <h1>Progreso de hidratación</h1>
+      <!-- La weather card se monta justo debajo del titulo para priorizar el clima local. -->
+      <div class="dashboard-weather-slot" id="weather-output"></div>
+
+      <!-- Este bloque resume progreso y metricas sin afectar al resto del layout. -->
+      <div class="dashboard-summary">
         <progress class="side-progress" id="progress" value="0" min="0" max="100"></progress>
 
-        <p class="acumulated">HAS BEBIDO</p>
-        <p id="total">0 ml</p>
+        <div class="dashboard-summary__stats">
+          <div class="dashboard-stat">
+            <p class="stat-label acumulated">HAS BEBIDO</p>
+            <p id="total">0 ml</p>
+          </div>
 
-        <p class="stat-card" id="daily-target">2300 ml</p>
-        <p>OBJETIVO DEL DÍA</p>
-        <!-- <div class="side-progress"></div> -->
+          <div class="dashboard-stat">
+            <p class="stat-card" id="daily-target">2300 ml</p>
+            <p class="stat-label">OBJETIVO DEL DÍA</p>
+          </div>
+        </div>
       </div>
 
       <h2>DATOS DEL DÍA</h2>
-      <div class="weather-api" id="weather-output">API DEL TIEMPO</div>
-      <h3>OBJETIVO DEL DÍA (ml)</h3>
-      <p class="stat-card">2300</p>
 
-      <h3 class="acumulated">HAS BEBIDO (ml)</h3>
-      <p>0</p>
-
-      <time id="countdown">00:00</time>
-      <p>CUENTA ATRÁS / SIGUIENTE ALARMA</p>
+      <div class="dashboard-countdown">
+        <time id="countdown">00:00</time>
+        <p>CUENTA ATRÁS / SIGUIENTE ALARMA</p>
+      </div>
 
       <form class="input-container" id="drink-form">
         <label for="amount">Ingrese la cantidad</label>
-        <input type="number" id="amount" placeholder="200">
+        <input type="number" id="amount" placeholder="200" min="1" inputmode="numeric">
         <button type="submit" class="drink-button" id="add-btn">+ BEBER</button>
         <button type="button" class="drink-button" id="remove-btn">+ Quitar</button>
       </form>
     </section>
 
-    <section id="view-history" style="display: none">
+    <section id="view-history" class="dashboard-view" style="display: none">
       <h2>HISTORIAL</h2>
       <div id="history-container">
         <p>Aún no has registrado tomas hoy.</p>
       </div>
     </section>
 
-    <section id="view-me" style="display: none">
+    <section id="view-me" class="dashboard-view" style="display: none">
       <h2>MI PERFIL</h2>
       <p>Configuración y datos personales (Próximamente...)</p>
     </section>
@@ -111,6 +118,8 @@
     </nav>
   </footer>
 
+  <!-- La config local expone la API key opcional antes de cargar el entry point. -->
+  <script src="./scripts/config/weatherRuntimeConfig.local.js"></script>
   <script type="module" src="./scripts/dashboard.js"></script>
 </body>
 

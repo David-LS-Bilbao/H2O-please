@@ -6,6 +6,7 @@ class DOMManager {
   cacheElements() {
     this.elements = {
       appLayout: document.querySelector(".app-layout"),
+      logoutButton: document.querySelector("#logout-btn"),
       progress: document.querySelector("#progress"),
       totalText: document.querySelector("#total"),
       dailyTarget: document.querySelector("#daily-target"),
@@ -13,6 +14,9 @@ class DOMManager {
       drinkForm: document.querySelector("#drink-form"),
       amountInput: document.querySelector("#amount"),
       drinkButton: document.querySelector("#add-btn"),
+      // Permite restar agua desde el mismo formulario sin duplicar vistas.
+      removeButton: document.querySelector("#remove-btn"),
+      // El clima se monta por JS dentro de este contenedor del dashboard.
       weatherOutput: document.querySelector("#weather-output"),
       historyContainer: document.querySelector("#history-container"),
       viewToday: document.querySelector("#view-today"),
