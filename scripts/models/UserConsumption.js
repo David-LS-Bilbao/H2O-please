@@ -15,6 +15,10 @@ class UserConsumption {
     this.waterConsumed += amount;
     this.nextAlarm = nowUnix + 1800;
   }
+
+  removeWater(amount) {
+    this.waterConsumed -= amount;
+  }
 }
 
 export default UserConsumption;

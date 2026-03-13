@@ -13,6 +13,7 @@ class DOMManager {
       drinkForm: document.querySelector("#drink-form"),
       amountInput: document.querySelector("#amount"),
       drinkButton: document.querySelector("#add-btn"),
+      removeButton: document.querySelector("#remove-btn"),
       weatherOutput: document.querySelector("#weather-output"),
     };
   }
@@ -20,8 +21,8 @@ class DOMManager {
   renderInitialUI(user) {
     const { totalText, dailyTarget, progress, countdown } = this.elements;
 
-    if (totalText) totalText.textContent = `${user.waterConsumed} ml`;
-    if (dailyTarget) dailyTarget.textContent = `${user.consumptionTarget} ml`;
+    if (totalText) totalText.textContent = `${user.waterConsumed}`;  /* ELIMINO ml */
+    if (dailyTarget) dailyTarget.textContent = `${user.consumptionTarget}`;  /* ELIMINO ml */
     if (progress) progress.value = Math.min(
       100,
       Math.round((user.waterConsumed / user.consumptionTarget) * 100)
