@@ -15,6 +15,13 @@ class DOMManager {
       drinkButton: document.querySelector("#add-btn"),
       removeButton: document.querySelector("#remove-btn"),
       weatherOutput: document.querySelector("#weather-output"),
+      historyContainer: document.querySelector("#history-container"),
+      viewToday: document.querySelector("#view-today"),
+      viewHistory: document.querySelector("#view-history"),
+      viewMe: document.querySelector("#view-me"),
+      todayButton: document.querySelector("#btn-today"),
+      historyButton: document.querySelector("#btn-history"),
+      meButton: document.querySelector("#btn-me"),
     };
   }
 

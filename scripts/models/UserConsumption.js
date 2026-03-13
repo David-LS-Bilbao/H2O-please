@@ -6,6 +6,7 @@ class UserConsumption {
     this.nextAlarm = data.nextAlarm || null;
     this.waterConsumed = data.waterConsumed ?? 0;
     this.consumptionTarget = data.consumptionTarget ?? 2300;
+    this.history = Array.isArray(data.history) ? data.history : [];
   }
 
   addWater(amount) {
@@ -14,10 +15,17 @@ class UserConsumption {
     this.lastTimeConsumed = new Date();
     this.waterConsumed += amount;
     this.nextAlarm = nowUnix + 1800;
+    this.history.unshift({
+      hora: new Date().toLocaleTimeString("es-ES", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      cantidad: amount,
+    });
   }
 
   removeWater(amount) {
-    this.waterConsumed -= amount;
+    this.waterConsumed = Math.max(0, this.waterConsumed - amount);
   }
 }
 
