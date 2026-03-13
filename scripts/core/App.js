@@ -61,7 +61,8 @@ class App {
   updateUI() {
     const { totalText, countdown, progress, dailyTarget } = this.dom.elements;
 
-    totalText.textContent = `${this.user.waterConsumed}`;
+    totalText.textContent = `${this.user.waterConsumed}`;  /* ELIMINO ml */
+
 
     if (this.user.lastTimeConsumedUnix) {
       countdown.textContent =
@@ -73,7 +74,8 @@ class App {
       Math.round((this.user.waterConsumed / this.user.consumptionTarget) * 100)
     );
     progress.value = percent;
-    dailyTarget.textContent = `${this.user.consumptionTarget}`;
+
+    dailyTarget.textContent = `${this.user.consumptionTarget}`; /* ELIMINO ml */
   }
 }
 

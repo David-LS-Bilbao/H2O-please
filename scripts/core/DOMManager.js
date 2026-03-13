@@ -20,9 +20,9 @@ class DOMManager {
 
   renderInitialUI(user) {
     const { totalText, dailyTarget, progress, countdown } = this.elements;
- 
-    if (totalText) totalText.textContent = `${user.waterConsumed}`;
-    if (dailyTarget) dailyTarget.textContent = `${user.consumptionTarget}`;
+
+    if (totalText) totalText.textContent = `${user.waterConsumed}`;  /* ELIMINO ml */
+    if (dailyTarget) dailyTarget.textContent = `${user.consumptionTarget}`;  /* ELIMINO ml */
     if (progress) progress.value = Math.min(
       100,
       Math.round((user.waterConsumed / user.consumptionTarget) * 100)
