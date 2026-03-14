@@ -4,24 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles/styles.css" type="text/css" />
+  <link rel="stylesheet" href="styles/styles.css" type="text/css">
   <title>H2O Please</title>
-
-<style>
-
-
-
-  
-</style>
-
-
-
-
-
 </head>
 
 <body data-page="dashboard">
   <header class="header-top">
+    <img src="./assets/images/logo-h2o-please-v2.svg" alt="H2O Please, tu App amiga para estar siempre hidratado">
     <!-- <button class="alarm-icon" id="alarm-button">🔔</button> -->
   </header>
 
@@ -29,33 +18,29 @@
     <h1>Progreso de hidratación del día</h1>
     <div>
       <progress class="side-progress" id="progress" value="0" min="0" max="100"></progress>
-      <!-- <div class="side-progress" id="progress"></div> -->
     </div>
 
     <section>
       <h2>DATOS DEL DÍA</h2>
-     <div class="weather-api" id="weather-output">API DEL TIEMPO</div>
+      <div class="weather-api" id="weather-output">API DEL TIEMPO</div>
       <h3>OBJETIVO DEL DÍA (ml)</h3>
       <p class="stat-card" id="daily-target">2300</p>
+      
+        <h3 class="acumulated">HAS BEBIDO (ml)</h3>
+        <p id="total">0</p>
 
-
-      <h3 class="acumulated">HAS BEBIDO (ml)</h3>
-      <p id="total">0</p>
-
-
-
-
-      <time id="countdown">00:00</time>
-      <p>CUENTA ATRÁS / SIGUIENTE ALARMA</p>
-
+        <time id="countdown">00:00</time>
+        
       <form class="input-container" id="drink-form">
-        <label for="amount">Ingrese la cantidad</label>
-        <input type="number" id="amount" placeholder="200">
-        <button type="submit" class="drink-button" id="add-btn">+ BEBER</button>
+        <label for="amount">¿Cuánto vas a beber?</label>
+        <span>+</span> <input type="number" id="amount" placeholder="200"> <span>ml</span>
+        <button type="submit" class="drink-button" id="add-btn">
+          <img src="./assets/images/water-glass-icon-white.svg" alt="Pulsa para beber">
+        </button>
       </form>
     </section>
 
-   
+
 
   </main>
   <footer>

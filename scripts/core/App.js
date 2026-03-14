@@ -7,7 +7,7 @@ function unixToTime(unixSeconds) {
     hour12: false,
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
+    /*second: "2-digit",*/  //ELIMINO LOS SEGUNDOS PARA MEJORAR UX
   });
 }
 
@@ -61,19 +61,20 @@ class App {
   updateUI() {
     const { totalText, countdown, progress, dailyTarget } = this.dom.elements;
 
-    totalText.textContent = `${this.user.waterConsumed}`;  /* ELIMINO ml */
+    totalText.textContent = `${this.user.waterConsumed}`;  // ELIMINO ml 
 
-    if (this.user.lastTimeConsumedUnix) {
-      countdown.textContent =
-        `Siguiente toma a las ${unixToTime(this.user.nextAlarm)}`;
-    }
+      if (this.user.lastTimeConsumedUnix) {
+        countdown.textContent =
+          `Próximo vaso: ${unixToTime(this.user.nextAlarm)} horas`; // SE CAMBIA EL TEXTO POR OTRO MÁS UX
+          countdown.style.opacity = "1"; // LINEA QUE AÑADE LA ANIMACIÓN
+      }
 
     const percent = Math.min(
       100,
       Math.round((this.user.waterConsumed / this.user.consumptionTarget) * 100)
     );
     progress.value = percent;
-    dailyTarget.textContent = `${this.user.consumptionTarget}`; /* ELIMINO ml */
+    dailyTarget.textContent = `${this.user.consumptionTarget}`; // ELIMINO ml
   }
 }
 
