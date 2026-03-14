@@ -123,6 +123,70 @@ feat: integrate jon functionality over luis base
 - **Jonathan** queda integrado de forma selectiva en la parte útil y segura
 - **Clima (David)** sigue pendiente para la siguiente fase
 
+## Integración del clima
+
+La integración del clima no se realizó mediante merge bruto de una rama completa. Se rescató de forma selectiva la parte funcional útil y se adaptó manualmente al dashboard consolidado de Luis para no romper ni la estructura principal ni las integraciones ya cerradas de Marcos y Jonathan.
+
+### Fuentes utilizadas
+- `origin/feat/weather-api-call` como base principal de la feature de clima
+- `feat/dashboard-weather-integration` como referencia para el montaje de la weather card dentro del dashboard
+- `origin/test/integracion-weather-dashboard-v2` como contraste de la integración intermedia
+- `backup/dashboard-weather-restyled` solo como referencia descartable, no como base
+
+### Qué se integró
+- capa funcional mínima de clima dentro de `scripts/features/weather-api/`
+- controladores de integración:
+  - `scripts/pages/dashboardWeatherIntegration.js`
+  - `scripts/pages/weatherCardIntegration.js`
+- mantenimiento de `scripts/dashboard.js` como entry point del dashboard
+- montaje funcional de la weather card dentro de `#weather-output`
+- obtención de geolocalización
+- consulta de clima con proveedor principal y fallback
+- cache local del último snapshot útil
+- render mínimo de la weather card dentro del dashboard actual
+- refinamiento funcional pequeño posterior:
+  - fallback selectivo a snapshot guardada
+  - mensajes HTTP algo más informativos
+  - ampliación del mapeo de códigos Open-Meteo
+  - mejora de detección de contexto seguro
+  - retirada del reloj de la card
+  - mejora del intento de resolución de la ubicación mostrada
+
+### Qué se descartó por ahora
+- merge completo de `feat/dashboard-weather-integration`
+- CSS grande o versión visual “restyled” del clima
+- decoraciones complejas y overrides visuales agresivos
+- `scripts/main.js`
+- demos o previews como requisito de integración principal
+- cualquier cambio que obligara a rediseñar el dashboard base de Luis
+
+### Criterio de integración
+- mantener como fuente de verdad visual el dashboard de Luis
+- integrar primero la funcionalidad mínima necesaria para tener clima real dentro del dashboard
+- preferir adaptación manual y local frente a arrastrar ramas mezcladas
+- limitar el CSS a ajustes pequeños y específicos del contenedor `#weather-output`
+- no tocar navegación, historial, perfil ni layout global salvo por compatibilidad mínima
+
+### Validación realizada
+Se realizó validación manual básica sobre la rama actual:
+- carga del dashboard sin romper la vista HOY
+- montaje correcto de la weather card dentro de `#weather-output`
+- navegación HOY / HISTORIAL / YO sin regresiones visibles
+- comprobación de que la card no empujaba el contenido hacia el footer
+- validación básica de carga del clima y uso de cache local cuando correspondía
+- revisión manual posterior del refinamiento funcional pequeño
+
+### Estado actual tras esta fase
+- la integración mínima del clima ya está aplicada y validada manualmente en `test/integracion-luis-base`
+- el diseño base de Luis se mantiene como referencia visual del dashboard
+- la integración del clima no debe considerarse todavía cerrada a nivel de Git, porque en este momento siguen existiendo cambios del refinamiento funcional pequeño sin commit
+- el estado actual es: clima integrado funcionalmente, validado manualmente y pendiente de cierre formal por commit cuando se dé por estable
+
+### Refinamiento pendiente
+- confirmar en navegador que la ubicación mostrada ya refleja mejor la localización real
+- decidir si hace falta un ajuste visual muy pequeño adicional, sin entrar en rediseño
+- revisar si conviene portar después alguna mejora menor de resiliencia o UX desde `feat/dashboard-weather-integration`, siempre sin traer su CSS grande
+
 ## Situación actual
 La rama de trabajo actual es:
 
@@ -134,7 +198,7 @@ Estado de integración:
 1. **Luis** → base visual consolidada
 2. **Marcos** → integrado y validado
 3. **Jonathan** → integrado funcionalmente de forma selectiva
-4. **Clima (David)** → pendiente, se integrará después sobre el marco visual de Luis ya consolidado
+4. **Clima (David)** → integración mínima aplicada y validada manualmente; refinamiento funcional pequeño en curso y pendiente de commit
 
 ## Conclusión
-Hasta este punto se ha conseguido una rama de integración estable basada en el diseño de Luis, con la funcionalidad principal de Marcos incorporada y la parte útil de Jonathan ya adaptada sin arrastrar su capa visual ni cambios de mayor riesgo. La siguiente fase será integrar la API del clima sobre este marco visual y funcional ya estabilizado.
+Hasta este punto se ha conseguido una rama de integración estable basada en el diseño de Luis, con la funcionalidad principal de Marcos incorporada, la parte útil de Jonathan ya adaptada y una integración mínima del clima ya montada dentro del dashboard. La fase abierta ahora no es de integración bruta, sino de cierre y validación final del clima con ajustes funcionales pequeños y conservadores antes de darla por cerrada.
