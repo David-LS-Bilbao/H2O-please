@@ -14,7 +14,6 @@ const WEATHER_CARD_SELECTORS = {
   status: "#weather-status",
   temperature: "#weather-temperature",
   date: "#weather-date",
-  time: "#weather-time",
 };
 
 const WEATHER_CARD_MARKUP = `
@@ -28,7 +27,6 @@ const WEATHER_CARD_MARKUP = `
       <p id="weather-temperature" class="weather-card__temperature">-- °C</p>
       <div class="weather-card__meta">
         <p id="weather-date" class="weather-card__meta-item">--/--/----</p>
-        <p id="weather-time" class="weather-card__meta-item">--:--:--</p>
       </div>
     </div>
   </section>
@@ -56,7 +54,6 @@ export function getWeatherCardElements(root = document) {
     status: root.querySelector(WEATHER_CARD_SELECTORS.status),
     temperature: root.querySelector(WEATHER_CARD_SELECTORS.temperature),
     date: root.querySelector(WEATHER_CARD_SELECTORS.date),
-    time: root.querySelector(WEATHER_CARD_SELECTORS.time),
   };
 }
 
@@ -69,7 +66,6 @@ export function createWeatherDomManager(root = document) {
   let currentWeatherDescription = "";
   let currentTimeZone = null;
   let currentTimeZoneOffsetSeconds = null;
-  let localClockTimerId = null;
 
   function getLocalDateTimeContext(baseDate = new Date()) {
     if (typeof currentTimeZone === "string" && currentTimeZone.trim() !== "") {
@@ -105,10 +101,6 @@ export function createWeatherDomManager(root = document) {
       dateTimeContext.date,
       dateTimeContext
     );
-    elements.time.textContent = formatWeatherTime(
-      dateTimeContext.date,
-      dateTimeContext
-    );
 
     if (currentWeatherDescription) {
       elements.status.dataset.icon = getWeatherStatusIcon(
@@ -120,27 +112,12 @@ export function createWeatherDomManager(root = document) {
   }
 
   function startLocalClock() {
-    if (!hasWeatherCardElements(elements)) {
-      return null;
-    }
-
     renderLocalDateTime();
-
-    if (localClockTimerId !== null) {
-      window.clearInterval(localClockTimerId);
-    }
-
-    localClockTimerId = window.setInterval(renderLocalDateTime, 1000);
-    return localClockTimerId;
+    return null;
   }
 
   function stopLocalClock() {
-    if (localClockTimerId === null) {
-      return;
-    }
-
-    window.clearInterval(localClockTimerId);
-    localClockTimerId = null;
+    return null;
   }
 
   function renderWeatherCard(snapshot) {
