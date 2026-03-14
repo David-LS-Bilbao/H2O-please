@@ -66,6 +66,87 @@ body {
     grid-template-rows: auto 1fr auto;
 }
 
+body[data-page="login"] {
+    grid-template-rows: 1fr;
+    place-items: center;
+    padding: 1rem;
+}
+
+body[data-page="login"] .login-layout {
+    width: min(100%, 24rem);
+    display: grid;
+    gap: 0.9rem;
+    padding: 1.25rem;
+    border: solid 0.1rem #58B5E333;
+    border-radius: 1.8rem;
+    background: rgba(253, 253, 253, 0.98);
+    box-shadow:
+        0 1rem 2.2rem rgba(88, 181, 227, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+body[data-page="login"] .login-layout form {
+    display: grid;
+    gap: 0.75rem;
+}
+
+body[data-page="login"] .login-layout input {
+    width: 100%;
+    padding: 1rem 1.1rem;
+    border: solid 0.1rem rgba(88, 181, 227, 0.28);
+    border-radius: 999px;
+    font-family: var(--primary-font-medium);
+    font-size: 1rem;
+    color: var(--primary-dark-color);
+    background: white;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+body[data-page="login"] .login-layout input::placeholder {
+    color: var(--neutral-color);
+}
+
+body[data-page="login"] .login-layout input:focus {
+    border-color: rgba(4, 118, 174, 0.4);
+    box-shadow: 0 0 0 0.2rem rgba(88, 181, 227, 0.14);
+}
+
+body[data-page="login"] .login-layout button {
+    width: 100%;
+    padding: 1rem 1.1rem;
+    border: 0;
+    border-radius: 999px;
+    font-family: var(--primary-font-bold);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+body[data-page="login"] #login-form button {
+    color: white;
+    background: var(--primary-color);
+    box-shadow: 0 0.8rem 1.6rem rgba(4, 118, 174, 0.18);
+}
+
+body[data-page="login"] #register-form button {
+    color: var(--primary-dark-color);
+    background: var(--secondary-light-color);
+    box-shadow: 0 0.8rem 1.6rem rgba(255, 209, 102, 0.2);
+}
+
+body[data-page="login"] #auth-message {
+    min-height: 1.35rem;
+    margin: 0;
+    padding: 0 0.25rem;
+    font-family: var(--primary-font-medium);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    text-align: center;
+    color: var(--primary-dark-color);
+}
+
 header {
     position: sticky;
     top: 0;
