@@ -5,8 +5,19 @@ import {
 } from "./weatherApiClient.js";
 
 function getFallbackCityLabel(location) {
+  if (
+    typeof location?.displayName === "string" &&
+    location.displayName.trim() !== ""
+  ) {
+    return location.displayName.trim();
+  }
+
   if (typeof location?.city === "string" && location.city.trim() !== "") {
     return location.city.trim();
+  }
+
+  if (typeof location?.country === "string" && location.country.trim() !== "") {
+    return location.country.trim();
   }
 
   return "Ubicacion actual";
@@ -64,20 +75,33 @@ function getOpenMeteoWeatherDescription(weatherCode) {
     case 53:
     case 55:
       return "Llovizna";
+    case 56:
+    case 57:
+      return "Llovizna helada";
     case 61:
     case 63:
     case 65:
       return "Lluvia";
+    case 66:
+    case 67:
+      return "Lluvia helada";
     case 71:
     case 73:
     case 75:
+    case 77:
       return "Nieve";
     case 80:
     case 81:
     case 82:
       return "Chubascos";
+    case 85:
+    case 86:
+      return "Chubascos de nieve";
     case 95:
       return "Tormenta";
+    case 96:
+    case 99:
+      return "Tormenta con granizo";
     default:
       return "Clima actual";
   }

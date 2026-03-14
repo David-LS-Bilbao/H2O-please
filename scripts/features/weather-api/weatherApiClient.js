@@ -74,21 +74,71 @@ function getPreferredLocationLanguage() {
   return "es";
 }
 
+function normalizeLocationLanguage(language) {
+  const normalizedLanguage =
+    typeof language === "string" ? language.trim() : getPreferredLocationLanguage();
+
+  if (normalizedLanguage === "") {
+    return "es";
+  }
+
+  return normalizedLanguage.split("-")[0];
+}
+
 function buildReverseGeocodeUrl({ latitude, longitude, language }) {
   const url = new URL(REVERSE_GEOCODE_API_BASE_URL);
 
   url.searchParams.set("latitude", latitude);
   url.searchParams.set("longitude", longitude);
-  url.searchParams.set("localityLanguage", language ?? getPreferredLocationLanguage());
+  url.searchParams.set(
+    "localityLanguage",
+    normalizeLocationLanguage(language ?? getPreferredLocationLanguage())
+  );
 
   return url.toString();
+}
+
+function getFirstNonEmptyLocationValue(candidates = []) {
+  return candidates.find(
+    (value) => typeof value === "string" && value.trim() !== ""
+  )?.trim() ?? null;
+}
+
+function buildLocationDisplayName(primaryLocation, countryName) {
+  if (!primaryLocation) {
+    return countryName ?? null;
+  }
+
+  if (!countryName || primaryLocation.toLowerCase() === countryName.toLowerCase()) {
+    return primaryLocation;
+  }
+
+  return `${primaryLocation}, ${countryName}`;
 }
 
 async function fetchJson(requestUrl, defaultMessage) {
   const response = await fetch(requestUrl);
 
   if (!response.ok) {
-    throw new Error(defaultMessage);
+    let errorDetail = "";
+
+    try {
+      const errorPayload = await response.json();
+      errorDetail =
+        errorPayload?.message ??
+        errorPayload?.reason ??
+        errorPayload?.error ??
+        "";
+    } catch {
+      errorDetail = "";
+    }
+
+    const normalizedDetail =
+      typeof errorDetail === "string" ? errorDetail.trim() : "";
+
+    throw new Error(
+      normalizedDetail !== "" ? `${defaultMessage} ${normalizedDetail}` : defaultMessage
+    );
   }
 
   return response.json();
@@ -126,19 +176,27 @@ async function fetchWeatherForecast(options) {
 }
 
 function mapLocationDetails(locationData) {
+  const informativeLocation = Array.isArray(locationData?.localityInfo?.informative)
+    ? getFirstNonEmptyLocationValue(
+        locationData.localityInfo.informative.map((item) => item?.name)
+      )
+    : null;
+
   const cityCandidates = [
     locationData?.locality,
     locationData?.city,
+    informativeLocation,
     locationData?.principalSubdivision,
     locationData?.countryName,
   ];
 
-  const city = cityCandidates.find(
-    (value) => typeof value === "string" && value.trim() !== ""
-  );
+  const city = getFirstNonEmptyLocationValue(cityCandidates);
+  const country = getFirstNonEmptyLocationValue([locationData?.countryName]);
 
   return {
-    city: city?.trim() ?? null,
+    city,
+    country,
+    displayName: buildLocationDisplayName(city, country),
   };
 }
 
@@ -160,6 +218,20 @@ function getGeolocationErrorMessage(error) {
 
   if (typeof friendlyMessage === "string") {
     return friendlyMessage;
+  }
+
+  const rawMessage =
+    typeof error?.message === "string" && error.message.trim() !== ""
+      ? error.message.trim().toLowerCase()
+      : "";
+
+  if (
+    rawMessage.includes("secure") ||
+    rawMessage.includes("https") ||
+    rawMessage.includes("localhost") ||
+    rawMessage.includes("context")
+  ) {
+    return "La ubicacion solo funciona en un contexto seguro. Abre la app en http://localhost:5500 o por HTTPS.";
   }
 
   return "No se pudo obtener la ubicacion del usuario.";

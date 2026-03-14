@@ -6,6 +6,20 @@ import {
   saveLocalWeatherSnapshot,
 } from "../features/weather-api/index.js";
 
+function shouldUseStoredSnapshotFallback(error) {
+  const normalizedMessage =
+    typeof error?.message === "string" ? error.message.toLowerCase() : "";
+
+  return !(
+    normalizedMessage.includes("ubicacion") ||
+    normalizedMessage.includes("geolocalizacion") ||
+    normalizedMessage.includes("localhost") ||
+    normalizedMessage.includes("https") ||
+    normalizedMessage.includes("secure") ||
+    normalizedMessage.includes("contexto seguro")
+  );
+}
+
 async function syncWeatherCard(weatherDomManager, contextLabel) {
   try {
     const snapshot = await getLocalWeatherSnapshot();
@@ -14,7 +28,7 @@ async function syncWeatherCard(weatherDomManager, contextLabel) {
   } catch (error) {
     const storedSnapshot = getStoredLocalWeatherSnapshot();
 
-    if (storedSnapshot) {
+    if (storedSnapshot && shouldUseStoredSnapshotFallback(error)) {
       weatherDomManager.renderWeatherCard(storedSnapshot);
       weatherDomManager.renderWeatherRefreshWarning(error.message);
       console.warn(
@@ -61,7 +75,7 @@ export function initWeatherCardIntegration({
     weatherDomManager.renderWeatherCard(storedSnapshot);
   }
 
-  weatherDomManager.startLocalClock();
+  weatherDomManager.renderLocalDateTime();
   syncWeatherCard(weatherDomManager, contextLabel);
 
   return weatherDomManager;
