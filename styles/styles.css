@@ -126,7 +126,6 @@ main.app-layout {
         display: none;
     }
 
-    /* ========== SIDE PROGRESS BAR ========== */
     div {
         display: flex;
         align-items: stretch;
@@ -155,7 +154,6 @@ main.app-layout {
         }
     }
 
-    /* ========== MAIN SECTION ========== */
     section {
         display: flex;
         flex-direction: column;
@@ -180,7 +178,6 @@ main.app-layout {
             }
         }
 
-        /* ===== AMOUNTS ===== */
         #daily-target {
             font-size: 3rem;
             font-family: var(--primary-font-medium);
@@ -206,7 +203,6 @@ main.app-layout {
             transition: opacity 1s ease;
         }
 
-        /* ===== FORM ===== */
         form {
             display: flex;
             flex-wrap: wrap;
@@ -275,7 +271,6 @@ main.app-layout {
         }
 
         .weather-api {
-            /* MODIFICAR TAMAÑO DE API CUANDO SE TENGA LA CARD DEFINITIVA */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -291,16 +286,29 @@ main.app-layout {
     }
 }
 
+#view-today {
+    width: 100%;
+}
 
+#view-history,
+#view-me {
+    align-items: stretch;
+}
 
+#view-history h2,
+#view-me h2 {
+    display: block;
+    margin: 0 0 1rem 0;
+    font-family: var(--primary-font-bold);
+    color: var(--primary-color);
+}
 
-
-
-
-
-
-
-
+#history-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+}
 
 /* Estilos de David, para modificar cuando conecte con la API del tiempo */
 .weather-card {
