@@ -10,7 +10,13 @@ export function login(username) {
 }
 
 export function register(username) {
+  const existingUser = loadUser(username);
+  if (existingUser) {
+    return false;
+  }
+
   let user = new UserConsumption(username);
   saveUser(user);
   localStorage.setItem("currentUser", username);
+  return true;
 }

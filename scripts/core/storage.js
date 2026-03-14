@@ -11,7 +11,8 @@ export function saveUser(user) {
     nextAlarm: user.nextAlarm,
     waterConsumed: user.waterConsumed,
     consumptionTarget: user.consumptionTarget,
-    history: user.history
+    history: user.history,
+    lastDate: user.lastDate,
   };
   localStorage.setItem(key, JSON.stringify(raw));
 }

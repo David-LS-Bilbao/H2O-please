@@ -28,13 +28,38 @@ class App {
     }
 
     this.dom.cacheElements();
+    this.verificarNuevoDia();
     this.dom.renderInitialUI(this.user);
     this.attachListeners();
     this.updateUI();
   }
 
+  verificarNuevoDia() {
+    const hoy = new Date().toLocaleDateString("es-ES");
+
+    if (!this.user.lastDate) {
+      this.user.lastDate = hoy;
+      saveUser(this.user);
+      return;
+    }
+
+    if (this.user.lastDate !== hoy) {
+      this.user.waterConsumed = 0;
+      this.user.history = [];
+      this.user.lastDate = hoy;
+      saveUser(this.user);
+    }
+  }
+
   attachListeners() {
-    const { drinkForm, amountInput, btnToday, btnHistory, btnMe } = this.dom.elements;
+    const {
+      drinkForm,
+      amountInput,
+      removeButton,
+      btnToday,
+      btnHistory,
+      btnMe,
+    } = this.dom.elements;
 
     if (drinkForm) {
       drinkForm.addEventListener("submit", (e) => {
@@ -51,6 +76,34 @@ class App {
             minute: "2-digit",
           }),
           cantidad: amount,
+        });
+
+        saveUser(this.user);
+        this.updateUI();
+        amountInput.value = "";
+      });
+    }
+
+    if (removeButton) {
+      removeButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        const amount = parseInt(amountInput.value || "200", 10);
+        if (Number.isNaN(amount) || amount <= 0) {
+          return;
+        }
+
+        const removedAmount = Math.min(amount, this.user.waterConsumed);
+        if (removedAmount <= 0) {
+          return;
+        }
+
+        this.user.removeWater(removedAmount);
+        this.user.history.unshift({
+          hora: new Date().toLocaleTimeString("es-ES", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          cantidad: -removedAmount,
         });
 
         saveUser(this.user);
@@ -118,12 +171,14 @@ class App {
     }
 
     this.user.history.forEach((toma) => {
+      const amount = Number(toma.cantidad) || 0;
+      const isNegative = amount < 0;
       const item = document.createElement("div");
       item.style.cssText =
         "display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid #eee; align-items:center;";
       item.innerHTML = `
         <span style="font-weight:bold; color:#555;">${toma.hora}</span>
-        <span style="color:#007bff; font-weight:bold;">+${toma.cantidad} ml</span>
+        <span style="color:${isNegative ? "#b42318" : "#007bff"}; font-weight:bold;">${isNegative ? "" : "+"}${amount} ml</span>
       `;
       historyContainer.appendChild(item);
     });

@@ -267,6 +267,16 @@ main.app-layout {
                 img {
                     width: 3.5rem;
                 }
+
+                &#remove-btn {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-family: var(--primary-font-bold);
+                    font-size: 2.4rem;
+                    line-height: 1;
+                }
             }
         }
 
@@ -308,6 +318,20 @@ main.app-layout {
     flex-direction: column;
     width: 100%;
     gap: 0.5rem;
+}
+
+@media (max-width: 480px) {
+    main.app-layout section form button {
+        width: 4.05rem;
+    }
+
+    main.app-layout section form button img {
+        width: 3.15rem;
+    }
+
+    main.app-layout section form button#remove-btn {
+        font-size: 2.16rem;
+    }
 }
 
 /* Estilos de David, para modificar cuando conecte con la API del tiempo */
