@@ -4,6 +4,8 @@ const STORAGE_KEY_PREFIX = "userConsumption:";
 
 export function saveUser(user) {
   const key = STORAGE_KEY_PREFIX + user.username;
+  
+  // Añadimos age y weight al objeto que se va a guardar
   const raw = {
     username: user.username,
     lastTimeConsumed: user.lastTimeConsumed,
@@ -11,8 +13,11 @@ export function saveUser(user) {
     nextAlarm: user.nextAlarm,
     waterConsumed: user.waterConsumed,
     consumptionTarget: user.consumptionTarget,
-    history: user.history
+    history: user.history || [],
+    age: user.age || 0,       // <--- ¡FALTABA ESTO!
+    weight: user.weight || 0  // <--- ¡Y ESTO!
   };
+  
   localStorage.setItem(key, JSON.stringify(raw));
 }
 
@@ -20,6 +25,8 @@ export function loadUser(username) {
   const raw = localStorage.getItem(STORAGE_KEY_PREFIX + username);
   if (!raw) return null;
   const data = JSON.parse(raw);
+  
+  // El constructor de UserConsumption ahora recibirá data.age y data.weight
   return new UserConsumption(username, data);
 }
 
@@ -28,3 +35,4 @@ export function loadCurrentUser() {
   if (!username) return null;
   return loadUser(username);
 }
+

@@ -5,10 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles/styles.css" type="text/css" />
-  <title>H2O Please</title>
+  <title>H2O Please - Dashboard</title>
 </head>
 
 <body data-page="dashboard">
+  
   <header class="header-top">
     <output class="weather-api" id="weather-output">API DEL TIEMPO</output>
     <button class="alarm-icon" id="alarm-button">🔔</button>
@@ -18,16 +19,12 @@
     
     <section id="view-today">
       <progress class="side-progress" id="progress" value="0" min="0" max="100"></progress>
-
       <p class="acumulated">HAS BEBIDO</p>
       <p id="total">0 ml</p>
-
       <p class="stat-card" id="daily-target">2300 ml</p>
       <p>OBJETIVO DEL DÍA</p>
-
       <time id="countdown">00:00</time>
       <p>CUENTA ATRÁS / SIGUIENTE ALARMA</p>
-
       <form class="input-container" id="drink-form">
         <label for="amount">Ingrese la cantidad</label>
         <input type="number" id="amount" placeholder="200">
@@ -38,13 +35,33 @@
     <section id="view-history" style="display: none;">
       <h2>HISTORIAL</h2>
       <div id="history-container">
-        <p>Aún no has registrado tomas hoy.</p>
-        </div>
+        <p>Aún no hay registros hoy.</p>
+      </div>
     </section>
 
     <section id="view-me" style="display: none;">
       <h2>MI PERFIL</h2>
-      <p>Configuración y datos personales (Próximamente...)</p>
+      <div class="profile-card">
+        <div class="user-info">
+          <p><strong>Usuario:</strong> <span id="profile-name"></span></p>
+          
+          <div class="edit-group">
+            <label for="edit-age">Edad (años):</label>
+            <input type="number" id="edit-age" placeholder="Ej: 25">
+          </div>
+
+          <div class="edit-group">
+            <label for="edit-weight">Peso (kg):</label>
+            <input type="number" id="edit-weight" placeholder="Ej: 75">
+          </div>
+
+          <p><strong>Objetivo Diario:</strong> <span id="profile-target"></span> ml</p>
+        </div>
+
+        <button id="btn-save-profile" class="save-btn">Guardar Cambios</button>
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+        <button id="btn-logout" class="logout-btn">Cerrar Sesión</button>
+      </div>
     </section>
 
   </main>
@@ -59,5 +76,4 @@
 
   <script type="module" src="./scripts/dashboard.js"></script>
 </body>
-
 </html>

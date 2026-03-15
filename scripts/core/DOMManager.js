@@ -14,18 +14,19 @@ class DOMManager {
       amountInput: document.querySelector("#amount"),
       drinkButton: document.querySelector("#add-btn"),
       weatherOutput: document.querySelector("#weather-output"),
-
-      // --- NUEVOS ELEMENTOS PARA NAVEGACIÓN Y VISTAS ---
       viewToday: document.querySelector("#view-today"),
       viewHistory: document.querySelector("#view-history"),
       viewMe: document.querySelector("#view-me"),
-
       btnToday: document.querySelector("#btn-today"),
       btnHistory: document.querySelector("#btn-history"),
       btnMe: document.querySelector("#btn-me"),
-
-      // Contenedor donde se pintarán las filas del historial
       historyContainer: document.querySelector("#history-container"),
+      profileName: document.querySelector("#profile-name"),
+      profileTarget: document.querySelector("#profile-target"),
+      editAge: document.querySelector("#edit-age"), 
+      editWeight: document.querySelector("#edit-weight"),
+      btnSaveProfile: document.querySelector("#btn-save-profile"),
+      btnLogout: document.querySelector("#btn-logout"),
     };
   }
 

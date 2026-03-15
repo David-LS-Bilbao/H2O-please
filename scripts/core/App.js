@@ -1,6 +1,7 @@
 import DOMManager from "./DOMManager.js";
 import { loadCurrentUser, saveUser } from "./storage.js";
 
+// Función de utilidad para el tiempo
 function unixToTime(unixSeconds) {
     const date = new Date(unixSeconds * 1000);
     return date.toLocaleTimeString("es-ES", {
@@ -25,28 +26,29 @@ class App {
         }
 
         this.dom.cacheElements();
-        
-        // Comprobar reset diario al iniciar
         this.verificarNuevoDia();
-        
         this.dom.renderInitialUI(this.user);
         this.attachListeners();
-        this.updateUI(); // Actualizar todo al cargar
+        this.updateUI(); 
     }
 
     verificarNuevoDia() {
         const hoy = new Date().toLocaleDateString();
-        // Asumiendo que tu objeto user tiene una propiedad lastDate
         if (this.user.lastDate !== hoy) {
             this.user.waterConsumed = 0;
-            this.user.history = []; // Inicializamos historial si no existe
+            this.user.history = []; 
             this.user.lastDate = hoy;
             saveUser(this.user);
         }
     }
 
     attachListeners() {
-        const { drinkForm, amountInput, btnToday, btnHistory, btnMe } = this.dom.elements;
+        const { 
+            drinkForm, amountInput, 
+            btnToday, btnHistory, btnMe, 
+            btnLogout,
+            btnSaveProfile, editAge, editWeight // Nuevos elementos del DOMManager
+        } = this.dom.elements;
 
         // --- Lógica de Beber ---
         if (drinkForm) {
@@ -55,38 +57,69 @@ class App {
                 const amount = parseInt(amountInput.value || "200");
                 if (Number.isNaN(amount) || amount <= 0) return;
 
-                // 1. Añadir agua
                 this.user.addWater(amount);
                 
-                // 2. Añadir al historial (Creamos el array si no existe)
                 if (!this.user.history) this.user.history = [];
                 this.user.history.unshift({
                     hora: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                     cantidad: amount
                 });
 
-                // 3. Guardar y refrescar
                 saveUser(this.user);
                 this.updateUI();
                 amountInput.value = "";
             });
         }
+        if (btnSaveProfile) {
+    btnSaveProfile.addEventListener("click", () => {
+        // 1. Extraer valores de los inputs
+        const nuevaEdad = parseInt(editAge.value) || 0;
+        const nuevoPeso = parseInt(editWeight.value) || 0;
 
-        // --- Lógica de Navegación (Botones Footer) ---
+        // 2. Asignarlos al objeto usuario de la sesión actual
+        this.user.age = nuevaEdad;
+        this.user.weight = nuevoPeso;
+
+        // 3. ¡IMPORTANTE! Guardar en el almacenamiento persistente
+        saveUser(this.user); 
+        
+        alert("¡Datos del usuario guardados en el sistema!");
+    });
+}
+
+        // --- Lógica Guardar Perfil (Edad y Peso) ---
+        if (btnSaveProfile) {
+            btnSaveProfile.addEventListener("click", () => {
+                // Guardamos los valores de los inputs en el objeto user
+                this.user.age = parseInt(editAge.value) || 0;
+                this.user.weight = parseInt(editWeight.value) || 0;
+
+                saveUser(this.user);
+                alert("¡Perfil del usuario actualizado!");
+            });
+        }
+
+        // --- Navegación (SPA) ---
         if (btnToday) btnToday.addEventListener('click', () => this.cambiarPestaña('today'));
         if (btnHistory) btnHistory.addEventListener('click', () => this.cambiarPestaña('history'));
         if (btnMe) btnMe.addEventListener('click', () => this.cambiarPestaña('me'));
+
+        // --- Cerrar Sesión ---
+        if (btnLogout) {
+            btnLogout.addEventListener("click", () => {
+                localStorage.removeItem("currentUser");
+                window.location.href = "index.html";
+            });
+        }
     }
 
     cambiarPestaña(pestaña) {
         const { viewToday, viewHistory, viewMe } = this.dom.elements;
 
-        // Ocultar todas
         viewToday.style.display = 'none';
         viewHistory.style.display = 'none';
         viewMe.style.display = 'none';
 
-        // Mostrar la seleccionada
         if (pestaña === 'today') {
             viewToday.style.display = 'block';
         } else if (pestaña === 'history') {
@@ -94,6 +127,7 @@ class App {
             this.renderizarHistorial();
         } else if (pestaña === 'me') {
             viewMe.style.display = 'block';
+            this.renderizarPerfil();
         }
     }
 
@@ -104,7 +138,7 @@ class App {
         historyContainer.innerHTML = '';
 
         if (!this.user.history || this.user.history.length === 0) {
-            historyContainer.innerHTML = '<p style="text-align:center; padding:20px;">No hay registros hoy.</p>';
+            historyContainer.innerHTML = '<p style="text-align:center; padding:20px; color: gray;">Sin registros hoy.</p>';
             return;
         }
 
@@ -117,6 +151,17 @@ class App {
             `;
             historyContainer.appendChild(item);
         });
+    }
+
+    renderizarPerfil() {
+        const { profileName, profileTarget, editAge, editWeight } = this.dom.elements;
+        
+        if (profileName) profileName.textContent = this.user.username;
+        if (profileTarget) profileTarget.textContent = `${this.user.consumptionTarget} ml`;
+        
+    
+        if (editAge) editAge.value = this.user.age || "";
+        if (editWeight) editWeight.value = this.user.weight || "";
     }
 
     updateUI() {

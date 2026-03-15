@@ -6,6 +6,10 @@ class UserConsumption {
     this.nextAlarm = data.nextAlarm || null;
     this.waterConsumed = data.waterConsumed ?? 0;
     this.consumptionTarget = data.consumptionTarget ?? 2300;
+    this.lastDate = data.lastDate || new Date().toLocaleDateString();
+    this.history = data.history || []; 
+    this.age = data.age || 0;        
+    this.weight = data.weight || 0;   
   }
 
   addWater(amount) {
