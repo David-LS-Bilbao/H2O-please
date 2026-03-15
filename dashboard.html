@@ -52,7 +52,18 @@
 
     <section id="view-me" style="display: none">
       <h2>MI PERFIL</h2>
-      <p>Configuración y datos personales (Próximamente...)</p>
+      <div id="profile-container">
+        <p><strong>Usuario:</strong> <span id="profile-name"></span></p>
+        <p><strong>Objetivo diario:</strong> <span id="profile-target"></span> ml</p>
+
+        <label for="edit-age">Edad</label>
+        <input type="number" id="edit-age" min="1" placeholder="Ej: 25" inputmode="numeric">
+
+        <label for="edit-weight">Peso (kg)</label>
+        <input type="number" id="edit-weight" min="1" placeholder="Ej: 75" inputmode="numeric">
+
+        <button type="button" id="btn-save-profile">Guardar cambios</button>
+      </div>
     </section>
   </main>
   <footer>

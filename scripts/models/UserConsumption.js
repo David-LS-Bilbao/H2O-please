@@ -10,6 +10,8 @@ class UserConsumption {
     this.consumptionTarget = data.consumptionTarget ?? 2300;
     this.history = Array.isArray(data.history) ? data.history : [];
     this.lastDate = data.lastDate || null;
+    this.age = Number.isFinite(data.age) ? data.age : null;
+    this.weight = Number.isFinite(data.weight) ? data.weight : null;
   }
 
   addWater(amount) {

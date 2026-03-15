@@ -10,6 +10,16 @@ function unixToTime(unixSeconds) {
   });
 }
 
+function parseOptionalPositiveInteger(rawValue) {
+  const parsedValue = Number.parseInt(rawValue, 10);
+
+  if (!Number.isFinite(parsedValue) || parsedValue <= 0) {
+    return null;
+  }
+
+  return parsedValue;
+}
+
 class App {
   constructor() {
     this.dom = new DOMManager();
@@ -59,6 +69,9 @@ class App {
       btnToday,
       btnHistory,
       btnMe,
+      editAge,
+      editWeight,
+      btnSaveProfile,
     } = this.dom.elements;
 
     if (drinkForm) {
@@ -123,6 +136,15 @@ class App {
     if (btnMe) {
       btnMe.addEventListener("click", () => this.cambiarPestana("me"));
     }
+
+    if (btnSaveProfile) {
+      btnSaveProfile.addEventListener("click", () => {
+        this.user.age = parseOptionalPositiveInteger(editAge?.value ?? "");
+        this.user.weight = parseOptionalPositiveInteger(editWeight?.value ?? "");
+        saveUser(this.user);
+        this.renderizarPerfil();
+      });
+    }
   }
 
   cambiarPestana(pestana) {
@@ -153,6 +175,7 @@ class App {
 
     if (pestana === "me" && viewMe) {
       viewMe.style.display = "flex";
+      this.renderizarPerfil();
     }
   }
 
@@ -182,6 +205,26 @@ class App {
       `;
       historyContainer.appendChild(item);
     });
+  }
+
+  renderizarPerfil() {
+    const { profileName, profileTarget, editAge, editWeight } = this.dom.elements;
+
+    if (profileName) {
+      profileName.textContent = this.user.username;
+    }
+
+    if (profileTarget) {
+      profileTarget.textContent = `${this.user.consumptionTarget}`;
+    }
+
+    if (editAge) {
+      editAge.value = this.user.age ?? "";
+    }
+
+    if (editWeight) {
+      editWeight.value = this.user.weight ?? "";
+    }
   }
 
   updateUI() {
