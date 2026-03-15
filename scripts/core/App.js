@@ -72,6 +72,7 @@ class App {
       editAge,
       editWeight,
       btnSaveProfile,
+      btnLogout,
     } = this.dom.elements;
 
     if (drinkForm) {
@@ -138,11 +139,20 @@ class App {
     }
 
     if (btnSaveProfile) {
+      // La persistencia de YO sigue la feature de Marcos, adaptada al modelo actual de esta rama.
       btnSaveProfile.addEventListener("click", () => {
         this.user.age = parseOptionalPositiveInteger(editAge?.value ?? "");
         this.user.weight = parseOptionalPositiveInteger(editWeight?.value ?? "");
         saveUser(this.user);
         this.renderizarPerfil();
+      });
+    }
+
+    if (btnLogout) {
+      // Se conserva el logout de YO por compatibilidad funcional con la feature original de Marcos.
+      btnLogout.addEventListener("click", () => {
+        localStorage.removeItem("currentUser");
+        window.location.href = "index.html";
       });
     }
   }

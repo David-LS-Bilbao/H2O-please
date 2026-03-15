@@ -196,7 +196,7 @@ Se realizó validación manual básica sobre la rama actual:
 
 ## Integración quirúrgica de `YO / Mi perfil`
 
-Tras actualizar `origin/marcos`, se detectó que esa rama sí contenía una versión más avanzada de la vista `YO / Mi perfil`. No se hizo merge global. Se aplicó una integración quirúrgica sobre la rama actual, usando `feat/mejoras-weather-card` como fuente de verdad visual y estructural.
+Tras actualizar `origin/marcos`, se detectó que esa rama sí contenía una versión más avanzada de la vista `YO / Mi perfil`. No se hizo merge global. Se aplicó una integración quirúrgica sobre la rama actual, usando `feat/mejoras-weather-card` como fuente de verdad visual y estructural, y más tarde se redujo la divergencia con Marcos en la propia sección `YO`.
 
 ### Qué se integró
 - bloque mínimo de perfil dentro de `#view-me`
@@ -208,14 +208,28 @@ Tras actualizar `origin/marcos`, se detectó que esa rama sí contenía una vers
 - guardado local de edad y peso
 - persistencia mínima de `age` y `weight`
 - adaptación del modelo actual para soportar esos datos sin romper auth ni consumo
+- recuperación del botón `Cerrar Sesión` por compatibilidad funcional con la feature de Marcos
+- alineación del HTML/CSS local con la estructura simple de Marcos:
+  - `profile-card`
+  - `user-info`
+  - `edit-group`
+  - `save-btn`
+  - `logout-btn`
 
 ### Qué se descartó
-- logout de Marcos
 - alertas innecesarias
-- estilos de perfil de Marcos
+- merge completo del layout/CSS de Marcos
+- estilos globales de perfil de Marcos
 - cambios de layout/header/footer
 - cambios globales de navegación
 - cualquier refactor no relacionado con perfil
+
+### Ajuste posterior de compatibilidad
+Tras la integración funcional inicial, se hizo una pasada pequeña para acercar la sección `YO` a Marcos sin absorber su rama completa:
+- se mantuvieron los mismos IDs usados por la lógica actual
+- se recuperó el logout con una implementación mínima y reversible
+- se dejó CSS encapsulado solo para evitar la herencia `flex` global del dashboard
+- se evitó rediseñar la vista o arrastrar estilos globales ajenos a perfil
 
 ### Archivos funcionales afectados
 - `dashboard.html`
@@ -243,7 +257,7 @@ Estado de integración:
 2. **Marcos** → integrado y validado
 3. **Jonathan** → integrado funcionalmente de forma selectiva y ampliado después en auth
 4. **Clima (David)** → integrado y refinado en la weather card actual
-5. **YO / Mi perfil** → integrado quirúrgicamente desde `origin/marcos`
+5. **YO / Mi perfil** → integrado quirúrgicamente desde `origin/marcos` y alineado después para reducir divergencia futura
 
 ## Conclusión
-Hasta este punto se ha conseguido una rama de integración estable basada en el diseño de Luis, con la funcionalidad principal de Marcos incorporada, la parte útil de Jonathan ya adaptada, la weather card integrada y refinada, y la vista `YO / Mi perfil` incorporada de forma quirúrgica sin absorber cambios globales de otras ramas. La fase abierta ya no es de merges grandes, sino de validación manual final y posibles ajustes pequeños, reversibles y bien acotados antes de llevar esta base a `dev`.
+Hasta este punto se ha conseguido una rama de integración estable basada en el diseño de Luis, con la funcionalidad principal de Marcos incorporada, la parte útil de Jonathan ya adaptada, la weather card integrada y refinada, y la vista `YO / Mi perfil` incorporada de forma quirúrgica y después alineada con la estructura funcional de Marcos sin absorber cambios globales de otras ramas. La fase abierta ya no es de merges grandes, sino de validación manual final y posibles ajustes pequeños, reversibles y bien acotados antes de llevar esta base a `dev`.
