@@ -14,19 +14,46 @@ const WEATHER_CARD_SELECTORS = {
   status: "#weather-status",
   temperature: "#weather-temperature",
   date: "#weather-date",
+  time: "#weather-time",
 };
 
 const WEATHER_CARD_MARKUP = `
   <section class="weather-card dashboard-weather-card" aria-live="polite">
-    <div class="weather-card__top">
-      <p class="weather-card__eyebrow">Clima local</p>
+    <div class="weather-card__top weather-card__header">
+      <div class="weather-card__heading">
+        <h2 id="weather-city">Ubicacion actual</h2>
+      </div>
       <p id="weather-status" class="weather-card__status">Cargando clima...</p>
     </div>
-    <h2 id="weather-city">Ubicacion actual</h2>
-    <div class="weather-card__main">
-      <p id="weather-temperature" class="weather-card__temperature">-- °C</p>
-      <div class="weather-card__meta">
-        <p id="weather-date" class="weather-card__meta-item">--/--/----</p>
+    <div class="weather-card__main weather-card__content">
+      <div class="weather-card__temperature-block">
+        <p
+          id="weather-temperature"
+          class="weather-card__temperature"
+          aria-label="Temperatura actual"
+        >
+          -- °C
+        </p>
+      </div>
+      <div class="weather-card__meta weather-card__datetime">
+        <div class="weather-card__meta-row">
+          <p
+            id="weather-date"
+            class="weather-card__meta-item"
+            aria-label="Fecha local"
+          >
+            --/--/----
+          </p>
+        </div>
+        <div class="weather-card__meta-row">
+          <p
+            id="weather-time"
+            class="weather-card__meta-item"
+            aria-label="Hora local"
+          >
+            --:--:--
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -54,6 +81,7 @@ export function getWeatherCardElements(root = document) {
     status: root.querySelector(WEATHER_CARD_SELECTORS.status),
     temperature: root.querySelector(WEATHER_CARD_SELECTORS.temperature),
     date: root.querySelector(WEATHER_CARD_SELECTORS.date),
+    time: root.querySelector(WEATHER_CARD_SELECTORS.time),
   };
 }
 
@@ -66,6 +94,7 @@ export function createWeatherDomManager(root = document) {
   let currentWeatherDescription = "";
   let currentTimeZone = null;
   let currentTimeZoneOffsetSeconds = null;
+  let localClockTimerId = null;
 
   function getLocalDateTimeContext(baseDate = new Date()) {
     if (typeof currentTimeZone === "string" && currentTimeZone.trim() !== "") {
@@ -101,6 +130,10 @@ export function createWeatherDomManager(root = document) {
       dateTimeContext.date,
       dateTimeContext
     );
+    elements.time.textContent = formatWeatherTime(
+      dateTimeContext.date,
+      dateTimeContext
+    );
 
     if (currentWeatherDescription) {
       elements.status.dataset.icon = getWeatherStatusIcon(
@@ -112,12 +145,27 @@ export function createWeatherDomManager(root = document) {
   }
 
   function startLocalClock() {
+    if (!hasWeatherCardElements(elements)) {
+      return null;
+    }
+
     renderLocalDateTime();
-    return null;
+
+    if (localClockTimerId !== null) {
+      window.clearInterval(localClockTimerId);
+    }
+
+    localClockTimerId = window.setInterval(renderLocalDateTime, 1000);
+    return localClockTimerId;
   }
 
   function stopLocalClock() {
-    return null;
+    if (localClockTimerId === null) {
+      return;
+    }
+
+    window.clearInterval(localClockTimerId);
+    localClockTimerId = null;
   }
 
   function renderWeatherCard(snapshot) {
@@ -160,6 +208,8 @@ export function createWeatherDomManager(root = document) {
     elements.status.textContent = message;
     elements.status.dataset.icon = "error";
     elements.temperature.textContent = "-- °C";
+    elements.date.textContent = "--/--/----";
+    elements.time.textContent = "--:--:--";
   }
 
   return {

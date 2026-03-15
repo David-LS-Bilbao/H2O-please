@@ -1,6 +1,8 @@
 class UserConsumption {
-  constructor(username, data = {}) {
+  // Integracion Jon adaptada y revisable: el modelo soporta password sin perder la estructura estable ya usada por App.
+  constructor(username, password = null, data = {}) {
     this.username = username;
+    this.password = password;
     this.lastTimeConsumed = data.lastTimeConsumed || null;
     this.lastTimeConsumedUnix = data.lastTimeConsumedUnix || null;
     this.nextAlarm = data.nextAlarm || null;
