@@ -1,0 +1,47 @@
+import { login, register } from "./services/authService.js";
+
+function initLoginPage() {
+  const loginForm = document.querySelector("#login-form");
+  const registerForm = document.querySelector("#register-form");
+  const authMessage = document.querySelector("#auth-message");
+
+  function renderAuthMessage(message = "") {
+    if (!authMessage) {
+      return;
+    }
+
+    authMessage.textContent = message;
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.querySelector("#username").value.trim();
+      if (!username) return;
+
+      renderAuthMessage("");
+      const ok = login(username);
+      if (ok) window.location.href = "dashboard.html";
+      else renderAuthMessage("Usuario no encontrado.");
+    });
+  }
+
+  if (registerForm) {
+    registerForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.querySelector("#new-username").value.trim();
+      if (!username) return;
+
+      renderAuthMessage("");
+      const ok = register(username);
+      if (ok) {
+        window.location.href = "dashboard.html";
+        return;
+      }
+
+      renderAuthMessage("El usuario ya existe.");
+    });
+  }
+}
+
+document.addEventListener("DOMContentLoaded", initLoginPage);
