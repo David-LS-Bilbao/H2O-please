@@ -12,13 +12,6 @@ Se decidió abandonar la rama `sandbox/conflictos-merge` como base principal de 
   - `backup/dashboard-weather-restyled`
   - `origin/feat/restructure` como base principal, por estar mezclada con trabajo de Jonathan y merges previos
 
-## Documentación operativa
-Se creó un archivo `AGENTS.md` en la raíz del repositorio para fijar reglas de trabajo con Codex:
-- mantener como fuente de verdad visual la rama de Luis
-- integrar funcionalidades del resto con cambios mínimos
-- evitar rediseños globales
-- separar integración funcional de limpieza estructural
-- documentar cada paso importante
 
 ## Integración de Marcos
 Sobre la rama `test/integracion-luis-base` se lanzó:
@@ -90,7 +83,6 @@ La integración de Jonathan no se realizó mediante merge completo de `origin/fe
 
 ### Qué se descartó por ahora
 - CSS amplio de Jonathan, para no alterar la identidad visual de Luis
-- cambios de passwords y autologin, por abrir demasiado alcance en esta fase
 - commits de transición o pruebas intermedias sin valor claro de integración
 - cualquier ajuste visual no imprescindible para la funcionalidad
 
@@ -115,6 +107,19 @@ La integración funcional de Jonathan se cerró con el commit:
 
 ```bash
 feat: integrate jon functionality over luis base
+```
+
+### Integración posterior de auth en `feat/mejoras-weather-card`
+En una fase posterior, ya fuera de `test/integracion-luis-base`, sí se integró la parte útil que seguía pendiente de Jonathan:
+- autologin
+- password en login y register
+- persistencia y carga de password
+- validación de credenciales con password
+
+Esa ampliación se cerró en la rama actual con el commit:
+
+```bash
+feat: integrate auth updates and polish weather card
 ```
 
 ### Estado tras esta fase
@@ -149,8 +154,9 @@ La integración del clima no se realizó mediante merge bruto de una rama comple
   - mensajes HTTP algo más informativos
   - ampliación del mapeo de códigos Open-Meteo
   - mejora de detección de contexto seguro
-  - retirada del reloj de la card
   - mejora del intento de resolución de la ubicación mostrada
+  - ajuste del render final para mostrar ciudad, temperatura, fecha y hora
+  - compactación y responsive conservador de la weather card sin romper el dashboard
 
 ### Qué se descartó por ahora
 - merge completo de `feat/dashboard-weather-integration`
@@ -175,30 +181,69 @@ Se realizó validación manual básica sobre la rama actual:
 - comprobación de que la card no empujaba el contenido hacia el footer
 - validación básica de carga del clima y uso de cache local cuando correspondía
 - revisión manual posterior del refinamiento funcional pequeño
+- comprobación de que la card ya muestra ciudad/localización, temperatura, fecha y hora
+- comprobación de que el ajuste visual final no rompe móvil ni escritorio
 
 ### Estado actual tras esta fase
-- la integración mínima del clima ya está aplicada y validada manualmente en `test/integracion-luis-base`
+- la integración mínima del clima ya está aplicada y refinada en `feat/mejoras-weather-card`
 - el diseño base de Luis se mantiene como referencia visual del dashboard
-- la integración del clima no debe considerarse todavía cerrada a nivel de Git, porque en este momento siguen existiendo cambios del refinamiento funcional pequeño sin commit
-- el estado actual es: clima integrado funcionalmente, validado manualmente y pendiente de cierre formal por commit cuando se dé por estable
+- la weather card ya quedó cerrada a nivel funcional y visual conservador
+- el estado actual es: clima integrado funcionalmente, validado técnicamente y ya comprometido en Git
 
 ### Refinamiento pendiente
-- confirmar en navegador que la ubicación mostrada ya refleja mejor la localización real
 - decidir si hace falta un ajuste visual muy pequeño adicional, sin entrar en rediseño
 - revisar si conviene portar después alguna mejora menor de resiliencia o UX desde `feat/dashboard-weather-integration`, siempre sin traer su CSS grande
+
+## Integración quirúrgica de `YO / Mi perfil`
+
+Tras actualizar `origin/marcos`, se detectó que esa rama sí contenía una versión más avanzada de la vista `YO / Mi perfil`. No se hizo merge global. Se aplicó una integración quirúrgica sobre la rama actual, usando `feat/mejoras-weather-card` como fuente de verdad visual y estructural.
+
+### Qué se integró
+- bloque mínimo de perfil dentro de `#view-me`
+- render de:
+  - nombre de usuario
+  - objetivo diario
+  - edad
+  - peso
+- guardado local de edad y peso
+- persistencia mínima de `age` y `weight`
+- adaptación del modelo actual para soportar esos datos sin romper auth ni consumo
+
+### Qué se descartó
+- logout de Marcos
+- alertas innecesarias
+- estilos de perfil de Marcos
+- cambios de layout/header/footer
+- cambios globales de navegación
+- cualquier refactor no relacionado con perfil
+
+### Archivos funcionales afectados
+- `dashboard.html`
+- `scripts/core/App.js`
+- `scripts/core/DOMManager.js`
+- `scripts/core/storage.js`
+- `scripts/models/UserConsumption.js`
+
+### Commit de cierre
+La integración quirúrgica de perfil quedó cerrada con el commit:
+
+```bash
+feat(profile): integrate YO profile logic from marcos surgically
+```
 
 ## Situación actual
 La rama de trabajo actual es:
 
 ```bash
-test/integracion-luis-base
+feat/mejoras-weather-card
 ```
 
 Estado de integración:
 1. **Luis** → base visual consolidada
 2. **Marcos** → integrado y validado
-3. **Jonathan** → integrado funcionalmente de forma selectiva
-4. **Clima (David)** → integración mínima aplicada y validada manualmente; refinamiento funcional pequeño en curso y pendiente de commit
+3. **Jonathan** → integrado funcionalmente de forma selectiva y ampliado después en auth
+4. **Clima (David)** → integrado y refinado en la weather card actual
+5. **YO / Mi perfil** → integrado quirúrgicamente desde `origin/marcos`
 
 ## Conclusión
-Hasta este punto se ha conseguido una rama de integración estable basada en el diseño de Luis, con la funcionalidad principal de Marcos incorporada, la parte útil de Jonathan ya adaptada y una integración mínima del clima ya montada dentro del dashboard. La fase abierta ahora no es de integración bruta, sino de cierre y validación final del clima con ajustes funcionales pequeños y conservadores antes de darla por cerrada.
+Hasta este punto se ha conseguido una rama de integración estable basada en el diseño de Luis, con la funcionalidad principal de Marcos incorporada, la parte útil de Jonathan ya adaptada, la weather card integrada y refinada, y la vista `YO / Mi perfil` incorporada de forma quirúrgica sin absorber cambios globales de otras ramas. La fase abierta ya no es de merges grandes, sino de validación manual final y posibles ajustes pequeños, reversibles y bien acotados antes de llevar esta base a `dev`.
