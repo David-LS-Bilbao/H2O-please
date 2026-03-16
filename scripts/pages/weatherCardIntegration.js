@@ -75,7 +75,7 @@ export function initWeatherCardIntegration({
     weatherDomManager.renderWeatherCard(storedSnapshot);
   }
 
-  weatherDomManager.renderLocalDateTime();
+  weatherDomManager.startLocalClock();
   syncWeatherCard(weatherDomManager, contextLabel);
 
   return weatherDomManager;
