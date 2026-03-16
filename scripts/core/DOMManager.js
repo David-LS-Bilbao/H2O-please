@@ -22,6 +22,13 @@ class DOMManager {
       btnHistory: document.querySelector("#btn-history"),
       btnMe: document.querySelector("#btn-me"),
       historyContainer: document.querySelector("#history-container"),
+      // YO mantiene los mismos hooks de Marcos para reducir reinterpretaciones en futuros merges.
+      profileName: document.querySelector("#profile-name"),
+      profileTarget: document.querySelector("#profile-target"),
+      editAge: document.querySelector("#edit-age"),
+      editWeight: document.querySelector("#edit-weight"),
+      btnSaveProfile: document.querySelector("#btn-save-profile"),
+      btnLogout: document.querySelector("#btn-logout"),
     };
   }
 

@@ -1,6 +1,8 @@
 class UserConsumption {
-  constructor(username, data = {}) {
+  // Integracion Jon adaptada y revisable: el modelo soporta password sin perder la estructura estable ya usada por App.
+  constructor(username, password = null, data = {}) {
     this.username = username;
+    this.password = password;
     this.lastTimeConsumed = data.lastTimeConsumed || null;
     this.lastTimeConsumedUnix = data.lastTimeConsumedUnix || null;
     this.nextAlarm = data.nextAlarm || null;
@@ -8,6 +10,8 @@ class UserConsumption {
     this.consumptionTarget = data.consumptionTarget ?? 2300;
     this.history = Array.isArray(data.history) ? data.history : [];
     this.lastDate = data.lastDate || null;
+    this.age = Number.isFinite(data.age) ? data.age : null;
+    this.weight = Number.isFinite(data.weight) ? data.weight : null;
   }
 
   addWater(amount) {

@@ -10,6 +10,16 @@ function unixToTime(unixSeconds) {
   });
 }
 
+function parseOptionalPositiveInteger(rawValue) {
+  const parsedValue = Number.parseInt(rawValue, 10);
+
+  if (!Number.isFinite(parsedValue) || parsedValue <= 0) {
+    return null;
+  }
+
+  return parsedValue;
+}
+
 class App {
   constructor() {
     this.dom = new DOMManager();
@@ -59,6 +69,10 @@ class App {
       btnToday,
       btnHistory,
       btnMe,
+      editAge,
+      editWeight,
+      btnSaveProfile,
+      btnLogout,
     } = this.dom.elements;
 
     if (drinkForm) {
@@ -123,6 +137,24 @@ class App {
     if (btnMe) {
       btnMe.addEventListener("click", () => this.cambiarPestana("me"));
     }
+
+    if (btnSaveProfile) {
+      // La persistencia de YO sigue la feature de Marcos, adaptada al modelo actual de esta rama.
+      btnSaveProfile.addEventListener("click", () => {
+        this.user.age = parseOptionalPositiveInteger(editAge?.value ?? "");
+        this.user.weight = parseOptionalPositiveInteger(editWeight?.value ?? "");
+        saveUser(this.user);
+        this.renderizarPerfil();
+      });
+    }
+
+    if (btnLogout) {
+      // Se conserva el logout de YO por compatibilidad funcional con la feature original de Marcos.
+      btnLogout.addEventListener("click", () => {
+        localStorage.removeItem("currentUser");
+        window.location.href = "index.html";
+      });
+    }
   }
 
   cambiarPestana(pestana) {
@@ -153,6 +185,7 @@ class App {
 
     if (pestana === "me" && viewMe) {
       viewMe.style.display = "flex";
+      this.renderizarPerfil();
     }
   }
 
@@ -182,6 +215,26 @@ class App {
       `;
       historyContainer.appendChild(item);
     });
+  }
+
+  renderizarPerfil() {
+    const { profileName, profileTarget, editAge, editWeight } = this.dom.elements;
+
+    if (profileName) {
+      profileName.textContent = this.user.username;
+    }
+
+    if (profileTarget) {
+      profileTarget.textContent = `${this.user.consumptionTarget}`;
+    }
+
+    if (editAge) {
+      editAge.value = this.user.age ?? "";
+    }
+
+    if (editWeight) {
+      editWeight.value = this.user.weight ?? "";
+    }
   }
 
   updateUI() {
