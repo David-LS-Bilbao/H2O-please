@@ -1,7 +1,6 @@
 import DOMManager from "./DOMManager.js";
 import { loadCurrentUser, saveUser } from "./storage.js";
 
-// Función de utilidad para el tiempo
 function unixToTime(unixSeconds) {
     const date = new Date(unixSeconds * 1000);
     return date.toLocaleTimeString("es-ES", {
@@ -46,11 +45,11 @@ class App {
         const { 
             drinkForm, amountInput, 
             btnToday, btnHistory, btnMe, 
-            btnLogout,
-            btnSaveProfile, editAge, editWeight 
+            btnLogout, btnSaveProfile, 
+            editAge, editWeight 
         } = this.dom.elements;
 
-        
+        // --- Lógica de Beber ---
         if (drinkForm) {
             drinkForm.addEventListener("submit", (e) => {
                 e.preventDefault();
@@ -70,41 +69,41 @@ class App {
                 amountInput.value = "";
             });
         }
-        if (btnSaveProfile) {
-    btnSaveProfile.addEventListener("click", () => {
-        
-        const nuevaEdad = parseInt(editAge.value) || 0;
-        const nuevoPeso = parseInt(editWeight.value) || 0;
 
-        
-        this.user.age = nuevaEdad;
-        this.user.weight = nuevoPeso;
-
-    
-        saveUser(this.user); 
-        
-        alert("¡Datos del usuario guardados en el sistema!");
-    });
-}
-
-     
+        // --- Lógica de Guardar Perfil (Cálculo dinámico 35ml/kg) ---
         if (btnSaveProfile) {
             btnSaveProfile.addEventListener("click", () => {
-                
-                this.user.age = parseInt(editAge.value) || 0;
-                this.user.weight = parseInt(editWeight.value) || 0;
+                const nuevaEdad = parseInt(editAge.value) || 0;
+                const nuevoPeso = parseInt(editWeight.value) || 0;
 
+                if (nuevoPeso <= 0) {
+                    alert("Por favor, introduce un peso válido.");
+                    return;
+                }
+
+                this.user.age = nuevaEdad;
+                this.user.weight = nuevoPeso;
+
+                // Calculamos la meta según el peso
+                this.user.calculateTarget(); 
+
+                // Guardamos en LocalStorage
                 saveUser(this.user);
-                alert("¡Perfil del usuario actualizado!");
+                
+                // Actualizamos toda la interfaz
+                this.renderizarPerfil();
+                this.updateUI(); 
+
+                alert(`¡Perfil actualizado! Tu nueva meta es ${this.user.consumptionTarget} ml`);
             });
         }
 
-        
+        // --- Navegación ---
         if (btnToday) btnToday.addEventListener('click', () => this.cambiarPestaña('today'));
         if (btnHistory) btnHistory.addEventListener('click', () => this.cambiarPestaña('history'));
         if (btnMe) btnMe.addEventListener('click', () => this.cambiarPestaña('me'));
 
-        
+        // --- Cerrar Sesión ---
         if (btnLogout) {
             btnLogout.addEventListener("click", () => {
                 localStorage.removeItem("currentUser");
@@ -115,17 +114,16 @@ class App {
 
     cambiarPestaña(pestaña) {
         const { viewToday, viewHistory, viewMe } = this.dom.elements;
-
         viewToday.style.display = 'none';
         viewHistory.style.display = 'none';
         viewMe.style.display = 'none';
 
-        if (pestaña === 'today') {
-            viewToday.style.display = 'block';
-        } else if (pestaña === 'history') {
+        if (pestaña === 'today') viewToday.style.display = 'block';
+        if (pestaña === 'history') {
             viewHistory.style.display = 'block';
             this.renderizarHistorial();
-        } else if (pestaña === 'me') {
+        }
+        if (pestaña === 'me') {
             viewMe.style.display = 'block';
             this.renderizarPerfil();
         }
@@ -134,7 +132,6 @@ class App {
     renderizarHistorial() {
         const { historyContainer } = this.dom.elements;
         if (!historyContainer) return;
-
         historyContainer.innerHTML = '';
 
         if (!this.user.history || this.user.history.length === 0) {
@@ -155,30 +152,25 @@ class App {
 
     renderizarPerfil() {
         const { profileName, profileTarget, editAge, editWeight } = this.dom.elements;
-        
         if (profileName) profileName.textContent = this.user.username;
         if (profileTarget) profileTarget.textContent = `${this.user.consumptionTarget} ml`;
-        
-    
         if (editAge) editAge.value = this.user.age || "";
         if (editWeight) editWeight.value = this.user.weight || "";
     }
 
     updateUI() {
         const { totalText, countdown, progress, dailyTarget } = this.dom.elements;
+        if (totalText) totalText.textContent = `${this.user.waterConsumed} ml`;
+        if (dailyTarget) dailyTarget.textContent = `${this.user.consumptionTarget} ml`;
 
-        totalText.textContent = `${this.user.waterConsumed} ml`;
-
-        if (this.user.lastTimeConsumedUnix) {
+        if (this.user.lastTimeConsumedUnix && countdown) {
             countdown.textContent = `Siguiente toma a las ${unixToTime(this.user.nextAlarm)}`;
         }
 
-        const percent = Math.min(
-            100,
-            Math.round((this.user.waterConsumed / this.user.consumptionTarget) * 100)
-        );
-        progress.value = percent;
-        dailyTarget.textContent = `${this.user.consumptionTarget} ml`;
+        if (progress) {
+            const percent = Math.min(100, Math.round((this.user.waterConsumed / this.user.consumptionTarget) * 100));
+            progress.value = percent;
+        }
     }
 }
 
