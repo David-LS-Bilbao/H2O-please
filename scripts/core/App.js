@@ -47,10 +47,10 @@ class App {
             drinkForm, amountInput, 
             btnToday, btnHistory, btnMe, 
             btnLogout,
-            btnSaveProfile, editAge, editWeight // Nuevos elementos del DOMManager
+            btnSaveProfile, editAge, editWeight 
         } = this.dom.elements;
 
-        // --- Lógica de Beber ---
+        
         if (drinkForm) {
             drinkForm.addEventListener("submit", (e) => {
                 e.preventDefault();
@@ -72,25 +72,25 @@ class App {
         }
         if (btnSaveProfile) {
     btnSaveProfile.addEventListener("click", () => {
-        // 1. Extraer valores de los inputs
+        
         const nuevaEdad = parseInt(editAge.value) || 0;
         const nuevoPeso = parseInt(editWeight.value) || 0;
 
-        // 2. Asignarlos al objeto usuario de la sesión actual
+        
         this.user.age = nuevaEdad;
         this.user.weight = nuevoPeso;
 
-        // 3. ¡IMPORTANTE! Guardar en el almacenamiento persistente
+    
         saveUser(this.user); 
         
         alert("¡Datos del usuario guardados en el sistema!");
     });
 }
 
-        // --- Lógica Guardar Perfil (Edad y Peso) ---
+     
         if (btnSaveProfile) {
             btnSaveProfile.addEventListener("click", () => {
-                // Guardamos los valores de los inputs en el objeto user
+                
                 this.user.age = parseInt(editAge.value) || 0;
                 this.user.weight = parseInt(editWeight.value) || 0;
 
@@ -99,12 +99,12 @@ class App {
             });
         }
 
-        // --- Navegación (SPA) ---
+        
         if (btnToday) btnToday.addEventListener('click', () => this.cambiarPestaña('today'));
         if (btnHistory) btnHistory.addEventListener('click', () => this.cambiarPestaña('history'));
         if (btnMe) btnMe.addEventListener('click', () => this.cambiarPestaña('me'));
 
-        // --- Cerrar Sesión ---
+        
         if (btnLogout) {
             btnLogout.addEventListener("click", () => {
                 localStorage.removeItem("currentUser");
