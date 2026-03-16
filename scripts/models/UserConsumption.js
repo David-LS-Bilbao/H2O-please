@@ -14,6 +14,11 @@ class UserConsumption {
     this.weight = Number.isFinite(data.weight) ? data.weight : null;
   }
 
+  calculateTarget() {
+    this.consumptionTarget =
+      Number.isFinite(this.weight) && this.weight > 0 ? this.weight * 35 : 2300;
+  }
+
   addWater(amount) {
     const nowUnix = Math.floor(Date.now() / 1000);
     this.lastTimeConsumedUnix = nowUnix;

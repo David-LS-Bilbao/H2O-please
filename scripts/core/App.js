@@ -143,8 +143,10 @@ class App {
       btnSaveProfile.addEventListener("click", () => {
         this.user.age = parseOptionalPositiveInteger(editAge?.value ?? "");
         this.user.weight = parseOptionalPositiveInteger(editWeight?.value ?? "");
+        this.user.calculateTarget();
         saveUser(this.user);
         this.renderizarPerfil();
+        this.updateUI();
       });
     }
 
