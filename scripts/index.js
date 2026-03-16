@@ -15,7 +15,7 @@ function initLoginPage() {
       else alert("Usuario no encontrado");
     });
   }
-
+//puto
   if (registerForm) {
     registerForm.addEventListener("submit", (e) => {
       e.preventDefault();
