@@ -199,7 +199,7 @@ class App {
 
     if (!Array.isArray(this.user.history) || this.user.history.length === 0) {
       historyContainer.innerHTML =
-        '<p style="text-align:center; padding:20px;">No hay registros hoy.</p>';
+        '<p style="text-align:center; padding:20px;">Sin registros.</p>';
       return;
     }
 
@@ -208,10 +208,10 @@ class App {
       const isNegative = amount < 0;
       const item = document.createElement("div");
       item.style.cssText =
-        "display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid #eee; align-items:center;";
+        "display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid var(--neutral-color); align-items:center;";
       item.innerHTML = `
-        <span style="font-weight:bold; color:#555;">${toma.hora}</span>
-        <span style="color:${isNegative ? "#b42318" : "#007bff"}; font-weight:bold;">${isNegative ? "" : "+"}${amount} ml</span>
+        <span style="font-weight:bold; color:var(--neutral-color);">${toma.hora}</span>
+        <span style="color:${isNegative ? "var(--negative-color)" : "var(--primary-dark-color)"}; font-weight:bold;">${isNegative ? "" : "+"}${amount} ml</span>
       `;
       historyContainer.appendChild(item);
     });
@@ -237,12 +237,36 @@ class App {
     }
   }
 
+  // COMIENZO DE LA ANIMACIÓN DE LOS NÚMEROS
+  waterConsumedAnimation(finalNumber) {
+    const totalText = this.dom.elements.totalText;
+    let actualNumber = parseInt(totalText.textContent) || 0;
+    
+    const interval = setInterval(() => {
+      if (actualNumber < finalNumber) {
+        actualNumber++
+      }
+      totalText.textContent = actualNumber;
+      if (actualNumber === finalNumber) {
+        clearInterval(interval);
+      }
+    }, 1);
+  }
+
   updateUI() {
     const { totalText, countdown, progress, dailyTarget } = this.dom.elements;
 
+    /*  ANIMACIÓN DE LOS NÚMEROES: ESTO ES LO ANTGUO Y ES PARA ELIMINAR
     if (totalText) {
       totalText.textContent = `${this.user.waterConsumed}`;
     }
+    */
+
+    // Se modifica el IF de arriba por este otro para hacer la animación de los números
+    if (totalText) {
+      this.waterConsumedAnimation(this.user.waterConsumed);
+    }
+    // FIN DE LA ANIMACIÓN DE LOS NÚMEROS
 
     if (countdown) {
       if (this.user.lastTimeConsumedUnix && this.user.nextAlarm) {

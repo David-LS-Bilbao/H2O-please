@@ -33,17 +33,57 @@
 
 /* ==================== VARIABLES ==================== */
 :root {
-    --primary-color: #0476ae;
-    --primary-light-color: #58B5E3;
-    --primary-dark-color: #034a6d;
+    --primary-color: #1B7090;
+    --primary-light-color: #4f89a0;
+    --primary-dark-color: #194f6b;
     --secondary-color: #ffd166;
     --secondary-light-color: #ffe08a;
     --neutral-color: #757575;
+    --negative-color: #972c24;
     --background-color: #fdfdfd;
+    --progress-background-color: #eeeeee;
     --primary-font-regular: 'Poppins-Regular', sans-serif;
     --primary-font-light: 'Poppins-Light', sans-serif;
     --primary-font-medium: 'Poppins-Medium', sans-serif;
     --primary-font-bold: 'Poppins-Bold', sans-serif;
+}
+
+.dark-theme {
+    --primary-dark-color: #a6e5fe;
+    --secondary-light-color: #0f3c52;
+    --negative-color: #cb453b;
+    --background-color: #222222;
+    --progress-background-color: #333333;
+    --neutral-color: #bababa;
+
+    svg {
+        path:nth-of-type(1) {
+            --primary-dark-color: #59cef8;
+        }
+
+        path:nth-of-type(2) {
+            --primary-light-color: #a6e5fe;
+        }
+    }
+
+    h2 {
+        --primary-color: #3398bd;
+    }
+
+    #countdown {
+        --primary-dark-color: #ffe08a;
+    }
+
+    #drink-form label {
+        --primary-light-color: #78cff2;
+    }
+
+    #view-me .logout-btn {
+        --primary-color: #a6e5fe;
+    }
+    footer {
+        --primary-color: #8fcce4;
+    }
 }
 
 /* ==================== GENERAL STYLES ==================== */
@@ -57,6 +97,7 @@ body {
     padding: 0;
     font-family: var(--primary-font-regular);
     background: var(--background-color);
+    transition: all 0.3s;
 }
 
 body {
@@ -148,12 +189,80 @@ body[data-page="login"] #auth-message {
 }
 
 header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     position: sticky;
     top: 0;
     padding: 0.5rem 1rem;
 
-    img {
+    svg {
         height: 2.2rem;
+
+        path:nth-of-type(1) {
+            fill: var(--primary-dark-color);
+        }
+
+        path:nth-of-type(2) {
+            fill: var(--primary-light-color);
+        }
+    }
+
+    #toggleButton {
+        position: relative;
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        outline: none;
+        cursor: pointer;
+        height: 1.3rem;
+        width: 3rem;
+        margin-right: 1.5rem;
+        box-shadow: 0.3rem 0.3rem 0.8rem #277B9A33;
+        border: 0.05rem solid #277B9A66;
+        border-radius: 2rem;
+
+        &:before {
+            position: absolute;
+            content: "";
+            width: 1rem;
+            height: 1rem;
+            top: 50%;
+            left: 0.2rem;
+            transform: translateY(-50%) translateX(0%);
+            border-radius: 50%;
+            background: var(--primary-color);
+            transition: transform 0.3s;
+        }
+
+        &:after {
+            position: absolute;
+            content: "";
+            background-image: url(../assets/images/bombilla-apagada.svg);
+            background-size: cover;
+            width: 1.6rem;
+            height: 1.6rem;
+            top: calc(50% - 0.1rem);
+            transform: translateY(-50%);
+            left: calc(100% + 0.3rem);
+            white-space: nowrap;
+            color: var(--primary-light-color);
+            pointer-events: none;
+        }
+    }
+
+    #toggleButton:checked {
+        background: var(--primary-color);
+        border: none;
+
+        &:before {
+            background: #fdfdfd;
+            transform: translateY(-50%) translateX(1.6rem);
+        }
+
+        &:after {
+            background-image: url(../assets/images/bombilla-encendida.svg);
+        }
     }
 }
 
@@ -223,14 +332,18 @@ main.app-layout {
             direction: rtl;
 
             &::-webkit-progress-bar {
-                background-color: #eee;
+                background-color: var(--progress-background-color);
                 border-radius: 1rem;
             }
 
             &::-webkit-progress-value {
-                background-color: var(--primary-color);
+                background-color: var(--primary-dark-color);
                 border-radius: 1rem;
-                transition: 0.5s ease;
+                transition: 1s ease;
+            }
+
+            &::-moz-progress-bar {
+                background: var(--primary-dark-color);
             }
         }
     }
@@ -270,7 +383,7 @@ main.app-layout {
             font-size: 3.7rem;
             font-family: var(--primary-font-bold);
             margin: 0;
-            color: var(--primary-color);
+            color: var(--primary-dark-color);
         }
 
         #countdown {
@@ -291,9 +404,9 @@ main.app-layout {
             gap: 0.5rem;
             margin: auto 0.5rem 0.5rem 0.5rem;
             padding-bottom: 0.5rem;
-            border: solid 0.1rem #58B5E333;
+            border: solid 0.1rem #277B9A11;
             border-radius: 2rem;
-            box-shadow: 0.3rem 0.3rem 0.8rem #58B5E355;
+            box-shadow: 0.3rem 0.3rem 0.8rem #277B9A33;
 
             label {
                 position: relative;
@@ -317,6 +430,7 @@ main.app-layout {
                 width: 20%;
                 border: 0;
                 text-align: right;
+                background: var(--background-color);
 
                 &::placeholder {
                     color: var(--neutral-color);
@@ -399,6 +513,10 @@ main.app-layout {
     flex-direction: column;
     width: 100%;
     gap: 0.5rem;
+    
+    p {
+        color: var(--neutral-color);
+    }
 }
 
 /* YO se encapsula para evitar la herencia flex global del dashboard y mantener una estructura simple compatible con Marcos. */
@@ -420,6 +538,7 @@ main.app-layout {
 
 #view-me .user-info p {
     margin: 0;
+    color: var(--neutral-color);
 }
 
 #view-me .edit-group {
@@ -430,6 +549,7 @@ main.app-layout {
 
 #view-me .edit-group label {
     font-size: 0.95rem;
+    color: var(--neutral-color);
 }
 
 #view-me .edit-group input,
@@ -437,6 +557,7 @@ main.app-layout {
 #view-me .logout-btn {
     width: 100%;
     box-sizing: border-box;
+
 }
 
 #view-me .edit-group input {
@@ -460,8 +581,8 @@ main.app-layout {
 }
 
 #view-me .logout-btn {
-    color: var(--primary-dark-color);
-    background: white;
+    color: var(--primary-color);
+    background: var(--background-color);
 }
 
 #view-me .profile-separator {
@@ -545,7 +666,7 @@ main.app-layout {
 }
 
 /* Weather card refresh revisable: el contenido queda por encima de las capas decorativas. */
-.dashboard-weather-card > * {
+.dashboard-weather-card>* {
     position: relative;
     z-index: 1;
 }
@@ -707,7 +828,7 @@ body[data-page="dashboard"] #weather-output .dashboard-weather-card h2 {
     gap: 0;
 }
 
-.dashboard-weather-card .weather-card__meta-row + .weather-card__meta-row {
+.dashboard-weather-card .weather-card__meta-row+.weather-card__meta-row {
     padding-top: 0.28rem;
     border-top: 1px solid rgba(255, 255, 255, 0.14);
 }
@@ -794,6 +915,7 @@ body[data-page="dashboard"] #weather-output .dashboard-weather-card {
 }
 
 @media (max-width: 360px) {
+
     .dashboard-weather-card .weather-card__top,
     .dashboard-weather-card .weather-card__header {
         grid-template-columns: 1fr;
