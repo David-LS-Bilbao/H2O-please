@@ -13,6 +13,7 @@ class DOMManager {
       drinkForm: document.querySelector("#drink-form"),
       amountInput: document.querySelector("#amount"),
       drinkButton: document.querySelector("#add-btn"),
+      removeButton: document.querySelector("#remove-btn"),
       weatherOutput: document.querySelector("#weather-output"),
       viewToday: document.querySelector("#view-today"),
       viewHistory: document.querySelector("#view-history"),

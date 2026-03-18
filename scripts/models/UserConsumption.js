@@ -26,6 +26,10 @@ class UserConsumption {
     this.waterConsumed += amount;
     this.nextAlarm = nowUnix + 1800;
   }
+
+  removeWater(amount) {
+    this.waterConsumed = Math.max(0, this.waterConsumed - amount);
+  }
 }
 
 export default UserConsumption;
