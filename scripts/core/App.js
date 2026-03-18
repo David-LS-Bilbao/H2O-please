@@ -51,6 +51,7 @@ class App {
     this.dom.renderInitialUI(this.user);
     this.attachListeners();
     this.updateUI();
+    this.iniciarMusica();
   }
 
   // Reinicia el progreso si ha cambiado el dia desde la ultima sesion guardada.
@@ -300,7 +301,31 @@ class App {
     if (dailyTarget) {
       dailyTarget.textContent = `${this.user.consumptionTarget}`;
     }
+    
   }
+iniciarMusica() {
+    const music = document.getElementById('bg-music');
+    if (!music) return;
+
+    music.volume = 0.5; // Empezamos al 50% por seguridad
+
+    const reproducir = () => {
+        music.play()
+            .then(() => {
+                console.log("¡Música iniciada correctamente!");
+                // Quitamos los eventos para que no se reinicie
+                ["click", "touchstart", "keydown"].forEach(ev => 
+                    document.removeEventListener(ev, reproducir)
+                );
+            })
+            .catch(e => console.error("Error al reproducir:", e));
+    };
+
+    // Añadimos varios tipos de interacción (clic, toque en móvil, tecla)
+    ["click", "touchstart", "keydown"].forEach(ev => 
+        document.addEventListener(ev, reproducir)
+    );
+}
 }
 
 export default App;
