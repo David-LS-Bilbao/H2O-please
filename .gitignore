@@ -1,1 +1,10 @@
 /ignore
+/AGENTS.md
+.gitignore
+classDiagram.mmd
+classDiagram.png
+moduleDiagram.mmd
+moduleDiagram.png
+nextsteps.md
+scripts/core/App.js
+test.js
