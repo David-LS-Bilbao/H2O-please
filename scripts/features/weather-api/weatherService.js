@@ -4,6 +4,39 @@ import {
   getUserLocation,
 } from "./weatherApiClient.js";
 
+const DEFAULT_CITY_LABEL = "Ubicacion actual";
+const DEFAULT_WEATHER_DESCRIPTION = "Clima actual";
+const OPEN_METEO_WEATHER_DESCRIPTIONS = {
+  0: "Cielo despejado",
+  1: "Mayormente despejado",
+  2: "Parcialmente nublado",
+  3: "Cubierto",
+  45: "Niebla",
+  48: "Niebla",
+  51: "Llovizna",
+  53: "Llovizna",
+  55: "Llovizna",
+  56: "Llovizna helada",
+  57: "Llovizna helada",
+  61: "Lluvia",
+  63: "Lluvia",
+  65: "Lluvia",
+  66: "Lluvia helada",
+  67: "Lluvia helada",
+  71: "Nieve",
+  73: "Nieve",
+  75: "Nieve",
+  77: "Nieve",
+  80: "Chubascos",
+  81: "Chubascos",
+  82: "Chubascos",
+  85: "Chubascos de nieve",
+  86: "Chubascos de nieve",
+  95: "Tormenta",
+  96: "Tormenta con granizo",
+  99: "Tormenta con granizo",
+};
+
 function getFallbackCityLabel(location) {
   if (
     typeof location?.displayName === "string" &&
@@ -20,13 +53,13 @@ function getFallbackCityLabel(location) {
     return location.country.trim();
   }
 
-  return "Ubicacion actual";
+  return DEFAULT_CITY_LABEL;
 }
 
 function getResolvedLocationLabel(location, apiCityName) {
   const fallbackCityLabel = getFallbackCityLabel(location);
 
-  if (fallbackCityLabel !== "Ubicacion actual") {
+  if (fallbackCityLabel !== DEFAULT_CITY_LABEL) {
     return fallbackCityLabel;
   }
 
@@ -46,7 +79,8 @@ function mapOpenWeatherSnapshot(weatherData, location) {
 
   return {
     temperatureCelsius,
-    weatherDescription: weatherData.weather?.[0]?.description ?? "Clima actual",
+    weatherDescription:
+      weatherData.weather?.[0]?.description ?? DEFAULT_WEATHER_DESCRIPTION,
     city: getResolvedLocationLabel(location, weatherData.name),
     latitude: location.latitude,
     longitude: location.longitude,
@@ -59,52 +93,7 @@ function mapOpenWeatherSnapshot(weatherData, location) {
 }
 
 function getOpenMeteoWeatherDescription(weatherCode) {
-  switch (weatherCode) {
-    case 0:
-      return "Cielo despejado";
-    case 1:
-      return "Mayormente despejado";
-    case 2:
-      return "Parcialmente nublado";
-    case 3:
-      return "Cubierto";
-    case 45:
-    case 48:
-      return "Niebla";
-    case 51:
-    case 53:
-    case 55:
-      return "Llovizna";
-    case 56:
-    case 57:
-      return "Llovizna helada";
-    case 61:
-    case 63:
-    case 65:
-      return "Lluvia";
-    case 66:
-    case 67:
-      return "Lluvia helada";
-    case 71:
-    case 73:
-    case 75:
-    case 77:
-      return "Nieve";
-    case 80:
-    case 81:
-    case 82:
-      return "Chubascos";
-    case 85:
-    case 86:
-      return "Chubascos de nieve";
-    case 95:
-      return "Tormenta";
-    case 96:
-    case 99:
-      return "Tormenta con granizo";
-    default:
-      return "Clima actual";
-  }
+  return OPEN_METEO_WEATHER_DESCRIPTIONS[weatherCode] ?? DEFAULT_WEATHER_DESCRIPTION;
 }
 
 function mapOpenMeteoSnapshot(weatherData, location) {
