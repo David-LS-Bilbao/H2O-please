@@ -165,6 +165,7 @@ class App {
         saveUser(this.user);
         this.renderizarPerfil();
         this.updateUI();
+        this.cambiarPestana("today");
         alert(`¡Perfil actualizado! Tu nueva meta es ${this.user.consumptionTarget} ml`);
       });
     }
