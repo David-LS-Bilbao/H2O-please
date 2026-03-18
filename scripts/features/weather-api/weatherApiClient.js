@@ -23,14 +23,6 @@ const GEOLOCATION_ERROR_MESSAGES = {
   3: "La ubicacion tardo demasiado en responder.",
 };
 
-function buildWeatherForecastUrl(options) {
-  if (hasWeatherApiKey()) {
-    return buildOpenWeatherForecastUrl(options);
-  }
-
-  return buildOpenMeteoForecastUrl(options);
-}
-
 function buildOpenWeatherForecastUrl({
   latitude,
   longitude,
@@ -281,7 +273,6 @@ function getUserLocation(options = {}) {
 }
 
 export {
-  buildWeatherForecastUrl,
   fetchLocationDetails,
   fetchWeatherForecast,
   getUserLocation,

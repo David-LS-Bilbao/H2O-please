@@ -35,17 +35,8 @@ function getStoredLocalWeatherSnapshot() {
   }
 }
 
-function clearStoredLocalWeatherSnapshot() {
-  if (!canUseLocalStorage()) {
-    return;
-  }
-
-  localStorage.removeItem(LOCAL_WEATHER_STORAGE_KEY);
-}
-
 export {
   LOCAL_WEATHER_STORAGE_KEY,
   getStoredLocalWeatherSnapshot,
   saveLocalWeatherSnapshot,
-  clearStoredLocalWeatherSnapshot,
 };

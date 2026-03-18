@@ -65,7 +65,7 @@ H2O-please/
 │  │     ├─ weatherService.js
 │  │     └─ weatherVisuals.js
 │  └─ pages/
-│     └─ indexWeatherDemo.js
+│     └─ weatherCardIntegration.js
 └─ styles/
    ├─ styles.css
    └─ weather-preview.css
@@ -93,7 +93,7 @@ Ejemplo:
 
 ```html
 <script src="scripts/config/weatherRuntimeConfig.local.js"></script>
-<script type="module" src="scripts/pages/indexWeatherDemo.js"></script>
+<script type="module" src="scripts/features/weather-api/weatherPreviewPage.js"></script>
 ```
 
 ---
@@ -110,7 +110,6 @@ Funciones disponibles:
 - `getLocalWeatherSnapshot()`
 - `getStoredLocalWeatherSnapshot()`
 - `saveLocalWeatherSnapshot(snapshot)`
-- `clearStoredLocalWeatherSnapshot()`
 - `formatTemperature(value)`
 - `formatWeatherDate(date)`
 - `formatWeatherTime(date)`
@@ -166,9 +165,6 @@ Centraliza el acceso al DOM, el reloj local y el render de la card del clima.
 ### `scripts/features/weather-api/weatherPreviewPage.js`
 Usa la feature en una pantalla dedicada de preview y delega el render en el DomManager.
 
-### `scripts/pages/indexWeatherDemo.js`
-Ejemplo de integracion en una pagina real del proyecto usando el mismo DomManager.
-
 ---
 
 ## 8. Como probar la feat en local
@@ -208,7 +204,6 @@ La referencia actual para hacerlo es:
 - `scripts/features/weather-api/dom/weatherDomManager.js`
 - `scripts/features/weather-api/weatherPreviewPage.js`
 - `index.html`
-- `scripts/pages/indexWeatherDemo.js`
 - `scripts/features/weather-api/weatherVisuals.js`
 
 ---
@@ -220,7 +215,6 @@ Debe entrar en Git:
 - `docs/Feature_api_clima.md`
 - `scripts/config/weatherRuntimeConfig.example.js`
 - `scripts/features/weather-api/`
-- `scripts/pages/indexWeatherDemo.js`
 - `styles/weather-preview.css`
 - `weather-preview.html`
 - cambios de `index.html`

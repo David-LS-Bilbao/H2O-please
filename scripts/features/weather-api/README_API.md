@@ -115,9 +115,6 @@ Las funciones mas utiles son:
 - `saveLocalWeatherSnapshot(snapshot)`
   Guarda un snapshot en cache local.
 
-- `clearStoredLocalWeatherSnapshot()`
-  Limpia el cache local.
-
 - `createWeatherDomManager(root)`
   Devuelve un gestor de DOM para pintar y actualizar la card del clima.
 
