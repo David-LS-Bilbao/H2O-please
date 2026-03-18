@@ -4,7 +4,7 @@ H2O Please es una aplicacion web frontend para registrar el consumo diario de ag
 
 ## Descripcion del proyecto
 
-La aplicacion ofrece un flujo simple de acceso con registro e inicio de sesion local, una pantalla de dashboard con seguimiento de consumo diario, historial de tomas, edicion de perfil y una tarjeta de clima integrada. El repositorio refleja un proyecto estudiantil en fase de integracion de ramas, con documentacion tecnica adicional dentro de `docs/`.
+La aplicacion ofrece un flujo simple de acceso con registro e inicio de sesion local, una pantalla de dashboard con seguimiento de consumo diario, historial de tomas, edicion de perfil, modo oscuro y una tarjeta de clima integrada. El repositorio refleja un proyecto estudiantil en fase de integracion de ramas, con documentacion tecnica adicional dentro de `docs/` y una feature de clima ya simplificada para el caso real de esta app.
 
 ## Objetivo
 
@@ -21,10 +21,12 @@ El objetivo actual del proyecto es unificar en una sola base funcional las aport
 - Reinicio automatico del progreso cuando cambia el dia.
 - Perfil de usuario con edad, peso y recalculo del objetivo diario.
 - Cierre de sesion desde la vista de perfil.
+- Modo oscuro con toggle en el dashboard.
 - Integracion de tarjeta de clima en el dashboard.
 - Vista previa independiente de la tarjeta de clima en `weather-preview.html`.
 - Cache local del ultimo dato meteorologico disponible.
 - Fallback meteorologico entre proveedores segun configuracion disponible.
+- Login y dashboard con estilos unificados en `styles/styles.css`.
 
 ## Tecnologias
 
@@ -59,6 +61,7 @@ H2O-please/
 │  │  ├─ App.js
 │  │  ├─ DOMManager.js
 │  │  └─ storage.js
+│  ├─ darkmode.js
 │  ├─ features/
 │  │  └─ weather-api/
 │  │     ├─ README_API.md
@@ -75,8 +78,7 @@ H2O-please/
 │  │  ├─ weatherCardIntegration.js
 │  │  └─ weatherPreviewPage.js
 │  ├─ services/
-│  │  ├─ authService.js
-│  │  └─ weatherServce.js
+│  │  └─ authService.js
 │  ├─ dashboard.js
 │  └─ index.js
 ├─ styles/
@@ -115,6 +117,7 @@ Nota importante: la geolocalizacion del clima requiere un contexto seguro. En de
    - anadir agua consumida
    - revisar el historial del dia
    - editar edad y peso en la vista `YO`
+   - cambiar entre modo claro y oscuro
    - ver la tarjeta del clima en el bloque `API DEL TIEMPO`
 5. Para revisar solo la feature del clima, abre `weather-preview.html`.
 
@@ -149,7 +152,7 @@ Cada usuario persistido bajo `userConsumption:<username>` guarda, segun el codig
 
 ## Integracion con API del clima
 
-La capa de clima vive en `scripts/features/weather-api/` y expone una API publica desde `scripts/features/weather-api/index.js`.
+La capa de clima vive en `scripts/features/weather-api/` y expone una API publica minima desde `scripts/features/weather-api/index.js`.
 
 ### Flujo real
 
@@ -161,6 +164,8 @@ La capa de clima vive en `scripts/features/weather-api/` y expone una API public
 6. Resuelve la ubicacion legible mediante BigDataCloud.
 7. Renderiza ciudad, descripcion, temperatura, fecha y hora local con un `DomManager` compartido.
 8. Guarda el ultimo snapshot valido en `localStorage`.
+
+La documentacion especifica de esta feature esta en `scripts/features/weather-api/README_API.md`.
 
 ### Configuracion disponible
 
@@ -190,9 +195,10 @@ localStorage.setItem("H2O_PLEASE_WEATHER_API_KEY", "tu-api-key");
 ## Estado actual
 
 - Aplicacion frontend funcional sin backend.
-- Login y registro locales operativos.
-- Dashboard operativo con progreso diario, historial y perfil.
+- Login y registro locales operativos con layout visual ya unificado.
+- Dashboard operativo con progreso diario, historial, perfil y modo oscuro.
 - Integracion de clima activa en dashboard y preview aislada.
+- Feature de clima simplificada a una estructura corta y centrada en el caso de uso real de la app.
 - Documentacion tecnica adicional disponible en `docs/`.
 - Estructura aun en fase de integracion y limpieza progresiva.
 - No hay scripts de `npm`, pruebas automatizadas ni pipeline de build definidos en el repositorio actual.
@@ -202,7 +208,7 @@ localStorage.setItem("H2O_PLEASE_WEATHER_API_KEY", "tu-api-key");
 Estas mejoras se desprenden del estado real del repo y de la documentacion incluida:
 
 - completar la limpieza estructural cuando la integracion de ramas este estable
-- revisar archivos pendientes o sin uso activo, como `scripts/services/weatherServce.js`
+- actualizar la documentacion secundaria de `docs/` para que refleje tambien la estructura nueva de `weather-api`
 - unificar mas logica de render entre dashboard y `DOMManager`
 - reforzar la gestion de configuracion del clima para entornos de despliegue
 - anadir pruebas automatizadas y comandos de desarrollo hoy ausentes
