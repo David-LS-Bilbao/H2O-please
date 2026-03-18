@@ -147,6 +147,13 @@ body[data-page="login"] #auth-message {
     color: var(--primary-dark-color);
 }
 
+.trash-button {
+    border: none;
+    background: none;
+    fill: orange;
+    cursor: pointer
+}
+
 header {
     position: sticky;
     top: 0;
@@ -545,7 +552,7 @@ main.app-layout {
 }
 
 /* Weather card refresh revisable: el contenido queda por encima de las capas decorativas. */
-.dashboard-weather-card > * {
+.dashboard-weather-card>* {
     position: relative;
     z-index: 1;
 }
@@ -707,7 +714,7 @@ body[data-page="dashboard"] #weather-output .dashboard-weather-card h2 {
     gap: 0;
 }
 
-.dashboard-weather-card .weather-card__meta-row + .weather-card__meta-row {
+.dashboard-weather-card .weather-card__meta-row+.weather-card__meta-row {
     padding-top: 0.28rem;
     border-top: 1px solid rgba(255, 255, 255, 0.14);
 }
@@ -794,6 +801,7 @@ body[data-page="dashboard"] #weather-output .dashboard-weather-card {
 }
 
 @media (max-width: 360px) {
+
     .dashboard-weather-card .weather-card__top,
     .dashboard-weather-card .weather-card__header {
         grid-template-columns: 1fr;
