@@ -8,6 +8,8 @@ import {
   getWeatherTimePeriod,
 } from "../weatherVisuals.js";
 
+const LOCAL_CLOCK_INTERVAL_MS = 1000;
+
 const WEATHER_CARD_SELECTORS = {
   card: ".weather-card",
   city: "#weather-city",
@@ -17,13 +19,24 @@ const WEATHER_CARD_SELECTORS = {
   time: "#weather-time",
 };
 
+const WEATHER_CARD_TEXT = {
+  defaultCity: "Ubicacion actual",
+  loadingStatus: "Cargando clima...",
+  defaultStatus: "Clima actual",
+  defaultTemperature: "-- °C",
+  defaultDate: "--/--/----",
+  defaultTime: "--:--:--",
+  stalePrefix: "Ultimo dato guardado.",
+  staleFallbackMessage: "No se pudo actualizar el clima.",
+};
+
 const WEATHER_CARD_MARKUP = `
   <section class="weather-card dashboard-weather-card" aria-live="polite">
     <div class="weather-card__top weather-card__header">
       <div class="weather-card__heading">
-        <h2 id="weather-city">Ubicacion actual</h2>
+        <h2 id="weather-city">${WEATHER_CARD_TEXT.defaultCity}</h2>
       </div>
-      <p id="weather-status" class="weather-card__status">Cargando clima...</p>
+      <p id="weather-status" class="weather-card__status">${WEATHER_CARD_TEXT.loadingStatus}</p>
     </div>
     <div class="weather-card__main weather-card__content">
       <div class="weather-card__temperature-block">
@@ -32,7 +45,7 @@ const WEATHER_CARD_MARKUP = `
           class="weather-card__temperature"
           aria-label="Temperatura actual"
         >
-          -- °C
+          ${WEATHER_CARD_TEXT.defaultTemperature}
         </p>
       </div>
       <div class="weather-card__meta weather-card__datetime">
@@ -42,7 +55,7 @@ const WEATHER_CARD_MARKUP = `
             class="weather-card__meta-item"
             aria-label="Fecha local"
           >
-            --/--/----
+            ${WEATHER_CARD_TEXT.defaultDate}
           </p>
         </div>
         <div class="weather-card__meta-row">
@@ -51,7 +64,7 @@ const WEATHER_CARD_MARKUP = `
             class="weather-card__meta-item"
             aria-label="Hora local"
           >
-            --:--:--
+            ${WEATHER_CARD_TEXT.defaultTime}
           </p>
         </div>
       </div>
@@ -155,7 +168,10 @@ export function createWeatherDomManager(root = document) {
       window.clearInterval(localClockTimerId);
     }
 
-    localClockTimerId = window.setInterval(renderLocalDateTime, 1000);
+    localClockTimerId = window.setInterval(
+      renderLocalDateTime,
+      LOCAL_CLOCK_INTERVAL_MS
+    );
     return localClockTimerId;
   }
 
@@ -182,8 +198,9 @@ export function createWeatherDomManager(root = document) {
       typeof snapshot.timezoneOffsetSeconds === "number"
         ? snapshot.timezoneOffsetSeconds
         : null;
-    elements.city.textContent = snapshot.city ?? "Ubicacion actual";
-    elements.status.textContent = snapshot.weatherDescription ?? "Clima actual";
+    elements.city.textContent = snapshot.city ?? WEATHER_CARD_TEXT.defaultCity;
+    elements.status.textContent =
+      snapshot.weatherDescription ?? WEATHER_CARD_TEXT.defaultStatus;
     elements.temperature.textContent = formatTemperature(snapshot.temperatureCelsius);
     renderLocalDateTime();
   }
@@ -195,8 +212,8 @@ export function createWeatherDomManager(root = document) {
 
     elements.status.textContent =
       typeof message === "string" && message.trim() !== ""
-        ? `Ultimo dato guardado. ${message.trim()}`
-        : "Ultimo dato guardado. No se pudo actualizar el clima.";
+        ? `${WEATHER_CARD_TEXT.stalePrefix} ${message.trim()}`
+        : `${WEATHER_CARD_TEXT.stalePrefix} ${WEATHER_CARD_TEXT.staleFallbackMessage}`;
   }
 
   function renderWeatherError(message) {
@@ -207,9 +224,9 @@ export function createWeatherDomManager(root = document) {
     currentWeatherDescription = "";
     elements.status.textContent = message;
     elements.status.dataset.icon = "error";
-    elements.temperature.textContent = "-- °C";
-    elements.date.textContent = "--/--/----";
-    elements.time.textContent = "--:--:--";
+    elements.temperature.textContent = WEATHER_CARD_TEXT.defaultTemperature;
+    elements.date.textContent = WEATHER_CARD_TEXT.defaultDate;
+    elements.time.textContent = WEATHER_CARD_TEXT.defaultTime;
   }
 
   return {

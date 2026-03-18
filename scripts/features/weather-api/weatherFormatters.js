@@ -1,18 +1,22 @@
+const DEFAULT_WEATHER_LOCALE = "es-ES";
+const TEMPERATURE_DECIMAL_DIGITS = 1;
+const UTC_TIME_ZONE = "UTC";
+
 function formatTemperature(temperatureCelsius) {
-  return `${temperatureCelsius.toFixed(1)} °C`;
+  return `${temperatureCelsius.toFixed(TEMPERATURE_DECIMAL_DIGITS)} °C`;
 }
 
 function resolveFormatConfig(localeOrOptions) {
   if (typeof localeOrOptions === "string" || localeOrOptions === undefined) {
     return {
-      locale: localeOrOptions ?? "es-ES",
+      locale: localeOrOptions ?? DEFAULT_WEATHER_LOCALE,
       timeZone: null,
       useUtc: false,
     };
   }
 
   return {
-    locale: localeOrOptions.locale ?? "es-ES",
+    locale: localeOrOptions.locale ?? DEFAULT_WEATHER_LOCALE,
     timeZone:
       typeof localeOrOptions.timeZone === "string"
         ? localeOrOptions.timeZone
@@ -27,13 +31,13 @@ function resolveIntlTimeZone({ timeZone, useUtc }) {
   }
 
   if (useUtc) {
-    return "UTC";
+    return UTC_TIME_ZONE;
   }
 
   return undefined;
 }
 
-function formatWeatherDate(date, localeOrOptions = "es-ES") {
+function formatWeatherDate(date, localeOrOptions = DEFAULT_WEATHER_LOCALE) {
   const { locale, timeZone, useUtc } = resolveFormatConfig(localeOrOptions);
 
   return new Intl.DateTimeFormat(locale, {
@@ -44,7 +48,7 @@ function formatWeatherDate(date, localeOrOptions = "es-ES") {
   }).format(date);
 }
 
-function formatWeatherTime(date, localeOrOptions = "es-ES") {
+function formatWeatherTime(date, localeOrOptions = DEFAULT_WEATHER_LOCALE) {
   const { locale, timeZone, useUtc } = resolveFormatConfig(localeOrOptions);
 
   return new Intl.DateTimeFormat(locale, {

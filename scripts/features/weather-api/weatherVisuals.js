@@ -1,10 +1,14 @@
+const WEATHER_HOUR_FORMAT_LOCALE = "en-GB";
+const WEATHER_DAY_START_HOUR = 7;
+const WEATHER_NIGHT_START_HOUR = 20;
+
 function normalizeWeatherDescription(description = "") {
   return description.toLowerCase().trim();
 }
 
 function getWeatherHours(date = new Date(), options = {}) {
   if (typeof options.timeZone === "string" && options.timeZone.trim() !== "") {
-    const formattedHour = new Intl.DateTimeFormat("en-GB", {
+    const formattedHour = new Intl.DateTimeFormat(WEATHER_HOUR_FORMAT_LOCALE, {
       hour: "2-digit",
       hourCycle: "h23",
       timeZone: options.timeZone,
@@ -23,7 +27,7 @@ function getWeatherHours(date = new Date(), options = {}) {
 function getWeatherTimePeriod(date = new Date(), options = {}) {
   const hours = getWeatherHours(date, options);
 
-  if (hours >= 7 && hours < 20) {
+  if (hours >= WEATHER_DAY_START_HOUR && hours < WEATHER_NIGHT_START_HOUR) {
     return "day";
   }
 

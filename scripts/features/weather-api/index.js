@@ -11,7 +11,6 @@ export {
 } from "./weatherConfig.js";
 
 export {
-  buildWeatherForecastUrl,
   fetchLocationDetails,
   fetchWeatherForecast,
   getUserLocation,
@@ -21,7 +20,6 @@ export {
   LOCAL_WEATHER_STORAGE_KEY,
   getStoredLocalWeatherSnapshot,
   saveLocalWeatherSnapshot,
-  clearStoredLocalWeatherSnapshot,
 } from "./weatherCache.js";
 
 export {

@@ -77,7 +77,6 @@ H2O-please/
 │  │  └─ UserConsumption.js
 │  ├─ pages/
 │  │  ├─ dashboardWeatherIntegration.js
-│  │  ├─ indexWeatherDemo.js
 │  │  └─ weatherCardIntegration.js
 │  ├─ services/
 │  │  ├─ authService.js
@@ -192,7 +191,6 @@ localStorage.setItem("H2O_PLEASE_WEATHER_API_KEY", "tu-api-key");
 
 - `dashboard.html` mediante `scripts/dashboard.js` y `scripts/pages/dashboardWeatherIntegration.js`
 - `weather-preview.html` mediante `scripts/features/weather-api/weatherPreviewPage.js`
-- `indexWeatherDemo.js` como integracion de ejemplo basada en la misma feature
 
 ## Estado actual
 
