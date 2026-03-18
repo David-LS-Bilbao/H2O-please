@@ -29,6 +29,7 @@ class App {
     this.dom = new DOMManager();
     // `user` guarda el estado cargado desde storage durante la sesion actual.
     this.user = null;
+    this.waterConsumedAnimationTimerId = null;
   }
 
   // Flujo de arranque del dashboard.
@@ -224,7 +225,7 @@ class App {
     // Estado vacio cuando todavia no hay movimientos registrados.
     if (!Array.isArray(this.user.history) || this.user.history.length === 0) {
       historyContainer.innerHTML =
-        '<p style="text-align:center; padding:20px;">No hay registros hoy.</p>';
+        '<p style="text-align:center; padding:20px;">Sin registros.</p>';
       return;
     }
 
@@ -236,10 +237,10 @@ class App {
       const isNegative = amount < 0;
       const item = document.createElement("div");
       item.style.cssText =
-        "display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid #eee; align-items:center;";
+        "display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid var(--neutral-color); align-items:center;";
       item.innerHTML = `
-        <span style="font-weight:bold; color:#555;">${toma.hora}</span>
-        <span style="color:${isNegative ? "#b42318" : "#007bff"}; font-weight:bold;">${isNegative ? "" : "+"}${amount} ml</span>
+        <span style="font-weight:bold; color:var(--neutral-color);">${toma.hora}</span>
+        <span style="color:${isNegative ? "var(--negative-color)" : "var(--primary-dark-color)"}; font-weight:bold;">${isNegative ? "" : "+"}${amount} ml</span>
       `;
       const button = document.createElement("button");
       button.innerHTML= '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/><path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/></svg>';
@@ -283,13 +284,47 @@ class App {
     }
   }
 
+  // Anima el contador principal tanto al subir como al bajar la cantidad de agua.
+  waterConsumedAnimation(finalNumber) {
+    const { totalText } = this.dom.elements;
+    if (!totalText) {
+      return;
+    }
+
+    const parsedCurrentNumber = Number.parseInt(totalText.textContent ?? "0", 10);
+    let currentNumber = Number.isFinite(parsedCurrentNumber) ? parsedCurrentNumber : 0;
+    const targetNumber = Number.isFinite(finalNumber) ? finalNumber : 0;
+
+    if (this.waterConsumedAnimationTimerId !== null) {
+      window.clearInterval(this.waterConsumedAnimationTimerId);
+      this.waterConsumedAnimationTimerId = null;
+    }
+
+    if (currentNumber === targetNumber) {
+      totalText.textContent = `${targetNumber}`;
+      return;
+    }
+
+    const step = currentNumber < targetNumber ? 1 : -1;
+
+    this.waterConsumedAnimationTimerId = window.setInterval(() => {
+      currentNumber += step;
+      totalText.textContent = `${currentNumber}`;
+
+      if (currentNumber === targetNumber) {
+        window.clearInterval(this.waterConsumedAnimationTimerId);
+        this.waterConsumedAnimationTimerId = null;
+      }
+    }, 1);
+  }
+
   // Refresca los indicadores principales del dashboard con el estado mas reciente.
   updateUI() {
     const { totalText, countdown, progress, dailyTarget } = this.dom.elements;
 
-    // Muestra la cantidad total consumida hoy.
+    // Muestra la cantidad total consumida hoy con la animacion del contador.
     if (totalText) {
-      totalText.textContent = `${this.user.waterConsumed}`;
+      this.waterConsumedAnimation(this.user.waterConsumed);
     }
 
     // La cuenta atras solo se muestra cuando existe una toma previa con alarma calculada.
