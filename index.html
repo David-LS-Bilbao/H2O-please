@@ -5,29 +5,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/styles.css" type="text/css" />
-    <title>H2O Please</title>
+    <title>H2O Please - Acceso</title>
 </head>
 
 <body data-page="login">
   <main class="login-layout">
-    <form id="login-form">
-      <!-- Integracion Jon revisable: se anade password al login sin cambiar la estructura visual actual. -->
-      <input type="text" id="username" placeholder="Usuario" required />
-      <input type="password" id="password" placeholder="Contrasena" required />
-      <button type="submit">Entrar</button>
-    </form>
+    
+    <header>
+      <h1>H2O Please</h1>
+      <p>Gestión de hidratación personal</p>
+    </header>
 
-    <form id="register-form">
-      <!-- Integracion Jon revisable: se anade password al registro manteniendo el contenedor de mensajes actual. -->
-      <input type="text" id="new-username" placeholder="Nuevo usuario" required />
-      <input type="password" id="new-password" placeholder="Contrasena" required />
-      <button type="submit">Registrarse</button>
-    </form>
+    <section>
+      <h2>Identificarse</h2>
+      <form id="login-form">
+        <fieldset>
+          <legend>Datos de acceso</legend>
+          <input type="text" id="username" placeholder="Usuario" required autocomplete="username" />
+          <input type="password" id="password" placeholder="Contraseña" required autocomplete="current-password" />
+          <button type="submit">Entrar</button>
+        </fieldset>
+      </form>
+    </section>
 
-    <p id="auth-message" role="status" aria-live="polite"></p>
+    <br> <section>
+      <h2>¿Eres nuevo?</h2>
+      <form id="register-form">
+        <fieldset>
+          <legend>Crear cuenta</legend>
+          <input type="text" id="new-username" placeholder="Elige un usuario" required autocomplete="username" />
+          <input type="password" id="new-password" placeholder="Crea una contraseña" required autocomplete="new-password" />
+          <button type="submit">Registrarse</button>
+        </fieldset>
+      </form>
+    </section>
+
+    <footer>
+      <p id="auth-message" role="status" aria-live="polite"></p>
+    </footer>
+
   </main>
 
   <script type="module" src="scripts/index.js"></script>
 </body>
-
 </html>
