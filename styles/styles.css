@@ -188,6 +188,13 @@ body[data-page="login"] #auth-message {
     color: var(--primary-dark-color);
 }
 
+.trash-button {
+    border: none;
+    background: none;
+    fill: orange;
+    cursor: pointer
+}
+
 header {
     display: flex;
     justify-content: space-between;
