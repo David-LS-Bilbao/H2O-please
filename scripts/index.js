@@ -11,6 +11,11 @@ function initLoginPage() {
 
   const loginForm = document.querySelector("#login-form");
   const registerForm = document.querySelector("#register-form");
+  const message= document.createElement("p");
+  message.id = "auth-message";
+  message.setAttribute("role", "status");
+  message.setAttribute("aria-live", "polite");
+  document.querySelector("main").appendChild(message);
   const authMessage = document.querySelector("#auth-message");
 
   function renderAuthMessage(message = "") {
@@ -36,7 +41,7 @@ function initLoginPage() {
         window.location.href = "dashboard.html";
         return;
       }
-
+      loginForm.appendChild(message);
       renderAuthMessage("Usuario y/o contrasena incorrectos.");
     });
   }
@@ -56,7 +61,7 @@ function initLoginPage() {
         window.location.href = "dashboard.html";
         return;
       }
-
+      registerForm.appendChild(message);
       renderAuthMessage("El usuario ya existe.");
     });
   }
