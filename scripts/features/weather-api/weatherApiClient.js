@@ -123,6 +123,8 @@ function extractErrorDetail(errorPayload) {
   return errorPayload?.message ?? errorPayload?.reason ?? errorPayload?.error ?? "";
 }
 
+// La UI solo trabaja con mensajes simples; aqui traducimos respuestas HTTP
+// fallidas a errores legibles para el resto de la feature.
 async function fetchJson(requestUrl, defaultMessage) {
   const response = await fetch(requestUrl);
 
@@ -147,6 +149,8 @@ async function fetchJson(requestUrl, defaultMessage) {
   return response.json();
 }
 
+// La app intenta OpenWeather solo cuando hay API key. Si falla, el flujo no se
+// rompe: cae automaticamente a Open-Meteo para mantener la card operativa.
 async function fetchWeatherForecast(options) {
   if (hasWeatherApiKey()) {
     try {
@@ -203,6 +207,8 @@ function mapLocationDetails(locationData) {
   };
 }
 
+// El reverse geocoding solo mejora la etiqueta visible de ciudad; el clima
+// puede mostrarse igualmente aunque este paso falle.
 async function fetchLocationDetails(options) {
   const data = await fetchJson(
     buildReverseGeocodeUrl(options),
@@ -240,6 +246,8 @@ function getGeolocationErrorMessage(error) {
   return "No se pudo obtener la ubicacion del usuario.";
 }
 
+// Encapsulamos aqui toda la logica del navegador relacionada con permisos,
+// secure context y errores de geolocalizacion para no repartirla por la UI.
 function getUserLocation(options = {}) {
   const geolocationOptions = {
     ...DEFAULT_GEOLOCATION_OPTIONS,

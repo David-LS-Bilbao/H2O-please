@@ -22,6 +22,8 @@ function getStoredWeatherApiKey() {
   return storedApiKey.trim();
 }
 
+// En desarrollo priorizamos la key inyectada en runtime y dejamos localStorage
+// como fallback para no depender de editar archivos del proyecto.
 function getOptionalWeatherApiKey() {
   const runtimeApiKey = globalThis[WEATHER_RUNTIME_CONFIG_KEY];
   const apiKey =
@@ -40,6 +42,7 @@ function hasWeatherApiKey() {
   return getOptionalWeatherApiKey() !== null;
 }
 
+// Esta variante es la que usan las llamadas que requieren key obligatoria.
 function getWeatherApiKey() {
   const apiKey = getOptionalWeatherApiKey();
 

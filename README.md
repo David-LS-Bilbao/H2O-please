@@ -17,7 +17,6 @@ El objetivo actual del proyecto es unificar en una sola base funcional las aport
 - Redireccion automatica al dashboard cuando ya existe sesion activa.
 - Dashboard con progreso diario de hidratacion.
 - Alta manual de agua consumida desde el formulario principal.
-- Resta manual de agua consumida con control para no bajar de cero.
 - Historial diario de movimientos de agua.
 - Reinicio automatico del progreso cuando cambia el dia.
 - Perfil de usuario con edad, peso y recalculo del objetivo diario.
@@ -62,22 +61,19 @@ H2O-please/
 │  │  └─ storage.js
 │  ├─ features/
 │  │  └─ weather-api/
-│  │     ├─ dom/
-│  │     │  └─ weatherDomManager.js
-│  │     ├─ README.md
+│  │     ├─ README_API.md
 │  │     ├─ index.js
 │  │     ├─ weatherApiClient.js
 │  │     ├─ weatherCache.js
 │  │     ├─ weatherConfig.js
-│  │     ├─ weatherFormatters.js
-│  │     ├─ weatherPreviewPage.js
-│  │     ├─ weatherService.js
-│  │     └─ weatherVisuals.js
+│  │     ├─ weatherDomManager.js
+│  │     └─ weatherService.js
 │  ├─ models/
 │  │  └─ UserConsumption.js
 │  ├─ pages/
 │  │  ├─ dashboardWeatherIntegration.js
-│  │  └─ weatherCardIntegration.js
+│  │  ├─ weatherCardIntegration.js
+│  │  └─ weatherPreviewPage.js
 │  ├─ services/
 │  │  ├─ authService.js
 │  │  └─ weatherServce.js
@@ -117,7 +113,6 @@ Nota importante: la geolocalizacion del clima requiere un contexto seguro. En de
 3. La aplicacion guarda el usuario activo y te lleva al dashboard.
 4. En `dashboard.html` puedes:
    - anadir agua consumida
-   - quitar agua consumida
    - revisar el historial del dia
    - editar edad y peso en la vista `YO`
    - ver la tarjeta del clima en el bloque `API DEL TIEMPO`
@@ -190,7 +185,7 @@ localStorage.setItem("H2O_PLEASE_WEATHER_API_KEY", "tu-api-key");
 ### Puntos de uso actuales
 
 - `dashboard.html` mediante `scripts/dashboard.js` y `scripts/pages/dashboardWeatherIntegration.js`
-- `weather-preview.html` mediante `scripts/features/weather-api/weatherPreviewPage.js`
+- `weather-preview.html` mediante `scripts/pages/weatherPreviewPage.js`
 
 ## Estado actual
 

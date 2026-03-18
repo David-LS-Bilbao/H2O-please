@@ -6,6 +6,8 @@ import {
 
 const DEFAULT_CITY_LABEL = "Ubicacion actual";
 const DEFAULT_WEATHER_DESCRIPTION = "Clima actual";
+// Open-Meteo devuelve codigos numericos; esta tabla los traduce a textos que
+// la interfaz puede mostrar sin conocer detalles del proveedor.
 const OPEN_METEO_WEATHER_DESCRIPTIONS = {
   0: "Cielo despejado",
   1: "Mayormente despejado",
@@ -122,6 +124,8 @@ function mapOpenMeteoSnapshot(weatherData, location) {
   };
 }
 
+// Este punto unifica ambos proveedores en un mismo contrato para que el DOM no
+// tenga que saber si el dato vino de OpenWeather o de Open-Meteo.
 function mapWeatherSnapshot(weatherPayload, location) {
   if (weatherPayload?.provider === "open-meteo") {
     return mapOpenMeteoSnapshot(weatherPayload.data, location);
@@ -130,6 +134,11 @@ function mapWeatherSnapshot(weatherPayload, location) {
   return mapOpenWeatherSnapshot(weatherPayload?.data ?? weatherPayload, location);
 }
 
+// Orquestacion principal de la feature:
+// 1. obtiene coordenadas
+// 2. consulta el clima
+// 3. intenta enriquecer la ubicacion
+// 4. devuelve un snapshot listo para pintar
 async function getLocalWeatherSnapshot() {
   const location = await getUserLocation();
   const weatherData = await fetchWeatherForecast(location);

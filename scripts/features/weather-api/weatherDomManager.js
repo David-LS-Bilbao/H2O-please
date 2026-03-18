@@ -1,15 +1,13 @@
-import {
-  formatTemperature,
-  formatWeatherDate,
-  formatWeatherTime,
-} from "../weatherFormatters.js";
-import {
-  getWeatherStatusIcon,
-  getWeatherTimePeriod,
-} from "../weatherVisuals.js";
-
+const DEFAULT_WEATHER_LOCALE = "es-ES";
+const WEATHER_HOUR_FORMAT_LOCALE = "en-GB";
+const TEMPERATURE_DECIMAL_DIGITS = 1;
+const UTC_TIME_ZONE = "UTC";
 const LOCAL_CLOCK_INTERVAL_MS = 1000;
+const WEATHER_DAY_START_HOUR = 7;
+const WEATHER_NIGHT_START_HOUR = 20;
 
+// La feature se ha dejado plana a proposito: el render, el formateo y las
+// heuristicas visuales viven juntos para reducir archivos en esta app de prueba.
 const WEATHER_CARD_SELECTORS = {
   card: ".weather-card",
   city: "#weather-city",
@@ -72,6 +70,157 @@ const WEATHER_CARD_MARKUP = `
   </section>
 `;
 
+function formatTemperature(temperatureCelsius) {
+  return `${temperatureCelsius.toFixed(TEMPERATURE_DECIMAL_DIGITS)} °C`;
+}
+
+function resolveFormatConfig(localeOrOptions) {
+  if (typeof localeOrOptions === "string" || localeOrOptions === undefined) {
+    return {
+      locale: localeOrOptions ?? DEFAULT_WEATHER_LOCALE,
+      timeZone: null,
+      useUtc: false,
+    };
+  }
+
+  return {
+    locale: localeOrOptions.locale ?? DEFAULT_WEATHER_LOCALE,
+    timeZone:
+      typeof localeOrOptions.timeZone === "string"
+        ? localeOrOptions.timeZone
+        : null,
+    useUtc: localeOrOptions.useUtc === true,
+  };
+}
+
+function resolveIntlTimeZone({ timeZone, useUtc }) {
+  if (typeof timeZone === "string" && timeZone.trim() !== "") {
+    return timeZone;
+  }
+
+  if (useUtc) {
+    return UTC_TIME_ZONE;
+  }
+
+  return undefined;
+}
+
+function formatWeatherDate(date, localeOrOptions = DEFAULT_WEATHER_LOCALE) {
+  const { locale, timeZone, useUtc } = resolveFormatConfig(localeOrOptions);
+
+  return new Intl.DateTimeFormat(locale, {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    timeZone: resolveIntlTimeZone({ timeZone, useUtc }),
+  }).format(date);
+}
+
+function formatWeatherTime(date, localeOrOptions = DEFAULT_WEATHER_LOCALE) {
+  const { locale, timeZone, useUtc } = resolveFormatConfig(localeOrOptions);
+
+  return new Intl.DateTimeFormat(locale, {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    timeZone: resolveIntlTimeZone({ timeZone, useUtc }),
+  }).format(date);
+}
+
+function normalizeWeatherDescription(description = "") {
+  return description.toLowerCase().trim();
+}
+
+function getWeatherHours(date = new Date(), options = {}) {
+  if (typeof options.timeZone === "string" && options.timeZone.trim() !== "") {
+    const formattedHour = new Intl.DateTimeFormat(WEATHER_HOUR_FORMAT_LOCALE, {
+      hour: "2-digit",
+      hourCycle: "h23",
+      timeZone: options.timeZone,
+    }).format(date);
+
+    return Number.parseInt(formattedHour, 10);
+  }
+
+  if (options.useUtc) {
+    return date.getUTCHours();
+  }
+
+  return date.getHours();
+}
+
+function getWeatherTimePeriod(date = new Date(), options = {}) {
+  const hours = getWeatherHours(date, options);
+
+  if (hours >= WEATHER_DAY_START_HOUR && hours < WEATHER_NIGHT_START_HOUR) {
+    return "day";
+  }
+
+  return "night";
+}
+
+function getWeatherStatusIcon(description, date = new Date(), options = {}) {
+  const normalizedDescription = normalizeWeatherDescription(description);
+
+  if (
+    normalizedDescription.includes("tormenta") ||
+    normalizedDescription.includes("trueno") ||
+    normalizedDescription.includes("electrica")
+  ) {
+    return "storm";
+  }
+
+  if (
+    normalizedDescription.includes("lluv") ||
+    normalizedDescription.includes("chubasco") ||
+    normalizedDescription.includes("aguacero")
+  ) {
+    return "rain";
+  }
+
+  if (
+    normalizedDescription.includes("nieve") ||
+    normalizedDescription.includes("granizo")
+  ) {
+    return "snow";
+  }
+
+  if (
+    normalizedDescription.includes("niebla") ||
+    normalizedDescription.includes("bruma") ||
+    normalizedDescription.includes("neblina") ||
+    normalizedDescription.includes("calima") ||
+    normalizedDescription.includes("humo")
+  ) {
+    return "mist";
+  }
+
+  if (
+    normalizedDescription.includes("nube") ||
+    normalizedDescription.includes("nub") ||
+    normalizedDescription.includes("cubierto")
+  ) {
+    return "cloud";
+  }
+
+  return getWeatherTimePeriod(date, options) === "day" ? "sun" : "moon";
+}
+
+function getWeatherCardElements(root = document) {
+  return {
+    card: root.querySelector(WEATHER_CARD_SELECTORS.card),
+    city: root.querySelector(WEATHER_CARD_SELECTORS.city),
+    status: root.querySelector(WEATHER_CARD_SELECTORS.status),
+    temperature: root.querySelector(WEATHER_CARD_SELECTORS.temperature),
+    date: root.querySelector(WEATHER_CARD_SELECTORS.date),
+    time: root.querySelector(WEATHER_CARD_SELECTORS.time),
+  };
+}
+
+function hasWeatherCardElements(elements) {
+  return Object.values(elements).every(Boolean);
+}
+
 export function mountWeatherCard(targetElement, position = "afterbegin") {
   if (!targetElement) {
     return null;
@@ -87,28 +236,18 @@ export function mountWeatherCard(targetElement, position = "afterbegin") {
   return targetElement.querySelector(WEATHER_CARD_SELECTORS.card);
 }
 
-export function getWeatherCardElements(root = document) {
-  return {
-    card: root.querySelector(WEATHER_CARD_SELECTORS.card),
-    city: root.querySelector(WEATHER_CARD_SELECTORS.city),
-    status: root.querySelector(WEATHER_CARD_SELECTORS.status),
-    temperature: root.querySelector(WEATHER_CARD_SELECTORS.temperature),
-    date: root.querySelector(WEATHER_CARD_SELECTORS.date),
-    time: root.querySelector(WEATHER_CARD_SELECTORS.time),
-  };
-}
-
-export function hasWeatherCardElements(elements) {
-  return Object.values(elements).every(Boolean);
-}
-
+// Dashboard y preview comparten este gestor para que ambos rendericen la card
+// exactamente igual y la logica de UI no se duplique.
 export function createWeatherDomManager(root = document) {
   const elements = getWeatherCardElements(root);
+  const hasRequiredElements = hasWeatherCardElements(elements);
   let currentWeatherDescription = "";
   let currentTimeZone = null;
   let currentTimeZoneOffsetSeconds = null;
   let localClockTimerId = null;
 
+  // Si la API devuelve timezone real la usamos. Si solo devuelve offset, se
+  // recrea la hora local desplazando la fecha base y formateando en UTC.
   function getLocalDateTimeContext(baseDate = new Date()) {
     if (typeof currentTimeZone === "string" && currentTimeZone.trim() !== "") {
       return {
@@ -129,8 +268,10 @@ export function createWeatherDomManager(root = document) {
     };
   }
 
+  // La fecha y la hora se recalculan a partir del contexto de la ciudad, no de
+  // la hora local del navegador cuando el proveedor aporta timezone u offset.
   function renderLocalDateTime() {
-    if (!hasWeatherCardElements(elements)) {
+    if (!hasRequiredElements) {
       return;
     }
 
@@ -158,7 +299,7 @@ export function createWeatherDomManager(root = document) {
   }
 
   function startLocalClock() {
-    if (!hasWeatherCardElements(elements)) {
+    if (!hasRequiredElements) {
       return null;
     }
 
@@ -175,17 +316,8 @@ export function createWeatherDomManager(root = document) {
     return localClockTimerId;
   }
 
-  function stopLocalClock() {
-    if (localClockTimerId === null) {
-      return;
-    }
-
-    window.clearInterval(localClockTimerId);
-    localClockTimerId = null;
-  }
-
   function renderWeatherCard(snapshot) {
-    if (!hasWeatherCardElements(elements)) {
+    if (!hasRequiredElements || typeof snapshot?.temperatureCelsius !== "number") {
       return;
     }
 
@@ -205,8 +337,10 @@ export function createWeatherDomManager(root = document) {
     renderLocalDateTime();
   }
 
+  // Este mensaje se usa cuando hay cache valido pero el refresco contra la API
+  // falla; asi diferenciamos "dato antiguo" de "error sin datos".
   function renderWeatherRefreshWarning(message) {
-    if (!hasWeatherCardElements(elements)) {
+    if (!hasRequiredElements) {
       return;
     }
 
@@ -217,12 +351,17 @@ export function createWeatherDomManager(root = document) {
   }
 
   function renderWeatherError(message) {
-    if (!hasWeatherCardElements(elements)) {
+    if (!hasRequiredElements) {
       return;
     }
 
     currentWeatherDescription = "";
-    elements.status.textContent = message;
+    currentTimeZone = null;
+    currentTimeZoneOffsetSeconds = null;
+    elements.status.textContent =
+      typeof message === "string" && message.trim() !== ""
+        ? message.trim()
+        : WEATHER_CARD_TEXT.staleFallbackMessage;
     elements.status.dataset.icon = "error";
     elements.temperature.textContent = WEATHER_CARD_TEXT.defaultTemperature;
     elements.date.textContent = WEATHER_CARD_TEXT.defaultDate;
@@ -231,10 +370,8 @@ export function createWeatherDomManager(root = document) {
 
   return {
     elements,
-    hasRequiredElements: hasWeatherCardElements(elements),
-    renderLocalDateTime,
+    hasRequiredElements,
     startLocalClock,
-    stopLocalClock,
     renderWeatherCard,
     renderWeatherRefreshWarning,
     renderWeatherError,

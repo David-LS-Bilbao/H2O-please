@@ -3,7 +3,7 @@ import {
   getLocalWeatherSnapshot,
   getStoredLocalWeatherSnapshot,
   saveLocalWeatherSnapshot,
-} from "./index.js";
+} from "../features/weather-api/index.js";
 
 // La preview reutiliza el DomManager de la feature para que el ejemplo y las
 // integraciones reales compartan exactamente la misma logica de render.

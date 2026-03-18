@@ -1,134 +1,207 @@
-# Weather API feature
+# Weather API
 
-Esta carpeta contiene una feature completa pero pequena para obtener, transformar y mostrar el clima actual del usuario.
+Esta carpeta contiene la feature del clima ya simplificada para la version actual de la aplicacion.
 
-La idea no es solo "pedir una API". La feature esta separada en modulos para que un alumno pueda entender mejor que hace cada parte:
+No esta pensada como una libreria generica. Esta pensada para resolver un caso concreto:
 
-- una parte lee configuracion
-- otra habla con APIs externas
-- otra transforma datos crudos en un formato util para la app
-- otra pinta la tarjeta en pantalla
-- otra guarda el ultimo resultado en `localStorage`
+- obtener el clima local del usuario
+- guardarlo en cache
+- y pintarlo en una tarjeta reutilizable dentro del dashboard
 
-## Que resuelve esta feature
+La estructura se ha reducido para dejar el menor numero de archivos utiles sin perder claridad para un alumno de fullstack.
 
-Esta feature se encarga de:
+## Estructura actual
 
-1. pedir la ubicacion del usuario al navegador
-2. consultar el clima actual con esa ubicacion
-3. intentar resolver un nombre de ciudad legible
-4. convertir la respuesta de la API en un objeto sencillo para la app
-5. guardar ese resultado en cache local si hace falta
-6. mostrar la informacion en una card reutilizable
+```text
+scripts/features/weather-api/
+├─ README_API.md
+├─ index.js
+├─ weatherApiClient.js
+├─ weatherCache.js
+├─ weatherConfig.js
+├─ weatherDomManager.js
+└─ weatherService.js
+```
 
-## Idea principal de arquitectura
+## Que hace cada archivo
 
-La feature esta dividida por responsabilidad.
+### `weatherConfig.js`
 
-Eso significa que cada archivo intenta hacer una sola cosa bien:
+Se ocupa de la configuracion.
 
-- `weatherConfig.js`
-  Lee la API key desde `window` o desde `localStorage`.
+- guarda los nombres de las claves y URLs base
+- lee la API key desde `window`
+- si no existe en runtime, la busca en `localStorage`
 
-- `weatherApiClient.js`
-  Construye URLs, llama a las APIs externas y encapsula la geolocalizacion del navegador.
+La idea es que la app pueda funcionar en desarrollo sin obligarte a tocar el codigo cada vez que cambias la key.
 
-- `weatherService.js`
-  Toma respuestas crudas de la API y las convierte en un snapshot sencillo y consistente para el resto de la app.
+### `weatherApiClient.js`
 
-- `weatherCache.js`
-  Guarda y recupera el ultimo clima desde `localStorage`.
+Se encarga de hablar con el navegador y con servicios externos.
 
-- `weatherFormatters.js`
-  Formatea temperatura, fecha y hora.
+Responsabilidades:
 
-- `weatherVisuals.js`
-  Decide el icono y si la UI debe mostrarse como dia o noche.
+- pedir la ubicacion del usuario
+- construir las URLs de peticion
+- llamar a OpenWeather si hay API key
+- usar Open-Meteo como fallback si OpenWeather falla o si no hay key
+- consultar BigDataCloud para obtener una ciudad legible
+- normalizar errores HTTP y de geolocalizacion
 
-- `dom/weatherDomManager.js`
-  Centraliza el render de la card en el DOM.
+Este archivo trabaja con datos externos todavia "crudos".
 
-- `index.js`
-  Hace de fachada publica. Reexporta lo importante para que desde fuera no haya que importar cada modulo por separado.
+### `weatherService.js`
 
-- `weatherPreviewPage.js`
-  Es una pagina de prueba para ver esta feature en funcionamiento sin tocar la pantalla principal.
+Es la capa que transforma los datos externos a un formato util para la UI.
 
-## Flujo completo paso a paso
+Aqui se decide:
 
-Si quieres entender la feature de principio a fin, este es el recorrido normal:
+- como traducir codigos de Open-Meteo a texto legible
+- como resolver el nombre final de la ciudad
+- como dejar un unico formato comun aunque cambie el proveedor
 
-1. La pagina llama a `getLocalWeatherSnapshot()`.
-2. `weatherApiClient.js` pide la ubicacion del usuario con `navigator.geolocation`.
-3. Con latitud y longitud, se consulta el proveedor del clima.
-4. Si existe API key, se intenta primero con OpenWeather.
-5. Si OpenWeather falla, se hace fallback a Open-Meteo.
-6. Despues se intenta resolver una ciudad legible con reverse geocoding.
-7. `weatherService.js` transforma todo eso en un objeto comun.
-8. `weatherDomManager.js` usa ese objeto para pintar la card.
-9. Opcionalmente, el snapshot se guarda en `localStorage` para reutilizarlo si la proxima carga falla.
+Su salida principal es un `snapshot`.
 
-## Que es un snapshot en esta feature
+### `weatherCache.js`
 
-Un "snapshot" es el objeto ya listo para usar por la app.
+Gestiona el cache local del snapshot.
 
-No contiene la respuesta completa de la API. Contiene solo lo que de verdad necesita la interfaz:
+- guarda el ultimo dato valido en `localStorage`
+- recupera ese dato si existe
+- evita romper la app si el JSON guardado esta corrupto
 
-- temperatura en grados Celsius
-- descripcion del clima
-- nombre de ciudad o etiqueta visible
-- latitud y longitud
-- zona horaria u offset
-- proveedor que devolvio el dato
-- fecha de obtencion
+### `weatherDomManager.js`
 
-En otras palabras: el snapshot es la version "limpia" y util del dato.
+Centraliza todo el render de la tarjeta del clima.
 
-## Proveedores y fallback
+Hace varias cosas relacionadas entre si:
 
-La feature trabaja con dos servicios:
+- monta el HTML base de la card
+- localiza nodos del DOM
+- formatea temperatura, fecha y hora
+- decide si el estado visual es de dia o de noche
+- calcula el icono textual de estado
+- actualiza el reloj local cada segundo
+- pinta datos, warnings y errores
 
-- `OpenWeather`
-  Se usa cuando existe API key.
+En esta version se han integrado aqui las utilidades de formato y visuales para reducir archivos y carpetas.
 
-- `Open-Meteo`
-  Se usa como fallback si OpenWeather falla, o como proveedor principal si no hay API key.
+### `index.js`
 
-Esto hace que la feature sea mas comoda para una app de prueba:
+Es la fachada publica de la feature.
 
-- si hay key, se aprovecha OpenWeather
-- si no hay key, la feature no se rompe
-- si un proveedor falla, todavia hay una alternativa
+Desde fuera solo deberian importarse las funciones que la aplicacion necesita de verdad.
 
-## API publica mas importante
+## API publica real
 
-Desde fuera del feature, lo normal es trabajar con lo que exporta `index.js`.
-
-Las funciones mas utiles son:
+La app actual usa esta API publica:
 
 - `getLocalWeatherSnapshot()`
-  Devuelve el clima actual del usuario ya transformado a un formato util para la app.
-
 - `getStoredLocalWeatherSnapshot()`
-  Lee el ultimo snapshot guardado en `localStorage`.
-
 - `saveLocalWeatherSnapshot(snapshot)`
-  Guarda un snapshot en cache local.
-
+- `mountWeatherCard(targetElement, position)`
 - `createWeatherDomManager(root)`
-  Devuelve un gestor de DOM para pintar y actualizar la card del clima.
 
-- `formatTemperature(value)`
-- `formatWeatherDate(date)`
-- `formatWeatherTime(date)`
-- `getWeatherStatusIcon(description, date)`
-- `getWeatherTimePeriod(date)`
+Todo lo demas se considera detalle interno.
 
-Estas utilidades se separan para que la UI no tenga que rehacer logica cada vez.
+## Flujo real paso a paso
+
+Cuando el dashboard o la preview cargan la tarjeta del clima, el flujo es este:
+
+1. La pagina monta la card o reutiliza la que ya existe.
+2. Crea un `DomManager` para controlar el render.
+3. Intenta leer un snapshot guardado en `localStorage`.
+4. Si existe, lo pinta primero para que la UI no arranque vacia.
+5. Pide la ubicacion del usuario al navegador.
+6. Intenta consultar OpenWeather si hay API key.
+7. Si no hay key o OpenWeather falla, usa Open-Meteo.
+8. Intenta enriquecer la ubicacion con una ciudad legible mediante reverse geocoding.
+9. Convierte la respuesta externa a un snapshot comun.
+10. Guarda el snapshot valido en cache.
+11. Actualiza la card y el reloj local.
+
+## Que es un snapshot
+
+El snapshot es el objeto limpio que usa la interfaz.
+
+No es la respuesta completa de una API externa. Es una version resumida y consistente con solo lo que la app necesita:
+
+- `temperatureCelsius`
+- `weatherDescription`
+- `city`
+- `latitude`
+- `longitude`
+- `timezone`
+- `timezoneOffsetSeconds`
+- `provider`
+- `fetchedAt`
+
+Esto hace que el DOM no dependa del formato propio de OpenWeather ni del de Open-Meteo.
+
+## Proveedores usados
+
+### `OpenWeather`
+
+Se intenta primero cuando hay API key disponible.
+
+Ventaja:
+
+- aporta descripcion textual y offset horario
+
+### `Open-Meteo`
+
+Se usa como fallback o como proveedor principal cuando no hay API key.
+
+Ventaja:
+
+- permite que la app de prueba siga funcionando sin configuracion extra
+
+### `BigDataCloud`
+
+Se usa para reverse geocoding.
+
+Su papel no es obtener el clima, sino mejorar la etiqueta visible de ciudad.
+
+## Por que la estructura es ahora mas pequena
+
+Antes la feature separaba mas piezas:
+
+- formateadores
+- logica visual
+- carpeta `dom`
+- script de preview dentro de la propia feature
+
+Para esta aplicacion de prueba eso anadia mas navegacion entre archivos que valor real.
+
+Por eso se simplifico asi:
+
+- `weatherFormatters.js` y `weatherVisuals.js` se integran en `weatherDomManager.js`
+- la carpeta `dom/` desaparece
+- `weatherPreviewPage.js` sale de la feature y pasa a `scripts/pages/`
+- `index.js` expone menos funciones
+
+La idea es mantener una arquitectura entendible, pero sin sobrefragmentar una feature pequena.
+
+## Donde se usa
+
+### Dashboard
+
+El dashboard entra por:
+
+- `scripts/pages/weatherCardIntegration.js`
+
+### Preview aislada
+
+La preview se sirve desde:
+
+- `weather-preview.html`
+- `scripts/pages/weatherPreviewPage.js`
+
+Esto deja claro que la preview es una pagina de ejemplo, no parte del nucleo de la feature.
 
 ## Configuracion de la API key
 
-Si quieres usar OpenWeather, la key se puede definir en runtime:
+La API key de OpenWeather puede definirse en runtime:
 
 ```html
 <script>
@@ -136,79 +209,29 @@ Si quieres usar OpenWeather, la key se puede definir en runtime:
 </script>
 ```
 
-Tambien puede guardarse en `localStorage` durante desarrollo:
+O guardarse directamente en `localStorage`:
 
 ```js
 localStorage.setItem("H2O_PLEASE_WEATHER_API_KEY", "tu-api-key");
 ```
 
-En este proyecto se recomienda usar:
+## Idea importante para un alumno
 
-- `scripts/config/weatherRuntimeConfig.example.js`
-  Archivo de ejemplo trackeado por Git.
+Si estas aprendiendo fullstack, esta carpeta muestra una separacion util:
 
-- `scripts/config/weatherRuntimeConfig.local.js`
-  Archivo local ignorado por Git, pensado para guardar la key real.
+- una capa obtiene datos
+- otra los adapta al dominio de la app
+- otra los cachea
+- otra los pinta
 
-Si una pantalla necesita la feature del clima, debe cargar antes:
+Eso evita mezclar en una sola funcion:
 
-```html
-<script src="scripts/config/weatherRuntimeConfig.local.js"></script>
-```
-
-## Como se pinta la card
-
-La tarjeta no se pinta directamente desde la pagina.
-
-La pagina delega esa responsabilidad al `DomManager`.
-
-Eso ayuda a que:
-
-- la logica de render este en un solo sitio
-- la preview y una integracion real compartan el mismo comportamiento
-- la UI sea mas facil de mantener
-
-El `DomManager` puede:
-
-- localizar los nodos de la tarjeta
-- renderizar el snapshot
-- mostrar errores
-- actualizar la fecha y la hora local cada segundo
-
-## Preview local
-
-Para probar esta feature de forma aislada, abre:
-
-```text
-/weather-preview.html
-```
-
-Esa vista monta la card y usa esta misma feature para cargar datos reales.
-
-Tambien hay una integracion de ejemplo en la raiz del proyecto, para ver como se conectaria con una pagina normal.
-
-## Que deberia entender un alumno al leer esta carpeta
-
-Si estas aprendiendo fullstack, esta feature es un buen ejemplo de varias ideas importantes:
-
-- una API externa no deberia mezclarse directamente con el DOM
-- la respuesta cruda de una API suele necesitar transformacion antes de usarse
-- el cache local puede mejorar la experiencia cuando una peticion falla
-- una fachada como `index.js` simplifica las importaciones desde fuera
-- separar por responsabilidad hace que el codigo sea mas legible
-
-## Limites actuales de la feature
-
-Esta carpeta esta pensada para una aplicacion de prueba y una integracion futura sencilla.
-
-Por eso:
-
-- no intenta resolver todos los casos de negocio posibles
-- no tiene una pantalla final de dashboard cerrada
-- prioriza claridad y reutilizacion por encima de una arquitectura mas compleja
+- geolocalizacion
+- peticiones HTTP
+- transformacion de datos
+- `localStorage`
+- escritura directa en el DOM
 
 ## Resumen corto
 
-Si tuvieras que explicarla en una sola frase:
-
-> `weather-api` obtiene el clima del usuario, lo transforma a un formato simple y lo deja listo para renderizar en una card reutilizable.
+La feature del clima obtiene la ubicacion del usuario, consulta el proveedor disponible, adapta la respuesta a un snapshot comun y deja ese dato listo para pintar en una card reutilizable.
