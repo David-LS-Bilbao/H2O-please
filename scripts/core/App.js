@@ -79,7 +79,6 @@ class App {
     const {
       drinkForm,
       amountInput,
-      removeButton,
       btnToday,
       btnHistory,
       btnMe,
@@ -105,35 +104,6 @@ class App {
             minute: "2-digit",
           }),
           cantidad: amount,
-        });
-
-        saveUser(this.user);
-        this.updateUI();
-        amountInput.value = "";
-      });
-    }
-
-    // Resta de agua: reutiliza el input actual y evita bajar de cero el consumo.
-    if (removeButton) {
-      removeButton.addEventListener("click", (e) => {
-        e.preventDefault();
-        const amount = parseInt(amountInput.value || "200", 10);
-        if (Number.isNaN(amount) || amount <= 0) {
-          return;
-        }
-
-        const removedAmount = Math.min(amount, this.user.waterConsumed);
-        if (removedAmount <= 0) {
-          return;
-        }
-
-        this.user.removeWater(removedAmount);
-        this.user.history.unshift({
-          hora: new Date().toLocaleTimeString("es-ES", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          cantidad: -removedAmount,
         });
 
         saveUser(this.user);

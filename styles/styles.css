@@ -469,16 +469,6 @@ main.app-layout {
                 img {
                     width: 3.5rem;
                 }
-
-                &#remove-btn {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    font-family: var(--primary-font-bold);
-                    font-size: 2.4rem;
-                    line-height: 1;
-                }
             }
         }
 
@@ -608,9 +598,6 @@ main.app-layout {
         width: 3.15rem;
     }
 
-    main.app-layout section form button#remove-btn {
-        font-size: 2.16rem;
-    }
 }
 
 /* Weather card refresh revisable: el redisenio se limita al dashboard y mantiene el montaje actual en #weather-output. */
