@@ -11,7 +11,7 @@
 <body data-page="login">
   <main class="login-layout">
 
-    <header class="header-top">
+    <header>
       <svg viewBox="0 0 1586 278">
         <path
           d="M89.26 13.24c1.88-2.63 4.2-5.67 7.76-5.72 3.62-.41 6.71 2 8.6 4.85 14.27 20.89 28.31 42.14 38.7 65.28 2.92 6.84 5.8 13.87 6.53 21.34.98 12.56-2.82 25.39-10.37 35.46-9.56 13-25.22 21.6-41.47 21.66-11.46.46-22.93-3.2-32.17-9.97-9.79-7.02-16.87-17.4-20.49-28.83-4.37-.12-8.75-.09-13.12-.07 6.08 41.65 11.75 83.37 17.63 125.05.47 2.96 1.45 6.08 3.88 8.03 2.51 2.21 6.02 2.38 9.2 2.43q34.065-.105 68.13 0c3.62.04 7.72-.59 10.01-3.71 3.18-4.31 2.85-10 3.73-15.05 5.73-41.61 11.74-83.19 17.48-124.8.39-2.22 1.01-4.55 2.68-6.17 3.26-3.26 9.33-2.8 12.04.94 1.76 2.15 1.74 5.08 1.47 7.7-6.36 44.69-12.5 89.41-18.81 134.11-1.24 9.39-7.67 17.95-16.51 21.44-4.79 2.03-10.08 1.87-15.17 1.87-22.35-.04-44.69-.04-67.04.01-8.11.2-16.2-3.42-21.22-9.83-3.88-4.59-5.69-10.52-6.37-16.41-5.66-40.8-11.33-81.6-17.05-122.39-.55-4.12-1.57-8.22-1.37-12.39.11-3.74 3.41-6.86 7.09-7.06 6.98-.51 14-.03 20.99-.15 2.14-13.87 8.37-26.63 14.88-38.91 9.08-16.86 19.56-32.91 30.36-48.71M67.77 80.75c-3.06 6.37-5.65 13.02-6.93 20 11.07.17 22.14.02 33.21.01 2.81.12 5.98 0 8.29 1.88 3.64 2.93 3.96 9.07.53 12.29-2.31 2.3-5.8 2.23-8.82 2.34-10.08-.01-20.15-.15-30.23.04 3.88 7.95 10.05 14.91 18.12 18.74 10.35 5.13 23.21 4.82 33.27-.87 10.31-5.68 17.84-16.37 19-28.17 1.22-8.62-2.25-16.89-5.72-24.57-8.58-18.23-19.15-35.5-30.7-51.99-11.35 15.89-21.53 32.69-30.02 50.3M437.36 89.45c14.55-1.98 29.56 1.76 42.22 8.99 10.99 6.21 18.28 18.14 18.94 30.73.89 17.42-7.47 34.55-20.42 45.96-13.39 11.76-29.52 19.96-46.1 26.23 15.97 4.03 31.85 8.41 47.75 12.7-2.65 10.05-5.37 20.08-8.06 30.11-20.61-5.12-41.04-10.92-61.57-16.32-11.89-3.27-23.87-6.23-35.71-9.68 1.88-7.34 3.9-14.64 5.75-21.98.79-2.58 1.17-5.94 4.1-6.99 21.26-9.6 43.65-18.02 61.63-33.34 7.18-6.16 13.62-14.86 13.06-24.78-.28-7.79-10.5-12.14-16.65-7.79-4.55 3.16-6.19 8.75-7.91 13.71-12.11-2.98-24.18-6.15-36.13-9.69 2.83-8.69 6.68-17.28 13.05-23.98 6.8-7.38 16.06-12.54 26.05-13.88" />
@@ -21,28 +21,25 @@
     </header>
 
     <section>
-      <h2>Identificarse</h2>
-      <form id="login-form">
+      <h2>Acceder a la aplicación</h2>
+
+      <div class="auth-tabs" role="tablist">
+        <button type="button" class="auth-tab active" data-mode="login" role="tab" aria-selected="true">
+          Iniciar sesión
+        </button>
+        <button type="button" class="auth-tab" data-mode="register" role="tab" aria-selected="false">
+          Registrarse
+        </button>
+      </div>
+
+      <form id="auth-form">
         <fieldset>
           <legend>Datos de acceso</legend>
           <input type="text" id="username" placeholder="Usuario" required autocomplete="username" />
           <input type="password" id="password" placeholder="Contraseña" required autocomplete="current-password" />
-          <button type="submit">Entrar</button>
 
-        </fieldset>
-      </form>
-    </section>
+          <button type="submit" id="auth-submit-btn">Entrar</button>
 
-    <br>
-    <section>
-      <h2>¿Eres nuevo?</h2>
-      <form id="register-form">
-        <fieldset>
-          <legend>Crear cuenta</legend>
-          <input type="text" id="new-username" placeholder="Elige un usuario" required autocomplete="username" />
-          <input type="password" id="new-password" placeholder="Crea una contraseña" required
-            autocomplete="new-password" />
-          <button type="submit">Registrarse</button>
         </fieldset>
       </form>
     </section>

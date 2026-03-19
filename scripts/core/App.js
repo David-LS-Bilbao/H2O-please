@@ -99,11 +99,9 @@ class App {
 
         this.user.addWater(amount);
         this.user.history.unshift({
-          hora: new Date().toLocaleTimeString("es-ES", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
+          hora: new Date().toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }),
           cantidad: amount,
+          timestamp: Math.floor(Date.now() / 1000)
         });
 
         saveUser(this.user);
@@ -219,11 +217,22 @@ class App {
       button.addEventListener("click", () => {
         const thisButtonId = parseInt(button.dataset.id);
         this.user.addWater(-this.user.history[thisButtonId].cantidad);
-        this.user.history.splice((thisButtonId), 1);
+        this.user.history.splice(thisButtonId, 1);
+
+        if (this.user.history.length > 0) {
+          const lastEntry = this.user.history[0];
+          const nowUnix = Math.floor(Date.now() / 1000);
+          this.user.lastTimeConsumedUnix = lastEntry.timestamp;
+          this.user.nextAlarm = lastEntry.timestamp + 1800;
+        } else {
+          this.user.lastTimeConsumedUnix = null;
+          this.user.nextAlarm = null;
+        }
+
         saveUser(this.user);
-        this.renderizarHistorial()
-        this.updateUI()
-      })
+        this.renderizarHistorial();
+        this.updateUI();
+      });
 
       item.appendChild(button)
       historyContainer.appendChild(item);
