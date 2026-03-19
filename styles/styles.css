@@ -108,7 +108,12 @@ body {
     grid-template-rows: auto 1fr auto;
 }
 
-/* ==================== LOGIN HELPERS ==================== */
+
+
+/* ==================== INICIO CODIGO DE MARCOS ==================== */
+
+
+/* Configuración General 
 
 
 .login-container {
@@ -121,12 +126,97 @@ body {
     text-align: center;
 }
 
-.trash-button {
-    border: none;
-    background: none;
-    fill: orange;
-    cursor: pointer
+Header y Logo 
+.login-logo {
+    width: 60px;
+    margin-bottom: 10px;
 }
+
+.login-header h1 {
+    color: #007bff;
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.login-header p {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+ Formularios 
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input {
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+ Botones con los colores de tu captura 
+button {
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-login {
+    background-color: #007eb3; / Azul oscuro /
+    color: white;
+}
+
+.btn-register {
+    background-color: #ffe494; / Amarillo suave /
+    color: #5d4a1a;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+ Divisor 
+.auth-divider {
+    margin: 25px 0;
+    position: relative;
+    border-top: 1px solid #eee;
+}
+
+.auth-divider span {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 0 10px;
+    color: #999;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+#auth-message {
+    margin-top: 20px;
+    min-height: 1.2rem;
+}
+
+*/
+
+/* ==================== FIN CODIGO DE MARCOS ==================== */
+
+
 header {
     display: flex;
     justify-content: space-between;
@@ -274,18 +364,35 @@ body[data-page="login"] {
             inset 0 1px 0 rgba(255, 255, 255, 0.85);
 
         form {
+            fieldset {
+                border-radius: 1.618rem;
+                padding: 1.618rem;
+                margin: 1.618rem 0;
+            }
+
             display: grid;
             gap: 0.75rem;
         }
 
         button {
+            /*por defecto*/
             width: 100%;
             padding: 1rem 1.1rem;
+            margin: 1rem 0;
             border: 0;
             border-radius: 10rem;
             font-family: var(--primary-font-bold);
             font-size: 1rem;
             cursor: pointer;
+        }
+
+        .auth-tab:last-child {
+            border-radius: 0 1.618rem 1.618rem 0;
+
+        }
+
+        .auth-tab:first-child {
+            border-radius: 1.618rem 0 0 1.618rem;
         }
 
         input {
@@ -313,16 +420,19 @@ body[data-page="login"] {
         }
     }
 
-    #login-form button {
+    #auth-form button {
         color: white;
         background: var(--primary-color);
         box-shadow: 0 0.8rem 1.6rem rgba(4, 118, 174, 0.18);
     }
 
-    #register-form button {
-        color: var(--primary-dark-color);
-        background: var(--secondary-light-color);
-        box-shadow: 0 0.8rem 1.6rem rgba(255, 209, 102, 0.2);
+    .auth-tabs {
+        display: flex;
+
+        .active {
+            color: var(--primary-dark-color);
+            background: var(--secondary-light-color);
+        }
     }
 
     #auth-message {
@@ -594,78 +704,7 @@ main.app-layout {
     }
 }
 
-#view-me .user-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-}
 
-#view-me .user-info p {
-    margin: 0;
-    color: var(--neutral-color);
-}
-
-#view-me .edit-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-#view-me .edit-group label {
-    font-size: 0.95rem;
-    color: var(--neutral-color);
-}
-
-#view-me .edit-group input,
-#view-me .save-btn,
-#view-me .logout-btn {
-    width: 100%;
-    box-sizing: border-box;
-
-}
-
-#view-me .edit-group input {
-    padding: 0.65rem 0.75rem;
-    border: solid 0.1rem #58B5E333;
-    border-radius: 0.35rem;
-    background: white;
-}
-
-#view-me .save-btn,
-#view-me .logout-btn {
-    padding: 0.65rem 0.75rem;
-    border: solid 0.1rem var(--primary-color);
-    border-radius: 0.35rem;
-    cursor: pointer;
-}
-
-#view-me .save-btn {
-    color: white;
-    background: var(--primary-color);
-}
-
-#view-me .logout-btn {
-    color: var(--primary-color);
-    background: var(--background-color);
-}
-
-#view-me .profile-separator {
-    width: 100%;
-    margin: 0;
-    border: 0;
-    border-top: 1px solid #eee;
-}
-
-@media (max-width: 480px) {
-    main.app-layout section form button {
-        width: 4.05rem;
-    }
-
-    main.app-layout section form button img {
-        width: 3.15rem;
-    }
-
-}
 /* ==================== WEATHER CARD ==================== */
 
 /* Weather card refresh revisable: el redisenio se limita al dashboard y mantiene el montaje actual en #weather-output. */

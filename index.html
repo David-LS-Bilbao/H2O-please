@@ -2,51 +2,49 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/styles.css" type="text/css" />
-    <title>H2O Please - Acceso</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles/styles.css" type="text/css" />
+  <title>H2O Please - Acceso</title>
 </head>
 
 <body data-page="login">
   <main class="login-layout">
-    
+
     <header>
       <h1>H2O Please</h1>
-      <p>Gestión de hidratación personal</p>
+      <p>Gestor de hidratación personal</p>
     </header>
 
     <section>
-      <h2>Identificarse</h2>
-      <form id="login-form">
+      <h2>Acceder a la aplicación</h2>
+
+      <div class="auth-tabs" role="tablist">
+        <button type="button" class="auth-tab active" data-mode="login" role="tab" aria-selected="true">
+          Iniciar sesión
+        </button>
+        <button type="button" class="auth-tab" data-mode="register" role="tab" aria-selected="false">
+          Registrarse
+        </button>
+      </div>
+
+      <form id="auth-form">
         <fieldset>
           <legend>Datos de acceso</legend>
           <input type="text" id="username" placeholder="Usuario" required autocomplete="username" />
           <input type="password" id="password" placeholder="Contraseña" required autocomplete="current-password" />
-          <button type="submit">Entrar</button>
-          
-        </fieldset>
-      </form>
-    </section>
-
-    <br> <section>
-      <h2>¿Eres nuevo?</h2>
-      <form id="register-form">
-        <fieldset>
-          <legend>Crear cuenta</legend>
-          <input type="text" id="new-username" placeholder="Elige un usuario" required autocomplete="username" />
-          <input type="password" id="new-password" placeholder="Crea una contraseña" required autocomplete="new-password" />
-          <button type="submit">Registrarse</button>
+          <button type="submit" id="auth-submit-btn">Entrar</button>
         </fieldset>
       </form>
     </section>
 
     <footer>
-      
+
     </footer>
 
   </main>
 
   <script type="module" src="scripts/index.js"></script>
 </body>
+
 </html>
