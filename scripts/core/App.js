@@ -99,11 +99,9 @@ class App {
 
         this.user.addWater(amount);
         this.user.history.unshift({
-          hora: new Date().toLocaleTimeString("es-ES", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
+          hora: new Date().toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }),
           cantidad: amount,
+          timestamp: Math.floor(Date.now() / 1000)
         });
 
         saveUser(this.user);
@@ -224,8 +222,8 @@ class App {
         if (this.user.history.length > 0) {
           const lastEntry = this.user.history[0];
           const nowUnix = Math.floor(Date.now() / 1000);
-          this.user.lastTimeConsumedUnix = nowUnix;
-          this.user.nextAlarm = nowUnix + 1800;
+          this.user.lastTimeConsumedUnix = lastEntry.timestamp;
+          this.user.nextAlarm = lastEntry.timestamp + 1800;
         } else {
           this.user.lastTimeConsumedUnix = null;
           this.user.nextAlarm = null;
