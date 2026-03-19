@@ -78,8 +78,14 @@
         --primary-light-color: #78cff2;
     }
 
-    #view-me .logout-btn {
-        --primary-color: #a6e5fe;
+    #view-me button {
+        &:nth-of-type(1) {
+            --primary-color: #a6e5fe;
+        }
+
+        &:nth-of-type(2) {
+            --primary-color: #ffe08a;
+        }
     }
 
     footer {
@@ -97,36 +103,27 @@ body {
     margin: 0;
     padding: 0;
     font-family: var(--primary-font-regular);
-    background: var(--background-color);
+    background: #aaaaaa;
     transition: all 0.3s;
 }
 
+body[data-page="login"] {
+    margin: 0;
+    box-sizing: border-box;
+}
+
 body {
-    height: 100dvh;
-    max-height: 100dvh;
     display: grid;
     grid-template-rows: auto 1fr auto;
-}
-
-/* ==================== LOGIN HELPERS ==================== */
-
-
-.login-container {
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    height: 100dvh;
+    max-height: 100dvh;
     width: 100%;
-    max-width: 400px;
-    text-align: center;
+    max-width: 560px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background: var(--background-color);
 }
 
-.trash-button {
-    border: none;
-    background: none;
-    fill: orange;
-    cursor: pointer
-}
 header {
     display: flex;
     justify-content: space-between;
@@ -134,6 +131,8 @@ header {
     position: sticky;
     top: 0;
     padding: 0.5rem 1rem;
+    background: var(--background-color);
+    z-index: 1;
 
     svg {
         height: 2.2rem;
@@ -157,7 +156,7 @@ header {
         height: 1.3rem;
         width: 3rem;
         margin-right: 1.5rem;
-        box-shadow: 0.3rem 0.3rem 0.8rem #277B9A33;
+        box-shadow: 0.2rem 0.2rem 0.1rem #277B9A11;
         border: 0.05rem solid #277B9A66;
         border-radius: 2rem;
 
@@ -250,15 +249,31 @@ footer {
 
 /* ==================== USER REGISTER & LOGIN ==================== */
 
+.login-layout {
+
+    .header-top {
+        padding: 1rem;
+    }
+
+    svg {
+        width: 100%;
+        transform: scale(1.3);
+    }
+}
+
+.login-container {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 2rem;
+    border-radius: 20px;
+}
+
 body[data-page="login"] {
     grid-template-rows: 1fr;
-    place-items: center;
-    padding: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    margin: 0;
     background-color: var(--background-color);
 
     .login-layout {
@@ -266,12 +281,6 @@ body[data-page="login"] {
         display: grid;
         gap: 0.9rem;
         padding: 1.25rem;
-        border: solid 0.1rem #58B5E333;
-        border-radius: 1.8rem;
-        background: rgba(253, 253, 253, 0.98);
-        box-shadow:
-            0 1rem 2.2rem rgba(88, 181, 227, 0.14),
-            inset 0 1px 0 rgba(255, 255, 255, 0.85);
 
         form {
             display: grid;
@@ -290,8 +299,8 @@ body[data-page="login"] {
 
         input {
             width: 100%;
-            padding: 1rem 1.1rem;
-            border: solid 0.1rem rgba(88, 181, 227, 0.28);
+            padding: 0.6rem 1.1rem;
+            border: solid 0.1rem #4f89a0aa;
             border-radius: 999px;
             font-family: var(--primary-font-medium);
             font-size: 1rem;
@@ -307,22 +316,38 @@ body[data-page="login"] {
             }
 
             &:focus {
-                border-color: rgba(4, 118, 174, 0.4);
-                box-shadow: 0 0 0 0.2rem rgba(88, 181, 227, 0.14);
+                border-color: #4f89a0aa;
+                box-shadow: 0 0 0 0.2rem #4f89a033;
             }
         }
     }
 
-    #login-form button {
-        color: white;
-        background: var(--primary-color);
-        box-shadow: 0 0.8rem 1.6rem rgba(4, 118, 174, 0.18);
+    #login-form,
+    #register-form {
+        max-width: 18rem;
+        margin: 0 auto;
+
+        fieldset {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            border-radius: 1rem;
+        }
     }
 
-    #register-form button {
-        color: var(--primary-dark-color);
-        background: var(--secondary-light-color);
-        box-shadow: 0 0.8rem 1.6rem rgba(255, 209, 102, 0.2);
+    #login-form {
+        button {
+            color: var(--background-color);
+            background: var(--primary-color);
+        }
+    }
+
+
+    #register-form {
+        button {
+            color: var(--primary-dark-color);
+            background: var(--secondary-light-color);
+        }
     }
 
     #auth-message {
@@ -507,10 +532,11 @@ main.app-layout {
 /* ==================== DASHBOARD HISTORY & ME VIEWS ==================== */
 
 #view-history {
+    padding: 0 3rem;
 
     h2 {
         display: block;
-        margin: 0 0 1rem 0;
+        margin: 1rem 0;
         font-family: var(--primary-font-bold);
         color: var(--primary-color);
     }
@@ -524,10 +550,33 @@ main.app-layout {
         p {
             color: var(--neutral-color);
         }
+
+        span {
+            &:nth-of-type(1) {
+                color: var(--primary-dark-color) !important;
+            }
+
+            &:nth-of-type(2) {
+                color: var(--neutral-color);
+                margin-left: 1rem;
+            }
+        }
+    }
+
+    .trash-button {
+        width: 2rem;
+        height: 2rem;
+        border: none;
+        background: none;
+        fill: var(--primary-dark-color);
+        stroke: 2pt;
+        transform: scale(1.2);
+        cursor: pointer
     }
 }
 
 #view-me {
+    height: calc(100dvh - 8.9rem);
 
     h2 {
         display: block;
@@ -536,13 +585,13 @@ main.app-layout {
         color: var(--primary-color);
     }
 
-    #profile-container.profile-card {
+    #profile-container {
         display: flex;
         flex-direction: column;
         width: 100%;
-        max-width: 20rem;
+        padding: 1.5rem;
         gap: 0.6rem;
-        margin: 0 auto;
+        margin: 1rem auto 0;
         box-sizing: border-box;
     }
 
@@ -568,6 +617,14 @@ main.app-layout {
             border: solid 0.1rem #58B5E333;
             border-radius: 10rem;
             background: var(--background-color);
+
+            &[type="number"] {
+                color: var(--neutral-color);
+            }
+        }
+
+        label {
+            color: var(--neutral-color);
         }
     }
 
@@ -594,67 +651,14 @@ main.app-layout {
     }
 }
 
-#view-me .user-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-}
 
-#view-me .user-info p {
-    margin: 0;
-    color: var(--neutral-color);
-}
 
-#view-me .edit-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
 
-#view-me .edit-group label {
-    font-size: 0.95rem;
-    color: var(--neutral-color);
-}
 
-#view-me .edit-group input,
-#view-me .save-btn,
-#view-me .logout-btn {
-    width: 100%;
-    box-sizing: border-box;
 
-}
 
-#view-me .edit-group input {
-    padding: 0.65rem 0.75rem;
-    border: solid 0.1rem #58B5E333;
-    border-radius: 0.35rem;
-    background: white;
-}
 
-#view-me .save-btn,
-#view-me .logout-btn {
-    padding: 0.65rem 0.75rem;
-    border: solid 0.1rem var(--primary-color);
-    border-radius: 0.35rem;
-    cursor: pointer;
-}
 
-#view-me .save-btn {
-    color: white;
-    background: var(--primary-color);
-}
-
-#view-me .logout-btn {
-    color: var(--primary-color);
-    background: var(--background-color);
-}
-
-#view-me .profile-separator {
-    width: 100%;
-    margin: 0;
-    border: 0;
-    border-top: 1px solid #eee;
-}
 
 @media (max-width: 480px) {
     main.app-layout section form button {
@@ -666,6 +670,7 @@ main.app-layout {
     }
 
 }
+
 /* ==================== WEATHER CARD ==================== */
 
 /* Weather card refresh revisable: el redisenio se limita al dashboard y mantiene el montaje actual en #weather-output. */
@@ -953,7 +958,7 @@ body[data-page="dashboard"] #weather-output .dashboard-weather-card {
 
 @media (max-width: 480px) {
     .dashboard-weather-card {
-        max-width: none;
+        /*max-width: none;*/
         padding: 0.68rem 0.78rem;
         border-radius: 1rem;
     }
