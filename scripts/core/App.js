@@ -99,9 +99,11 @@ class App {
 
         this.user.addWater(amount);
         this.user.history.unshift({
-          hora: new Date().toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }),
+          hora: new Date().toLocaleTimeString("es-ES", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
           cantidad: amount,
-          timestamp: Math.floor(Date.now() / 1000)
         });
 
         saveUser(this.user);
