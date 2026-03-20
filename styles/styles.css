@@ -584,13 +584,11 @@ main.app-layout {
         }
 
         button {
-            width: 4rem;
             margin-left: auto;
             margin-right: 0.5rem;
             aspect-ratio: 1 / 1;
             border: none;
-            border-radius: 50%;
-            background-color: var(--primary-color);
+
             cursor: pointer;
 
             img {

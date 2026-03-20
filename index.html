@@ -17,8 +17,6 @@
     </header>
 
     <section>
-      <h2>Acceder a la aplicación</h2>
-
       <div class="auth-tabs" role="tablist">
         <button type="button" class="auth-tab active" data-mode="login" role="tab" aria-selected="true">
           Iniciar sesión
@@ -29,19 +27,11 @@
       </div>
 
       <form id="auth-form">
-        <fieldset>
-          <legend>Datos de acceso</legend>
-          <input type="text" id="username" placeholder="Usuario" required autocomplete="username" />
-          <input type="password" id="password" placeholder="Contraseña" required autocomplete="current-password" />
-          <button type="submit" id="auth-submit-btn">Entrar</button>
-        </fieldset>
+        <input type="text" id="username" placeholder="Usuario" required autocomplete="username" />
+        <input type="password" id="password" placeholder="Contraseña" required autocomplete="current-password" />
+        <button type="submit" id="auth-submit-btn">Entrar</button>
       </form>
     </section>
-
-    <footer>
-
-    </footer>
-
   </main>
 
   <script type="module" src="scripts/index.js"></script>
