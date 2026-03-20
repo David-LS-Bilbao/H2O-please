@@ -62,14 +62,14 @@ function initLoginPage() {
           window.location.href = "dashboard.html";
           return;
         }
-        renderAuthMessage("Usuario y/o contraseña incorrectos.");
+        renderAuthMessage("Usuario y/o contraseña incorrectos");
       } else {
         const ok = register(username, password);
         if (ok) {
           window.location.href = "dashboard.html";
           return;
         }
-        renderAuthMessage("El nombre de usuario ya existe.");
+        renderAuthMessage("El nombre de usuario ya existe");
       }
     });
   }

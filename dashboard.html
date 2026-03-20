@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles/styles.css" type="text/css">
-  <script type="module" src="./scripts/darkmode.js" defer></script>
+  <script src="./scripts/darkmode.js" defer></script>
   <title>H2O Please</title>
 </head>
 
@@ -24,7 +24,7 @@
     <div id="view-today">
       <h1>Progreso de hidratación del día</h1>
       <div>
-        <progress class="side-progress" id="progress" value="0" min="0" max="100"></progress>
+        <progress class="side-progress" id="progress" value="0" max="100"></progress>
       </div>
 
       <section>
@@ -79,6 +79,7 @@
         <button type="button" id="btn-logout" class="logout-btn">Cerrar Sesión</button>
       </div>
     </section>
+
   </main>
   <footer>
     <nav class="bottom-navigation">
@@ -93,7 +94,7 @@
           <path
             d=" M 282.35 189.38 C 291.19 185.98 301.82 192.59 302.65 201.99 C 303.53 216.47 297.13 230.85 287.16 241.16 C 278.59 249.31 267.30 254.78 255.44 255.67 C 249.25 257.02 241.94 255.25 238.04 250.01 C 235.74 246.31 234.15 241.70 235.39 237.36 C 236.85 230.37 243.88 225.07 250.96 225.31 C 260.32 225.34 268.83 218.33 271.33 209.43 C 272.18 204.55 271.94 199.15 274.93 194.91 C 276.87 192.50 279.34 190.31 282.35 189.38 Z" />
         </svg>
-        <p>HOY</p>
+        <span>HOY</span>
       </button>
       <button id="btn-history">
         <svg viewBox="0 0 512 512">
@@ -118,7 +119,7 @@
           <path
             d=" M 156.02 390.02 C 169.34 389.98 182.66 389.98 195.98 390.03 C 196.02 403.34 196.02 416.66 195.98 429.98 C 182.66 430.02 169.34 430.02 156.02 429.98 C 155.99 416.66 155.98 403.34 156.02 390.02 Z" />
         </svg>
-        <p>HISTORIAL</p>
+        <span>HISTORIAL</span>
       </button>
       <button id="btn-me">
         <svg viewBox="0 0 512 512">
@@ -127,7 +128,7 @@
           <path
             d=" M 132.18 310.15 C 173.29 281.94 224.25 268.58 273.91 272.79 C 323.56 276.53 371.52 298.13 407.54 332.45 C 434.56 358.01 454.89 390.58 465.91 426.10 C 469.19 436.06 471.76 446.51 470.72 457.07 C 469.20 475.56 458.63 493.08 442.82 502.84 C 435.46 507.69 426.85 510.02 418.37 512.00 L 94.63 512.00 C 82.91 509.95 71.35 505.62 62.27 497.74 C 48.90 486.62 41.05 469.38 41.07 452.02 C 40.88 442.05 44.06 432.47 47.06 423.09 C 61.90 377.41 92.36 337.01 132.18 310.15 M 240.47 312.62 C 200.05 316.13 161.02 333.64 131.70 361.72 C 107.54 384.66 90.01 414.50 81.74 446.77 C 79.26 455.43 83.45 465.36 91.44 469.53 C 97.08 472.74 103.78 471.93 110.00 472.01 C 210.02 471.98 310.04 472.01 410.05 472.00 C 418.62 472.37 427.08 466.88 429.76 458.65 C 432.63 451.34 429.45 443.69 427.34 436.65 C 414.12 395.26 385.30 359.14 347.83 337.13 C 315.76 318.01 277.65 309.43 240.47 312.62 Z" />
         </svg>
-        <p>YO</p>
+        <span>YO</span>
       </button>
     </nav>
   </footer>
