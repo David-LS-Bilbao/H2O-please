@@ -1,27 +1,7 @@
 import DOMManager from "./DOMManager.js";
 import { loadCurrentUser, saveUser } from "./storage.js";
 import Navigation from "./Navigation.js";
-
-// Convierte un timestamp Unix en una hora legible para el mensaje de la siguiente alarma.
-function unixToTime(unixSeconds) {
-  const date = new Date(unixSeconds * 1000);
-  return date.toLocaleTimeString("es-ES", {
-    hour12: false,
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-// Normaliza los campos opcionales del perfil y descarta valores vacios o invalidos.
-function parseOptionalPositiveInteger(rawValue) {
-  const parsedValue = Number.parseInt(rawValue, 10);
-
-  if (!Number.isFinite(parsedValue) || parsedValue <= 0) {
-    return null;
-  }
-
-  return parsedValue;
-}
+import { unixToTime, parseOptionalPositiveInteger } from "./utils.js";
 
 // Controlador principal del dashboard: coordina estado, persistencia, vistas y eventos.
 class App {
