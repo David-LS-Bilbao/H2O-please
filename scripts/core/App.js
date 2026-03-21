@@ -123,6 +123,7 @@ class App {
         this.renderizarPerfil();
         this.updateUI();
         alert(`¡Perfil actualizado! Tu nueva meta es ${this.user.consumptionTarget} ml`);
+        this.navigation.showView("today");
       });
     }
 

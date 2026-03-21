@@ -1,32 +1,38 @@
 # H2O Please
 
-H2O Please es una aplicacion web frontend para registrar el consumo diario de agua y consultar el progreso de hidratacion del usuario. El proyecto funciona enteramente en cliente con HTML, CSS y JavaScript vanilla, guarda el estado en `localStorage` y actualmente incorpora una integracion de clima local con tarjeta reutilizable.
+H2O Please es una aplicacion web frontend para registrar el consumo diario de agua y consultar el progreso de hidratacion del usuario. Esta version final funciona solo en cliente, usa HTML, CSS y JavaScript vanilla, persiste los datos en `localStorage` y añade una tarjeta de clima integrada en el dashboard.
 
-## Descripcion del proyecto
+## Estado del proyecto
 
-La aplicacion ofrece un flujo simple de acceso con registro e inicio de sesion local, una pantalla de dashboard con seguimiento de consumo diario, historial de tomas, edicion de perfil, modo oscuro y una tarjeta de clima integrada. El repositorio refleja un proyecto estudiantil en fase de integracion de ramas, con documentacion tecnica adicional dentro de `docs/` y una feature de clima ya simplificada para el caso real de esta app.
+La aplicacion esta cerrada como frontend estatico:
 
-## Objetivo
+- acceso con login y registro local
+- dashboard con vistas `HOY`, `HISTORIAL` y `YO`
+- gestion del consumo diario de agua
+- perfil de usuario con recalculo del objetivo diario
+- modo oscuro con toggle en dashboard
+- tarjeta de clima reutilizable en dashboard
+- preview independiente de la weather card
 
-El objetivo actual del proyecto es unificar en una sola base funcional las aportaciones del equipo, manteniendo la aplicacion operativa y respetando la estructura visual ya consolidada. A nivel de producto, la aplicacion busca ayudar a registrar la hidratacion diaria de forma sencilla y mostrar informacion contextual util, como el objetivo diario y el clima local.
+No hay backend, base de datos, build, `npm` ni pipeline de test automatizado en el estado actual del repositorio.
 
-## Funcionalidades reales
+## Funcionalidades incluidas
 
-- Registro de usuario en cliente con `username` y `password`.
-- Inicio de sesion local con persistencia del usuario activo.
-- Redireccion automatica al dashboard cuando ya existe sesion activa.
-- Dashboard con progreso diario de hidratacion.
-- Alta manual de agua consumida desde el formulario principal.
-- Historial diario de movimientos de agua.
-- Reinicio automatico del progreso cuando cambia el dia.
-- Perfil de usuario con edad, peso y recalculo del objetivo diario.
-- Cierre de sesion desde la vista de perfil.
-- Modo oscuro con toggle en el dashboard.
-- Integracion de tarjeta de clima en el dashboard.
-- Vista previa independiente de la tarjeta de clima en `weather-preview.html`.
-- Cache local del ultimo dato meteorologico disponible.
-- Fallback meteorologico entre proveedores segun configuracion disponible.
-- Login y dashboard con estilos unificados en `styles/styles.css`.
+- Registro local de usuario con `username` y `password`
+- Inicio de sesion local con validacion de credenciales
+- Autologin si ya existe una sesion activa
+- Dashboard con contador, progreso y objetivo diario
+- Alta manual de agua consumida desde el formulario principal
+- Proteccion basica frente a clicks repetidos en el boton de beber
+- Historial diario de tomas con borrado individual
+- Reinicio automatico del consumo al cambiar de dia
+- Vista de perfil con edad, peso y recalculo del objetivo diario
+- Vuelta automatica a la vista `HOY` despues de guardar el perfil
+- Cierre de sesion desde la vista `YO`
+- Modo oscuro en dashboard
+- Tarjeta de clima con geolocalizacion y cache local
+- Fallback meteorologico cuando no hay API key de OpenWeather
+- Vista `weather-preview.html` para revisar la card de clima de forma aislada
 
 ## Tecnologias
 
@@ -40,7 +46,7 @@ El objetivo actual del proyecto es unificar en una sola base funcional las aport
 - Open-Meteo API
 - BigDataCloud Reverse Geocoding API
 
-## Estructura real de carpetas
+## Estructura real del proyecto
 
 ```text
 H2O-please/
@@ -56,12 +62,15 @@ H2O-please/
 │  └─ resumen_integracion_h2o_please_v2.md
 ├─ scripts/
 │  ├─ config/
-│  │  └─ weatherRuntimeConfig.example.js
+│  │  ├─ weatherRuntimeConfig.example.js
+│  │  └─ weatherRuntimeConfig.local.js
 │  ├─ core/
 │  │  ├─ App.js
 │  │  ├─ DOMManager.js
-│  │  └─ storage.js
-│  ├─ darkmode.js
+│  │  ├─ Navigation.js
+│  │  ├─ Views.js
+│  │  ├─ storage.js
+│  │  └─ utils.js
 │  ├─ features/
 │  │  └─ weather-api/
 │  │     ├─ README_API.md
@@ -79,6 +88,7 @@ H2O-please/
 │  │  └─ weatherPreviewPage.js
 │  ├─ services/
 │  │  └─ authService.js
+│  ├─ darkmode.js
 │  ├─ dashboard.js
 │  └─ index.js
 ├─ styles/
@@ -90,9 +100,9 @@ H2O-please/
 └─ README.md
 ```
 
-## Instalacion local
+## Como ejecutar el proyecto en local
 
-El proyecto no usa gestor de paquetes ni proceso de build en el estado actual del repositorio. Para ejecutarlo en local basta con servir los archivos estaticos desde un servidor local.
+El proyecto no necesita instalacion de dependencias. Basta con servir los archivos estaticos desde un servidor local.
 
 ```bash
 git clone https://github.com/David-LS-Bilbao/H2O-please.git
@@ -103,40 +113,40 @@ python3 -m http.server 5500
 Despues abre en el navegador:
 
 - `http://localhost:5500/` para login y registro
-- `http://localhost:5500/dashboard.html` si ya existe un usuario activo en `localStorage`
-- `http://localhost:5500/weather-preview.html` para revisar la tarjeta del clima de forma aislada
+- `http://localhost:5500/dashboard.html` si ya existe un usuario activo
+- `http://localhost:5500/weather-preview.html` para revisar la weather card por separado
 
-Nota importante: la geolocalizacion del clima requiere un contexto seguro. En desarrollo, `http://localhost:5500` es valido.
+Nota: la geolocalizacion del clima requiere un contexto seguro o `localhost`. Para desarrollo local, `http://localhost:5500` es valido.
 
-## Uso basico
+## Flujo de uso
 
-1. Entra en `index.html`.
-2. Registra un usuario nuevo o inicia sesion con uno existente.
-3. La aplicacion guarda el usuario activo y te lleva al dashboard.
-4. En `dashboard.html` puedes:
-   - anadir agua consumida
-   - revisar el historial del dia
-   - editar edad y peso en la vista `YO`
-   - cambiar entre modo claro y oscuro
-   - ver la tarjeta del clima en el bloque `API DEL TIEMPO`
-5. Para revisar solo la feature del clima, abre `weather-preview.html`.
+1. Abre `index.html`.
+2. Usa la pestana `Iniciar sesion` o `Crear cuenta`.
+3. Al autenticarse, la aplicacion redirige a `dashboard.html`.
+4. En `HOY` puedes:
+   - consultar el objetivo diario
+   - ver el total consumido
+   - revisar la tarjeta de clima
+   - anadir una nueva toma de agua
+5. En `HISTORIAL` puedes revisar las tomas del dia y borrar entradas.
+6. En `YO` puedes editar edad y peso, guardar cambios y cerrar sesion.
 
-## localStorage
+## Persistencia en localStorage
 
-La aplicacion depende de `localStorage` para persistir estado de usuario y clima.
+La aplicacion guarda todo el estado en `localStorage`.
 
-### Claves usadas actualmente
+### Claves principales
 
-| Clave | Uso real |
+| Clave | Uso |
 | --- | --- |
-| `currentUser` | Nombre del usuario con sesion activa |
-| `userConsumption:<username>` | Estado completo del usuario |
-| `H2O_PLEASE_WEATHER_API_KEY` | API key opcional para clima |
-| `localWeatherSnapshot` | Cache del ultimo snapshot meteorologico |
+| `currentUser` | Usuario con sesion activa |
+| `userConsumption:<username>` | Estado persistido del usuario |
+| `H2O_PLEASE_WEATHER_API_KEY` | API key opcional de OpenWeather |
+| `localWeatherSnapshot` | Ultimo snapshot meteorologico valido |
 
-### Datos del usuario
+### Estado de usuario guardado
 
-Cada usuario persistido bajo `userConsumption:<username>` guarda, segun el codigo actual:
+La entrada `userConsumption:<username>` contiene la informacion funcional del usuario, por ejemplo:
 
 - `username`
 - `password`
@@ -150,84 +160,66 @@ Cada usuario persistido bajo `userConsumption:<username>` guarda, segun el codig
 - `age`
 - `weight`
 
-## Integracion con API del clima
+## Clima: como funciona en esta version
 
-La capa de clima vive en `scripts/features/weather-api/` y expone una API publica minima desde `scripts/features/weather-api/index.js`.
+La feature meteorologica vive en `scripts/features/weather-api/` y se monta desde:
+
+- `scripts/pages/dashboardWeatherIntegration.js` para `dashboard.html`
+- `scripts/pages/weatherPreviewPage.js` para `weather-preview.html`
 
 ### Flujo real
 
-1. La pagina crea o monta la card con `weatherCardIntegration.js`.
-2. La feature intenta recuperar un snapshot meteorologico guardado.
-3. Solicita geolocalizacion al navegador.
-4. Si existe API key, usa OpenWeather.
-5. Si no existe API key, o si OpenWeather falla, usa Open-Meteo como fallback.
-6. Resuelve la ubicacion legible mediante BigDataCloud.
-7. Renderiza ciudad, descripcion, temperatura, fecha y hora local con un `DomManager` compartido.
-8. Guarda el ultimo snapshot valido en `localStorage`.
+1. Se monta la weather card en el contenedor correspondiente.
+2. Si existe un snapshot local previo, se pinta primero para no dejar la vista vacia.
+3. La app intenta obtener la ubicacion del usuario.
+4. Si hay API key de OpenWeather, usa OpenWeather como proveedor principal.
+5. Si no hay API key, o el proveedor principal no aplica, usa Open-Meteo.
+6. Intenta resolver una ubicacion legible con BigDataCloud.
+7. Guarda el ultimo snapshot valido en `localStorage`.
+8. Si falla el refresco por red o proveedor y habia cache previa, reutiliza ese dato guardado.
 
-La documentacion especifica de esta feature esta en `scripts/features/weather-api/README_API.md`.
+### Configuracion recomendada
 
-### Configuracion disponible
-
-El repositorio incluye la plantilla:
-
-```text
-scripts/config/weatherRuntimeConfig.example.js
-```
-
-Su contenido esperado es:
-
-```js
-window.H2O_PLEASE_WEATHER_API_KEY = "tu-api-key";
-```
-
-Ademas, el propio proyecto permite guardar la clave directamente en `localStorage`:
+La app puede funcionar sin API key gracias al fallback con Open-Meteo. Si quieres usar OpenWeather, la forma mas simple es guardar la key en `localStorage`:
 
 ```js
 localStorage.setItem("H2O_PLEASE_WEATHER_API_KEY", "tu-api-key");
 ```
 
-### Puntos de uso actuales
+El repositorio tambien incluye estos ficheros de apoyo:
 
-- `dashboard.html` mediante `scripts/dashboard.js` y `scripts/pages/dashboardWeatherIntegration.js`
-- `weather-preview.html` mediante `scripts/pages/weatherPreviewPage.js`
+```text
+scripts/config/weatherRuntimeConfig.example.js
+scripts/config/weatherRuntimeConfig.local.js
+```
 
-## Estado actual
+La plantilla esperada es:
 
-- Aplicacion frontend funcional sin backend.
-- Login y registro locales operativos con layout visual ya unificado.
-- Dashboard operativo con progreso diario, historial, perfil y modo oscuro.
-- Integracion de clima activa en dashboard y preview aislada.
-- Feature de clima simplificada a una estructura corta y centrada en el caso de uso real de la app.
-- Documentacion tecnica adicional disponible en `docs/`.
-- Estructura aun en fase de integracion y limpieza progresiva.
-- No hay scripts de `npm`, pruebas automatizadas ni pipeline de build definidos en el repositorio actual.
+```js
+window.H2O_PLEASE_WEATHER_API_KEY = "tu-api-key";
+```
 
-## Mejoras futuras
+## Limitaciones reales
 
-Estas mejoras se desprenden del estado real del repo y de la documentacion incluida:
-
-- completar la limpieza estructural cuando la integracion de ramas este estable
-- actualizar la documentacion secundaria de `docs/` para que refleje tambien la estructura nueva de `weather-api`
-- unificar mas logica de render entre dashboard y `DOMManager`
-- reforzar la gestion de configuracion del clima para entornos de despliegue
-- anadir pruebas automatizadas y comandos de desarrollo hoy ausentes
-- seguir consolidando la documentacion tecnica y funcional del proyecto
+- Es una aplicacion frontend pura; no hay backend ni persistencia remota.
+- Los datos de usuario y password quedan en `localStorage`, asi que no es un sistema de autenticacion seguro para produccion.
+- No hay tests automatizados, lint ni build en el repositorio actual.
+- La geolocalizacion y las llamadas al clima dependen del navegador, la red y los permisos del usuario.
+- La preview del clima y el dashboard sirven para validacion manual, no para pruebas automatizadas.
 
 ## Documentacion adicional
 
-El repositorio incluye documentacion complementaria en `docs/`, por ejemplo:
+El repositorio incluye documentacion tecnica complementaria en `docs/`:
 
-- `Feature_api_clima.md` para la feature meteorologica
-- `GitHub_guia_flujo.md` para el flujo de trabajo con ramas y PR
-- `resumen_integracion_h2o_please_v2.md` para decisiones de integracion
-- `DOCUMENTACION.html` como bitacora HTML generada
+- `docs/Feature_api_clima.md`
+- `docs/GitHub_guia_flujo.md`
+- `docs/resumen_integracion_h2o_please_v2.md`
+- `docs/DOCUMENTACION.html`
 
-## Autores / equipo
+La documentacion especifica de la feature meteorologica esta en:
 
-Segun la documentacion interna del proyecto:
+- `scripts/features/weather-api/README_API.md`
 
-- Luis: base visual principal y funcionalidades ya integradas en su rama
-- Marcos: funcionalidades adicionales
-- Jon: funcionalidades adicionales
-- David: integracion de la API del clima mediante weather card
+## Equipo
+
+Proyecto desarrollado e integrado por el equipo de H2O Please.
