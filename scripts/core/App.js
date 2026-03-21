@@ -30,6 +30,7 @@ class App {
     // `user` guarda el estado cargado desde storage durante la sesion actual. ????
     this.user = null;
     this.waterConsumedAnimationTimerId = null;
+    this.isDrinkButtonDisabled = false;
     this.navigation = new Navigation();
   }
 
@@ -93,6 +94,17 @@ class App {
     if (drinkForm) {
       drinkForm.addEventListener("submit", (e) => {
         e.preventDefault();
+
+        if (this.isDrinkButtonDisabled) { // preventing consecutive agregates
+          return;
+        }
+        this.isDrinkButtonDisabled = true;
+        const drinkButton = this.dom.elements.drinkButton;
+        if (drinkButton) {
+          drinkButton.disabled = true;
+          drinkButton.style.opacity = "0.5";
+        }
+
         const amount = parseInt(amountInput.value || "200", 10);
         if (Number.isNaN(amount) || amount <= 0) {
           return;
@@ -108,6 +120,14 @@ class App {
         saveUser(this.user);
         this.updateUI();
         amountInput.value = "";
+
+        setTimeout(() => { // enabless the drink button back after timeout
+          this.isDrinkButtonDisabled = false;
+          if (drinkButton) {
+            drinkButton.disabled = false;
+            drinkButton.style.opacity = "1";
+          }
+        }, 1000);
       });
     }
 
