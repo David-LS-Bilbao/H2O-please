@@ -432,7 +432,7 @@
       <ul>
         <li><code>index.html</code> + <code>scripts/index.js</code>: acceso, login y registro.</li>
         <li><code>dashboard.html</code> + <code>scripts/dashboard.js</code>: panel principal de la aplicación.</li>
-        <li><code>weather-preview.html</code> + <code>scripts/pages/weatherPreviewPage.js</code>: vista aislada para revisión de la weather card.</li>
+        <li><code>weather-preview.html</code> + <code>scripts/pages/weatherPreviewPage.js</code>: vista aislada de prueba para revisar la weather card; existe como recurso técnico, pero no tiene acceso directo desde la interfaz principal de la aplicación.</li>
       </ul>
 
       <h3>4.2 Estructura general de módulos</h3>
@@ -612,9 +612,6 @@ classDiagram
     class UserConsumption {
       +username
       +password
-      +lastTimeConsumed
-      +lastTimeConsumedUnix
-      +nextAlarm
       +waterConsumed
       +consumptionTarget
       +history
@@ -643,36 +640,33 @@ classDiagram
 
     class Navigation {
       +init()
-      +onViewChange(viewName, callback)
+      +onViewChange(viewName)
       +showView(viewName)
     }
 
     class Views {
-      <<module>>
       +renderizarHistorial()
       +renderizarPerfil()
     }
 
-    class storage {
-      <<module>>
+    class Storage {
       +saveUser(user)
       +loadUser(username)
       +loadCurrentUser()
     }
 
-    class authService {
-      <<module>>
-      +login(username, password)
-      +register(username, password)
+    class AuthService {
+      +login(username,password)
+      +register(username,password)
     }
 
     App --> DOMManager
     App --> Navigation
     App --> Views
-    App --> storage
+    App --> Storage
     App --> UserConsumption
-    authService --> storage
-    storage --> UserConsumption
+    AuthService --> Storage
+    Storage --> UserConsumption
       </pre>
 
       <h3>5.2 Flujo de autenticación</h3>
@@ -899,15 +893,6 @@ flowchart LR
         <li><code>docs/DOCUMENTACION.html</code></li>
       </ul>
 
-      <h3>10.2 Aspectos pendientes de validación manual antes de entregar</h3>
-      <div class="annex-box">
-        <ul>
-          <li>la versión final y la fecha que deben figurar en portada</li>
-          <li>si la rúbrica exige evidencias externas de gestión del trabajo</li>
-          <li>si conviene adjuntar capturas de ramas, commits o tablero de seguimiento</li>
-          <li>si se desea incorporar un anexo visual con capturas de la aplicación</li>
-        </ul>
-      </div>
       <p class="small">Este archivo está preparado para abrirse en navegador e imprimirse en formato A4 mediante la opción “Imprimir &gt; Guardar como PDF”.</p>
     </section>
   </main>
