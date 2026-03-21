@@ -12,6 +12,7 @@ class UserConsumption {
     this.lastDate = data.lastDate || null;
     this.age = Number.isFinite(data.age) ? data.age : null;
     this.weight = Number.isFinite(data.weight) ? data.weight : null;
+    this.darkModeEnabled = data?.darkModeEnabled ?? false;
   }
 
   calculateTarget() {

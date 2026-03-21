@@ -28,6 +28,7 @@ export function register(username, password) {
 
   // Integracion Jon revisable: el alta ya crea usuarios con password persistible desde el primer guardado.
   const user = new UserConsumption(username, password);
+  user.darkModeEnabled = false; 
   saveUser(user);
   localStorage.setItem("currentUser", username);
   return true;

@@ -17,7 +17,7 @@ export function saveUser(user) {
     history: user.history,
     lastDate: user.lastDate,
     age: user.age,
-    weight: user.weight,
+    weight: user.weight
   };
   localStorage.setItem(key, JSON.stringify(raw));
 }
