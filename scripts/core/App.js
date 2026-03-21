@@ -1,5 +1,6 @@
 import DOMManager from "./DOMManager.js";
 import { loadCurrentUser, saveUser } from "./storage.js";
+import Navigation from "./Navigation.js";
 
 // Convierte un timestamp Unix en una hora legible para el mensaje de la siguiente alarma.
 function unixToTime(unixSeconds) {
@@ -25,11 +26,11 @@ function parseOptionalPositiveInteger(rawValue) {
 // Controlador principal del dashboard: coordina estado, persistencia, vistas y eventos.
 class App {
   constructor() {
-    // DOMManager centraliza la captura de nodos que necesita la pantalla.
     this.dom = new DOMManager();
-    // `user` guarda el estado cargado desde storage durante la sesion actual.
+    // `user` guarda el estado cargado desde storage durante la sesion actual. ????
     this.user = null;
     this.waterConsumedAnimationTimerId = null;
+    this.navigation = new Navigation();
   }
 
   // Flujo de arranque del dashboard.
@@ -50,6 +51,9 @@ class App {
     this.dom.cacheElements();
     this.verificarNuevoDia();
     this.dom.renderInitialUI(this.user);
+    this.navigation.init();
+    this.navigation.onViewChange("history", () => this.renderizarHistorial());
+    this.navigation.onViewChange("me", () => this.renderizarPerfil());
     this.attachListeners();
     this.updateUI();
   }
@@ -79,9 +83,6 @@ class App {
     const {
       drinkForm,
       amountInput,
-      btnToday,
-      btnHistory,
-      btnMe,
       editAge,
       editWeight,
       btnSaveProfile,
@@ -110,19 +111,6 @@ class App {
       });
     }
 
-    // Navegacion inferior entre vistas del dashboard.
-    if (btnToday) {
-      btnToday.addEventListener("click", () => this.cambiarPestana("today"));
-    }
-
-    if (btnHistory) {
-      btnHistory.addEventListener("click", () => this.cambiarPestana("history"));
-    }
-
-    if (btnMe) {
-      btnMe.addEventListener("click", () => this.cambiarPestana("me"));
-    }
-
     // Edicion de perfil: guarda edad y peso, recalcula el objetivo y refresca la vista.
     if (btnSaveProfile) {
       // La persistencia de YO sigue la feature de Marcos, adaptada al modelo actual de esta rama.
@@ -133,7 +121,6 @@ class App {
         saveUser(this.user);
         this.renderizarPerfil();
         this.updateUI();
-        this.cambiarPestana("today");
         alert(`¡Perfil actualizado! Tu nueva meta es ${this.user.consumptionTarget} ml`);
       });
     }
@@ -145,40 +132,6 @@ class App {
         localStorage.removeItem("currentUser");
         window.location.href = "index.html";
       });
-    }
-  }
-
-  // Muestra una sola pestaña a la vez y lanza el render especifico cuando hace falta.
-  cambiarPestana(pestana) {
-    const { viewToday, viewHistory, viewMe } = this.dom.elements;
-
-    // Oculta primero todas las vistas para evitar solapamientos.
-    if (viewToday) {
-      viewToday.style.display = "none";
-    }
-
-    if (viewHistory) {
-      viewHistory.style.display = "none";
-    }
-
-    if (viewMe) {
-      viewMe.style.display = "none";
-    }
-
-    if (pestana === "today" && viewToday) {
-      viewToday.style.display = "flex";
-      return;
-    }
-
-    if (pestana === "history" && viewHistory) {
-      viewHistory.style.display = "flex";
-      this.renderizarHistorial();
-      return;
-    }
-
-    if (pestana === "me" && viewMe) {
-      viewMe.style.display = "flex";
-      this.renderizarPerfil();
     }
   }
 
