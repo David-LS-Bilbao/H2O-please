@@ -32,6 +32,7 @@ No hay backend, base de datos, build, `npm` ni pipeline de test automatizado en 
 - Modo oscuro en dashboard
 - Tarjeta de clima con geolocalizacion y cache local
 - Fallback meteorologico cuando no hay API key de OpenWeather
+- Recomendacion compacta de hidratacion segun la maxima diaria prevista
 - Vista `weather-preview.html` para revisar la card de clima de forma aislada
 
 ## Tecnologias
@@ -174,9 +175,18 @@ La feature meteorologica vive en `scripts/features/weather-api/` y se monta desd
 3. La app intenta obtener la ubicacion del usuario.
 4. Si hay API key de OpenWeather, usa OpenWeather como proveedor principal.
 5. Si no hay API key, o el proveedor principal no aplica, usa Open-Meteo.
-6. Intenta resolver una ubicacion legible con BigDataCloud.
-7. Guarda el ultimo snapshot valido en `localStorage`.
-8. Si falla el refresco por red o proveedor y habia cache previa, reutiliza ese dato guardado.
+6. Resuelve la maxima diaria prevista desde Open-Meteo.
+7. Calcula un mensaje corto de hidratacion dentro de la propia card en funcion de esa maxima.
+8. Intenta resolver una ubicacion legible con BigDataCloud.
+9. Guarda el ultimo snapshot valido en `localStorage`.
+10. Si falla el refresco por red o proveedor y habia cache previa, reutiliza ese dato guardado.
+
+### Mejora reciente en la card del clima
+
+Como mejora pequena y reversible de la feature meteorologica, la tarjeta muestra ahora
+la maxima prevista del dia y un consejo compacto de hidratacion. El objetivo es aportar
+contexto util sin tocar la logica principal de consumo de agua ni aumentar demasiado la
+altura de la interfaz en movil.
 
 ### Configuracion recomendada
 

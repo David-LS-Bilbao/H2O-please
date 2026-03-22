@@ -15,6 +15,7 @@ const WEATHER_CARD_SELECTORS = {
   temperature: "#weather-temperature",
   date: "#weather-date",
   time: "#weather-time",
+  advice: "#weather-advice",
 };
 
 const WEATHER_CARD_TEXT = {
@@ -24,6 +25,7 @@ const WEATHER_CARD_TEXT = {
   defaultTemperature: "-- °C",
   defaultDate: "--/--/----",
   defaultTime: "--:--:--",
+  defaultAdvice: "Max. -- °C. Hidratate bien hoy.",
   stalePrefix: "Ultimo dato guardado.",
   staleFallbackMessage: "No se pudo actualizar el clima.",
 };
@@ -67,11 +69,42 @@ const WEATHER_CARD_MARKUP = `
         </div>
       </div>
     </div>
+    <p id="weather-advice" class="weather-card__advice">
+      ${WEATHER_CARD_TEXT.defaultAdvice}
+    </p>
   </section>
 `;
 
 function formatTemperature(temperatureCelsius) {
   return `${temperatureCelsius.toFixed(TEMPERATURE_DECIMAL_DIGITS)} °C`;
+}
+
+function formatAdviceTemperature(temperatureCelsius) {
+  return `${Math.round(temperatureCelsius)} °C`;
+}
+
+function getWeatherAdviceText(forecastMaxTemperatureCelsius) {
+  if (typeof forecastMaxTemperatureCelsius !== "number") {
+    return WEATHER_CARD_TEXT.defaultAdvice;
+  }
+
+  const formattedMaxTemperature = formatAdviceTemperature(
+    forecastMaxTemperatureCelsius
+  );
+
+  if (forecastMaxTemperatureCelsius < 5) {
+    return `Max. ${formattedMaxTemperature}. Frio: abrigate e hidratate.`;
+  }
+
+  if (forecastMaxTemperatureCelsius < 15) {
+    return `Max. ${formattedMaxTemperature}. Fresco: abrigate e hidratate.`;
+  }
+
+  if (forecastMaxTemperatureCelsius <= 25) {
+    return `Max. ${formattedMaxTemperature}. Hidratate con normalidad.`;
+  }
+
+  return `Max. ${formattedMaxTemperature}. Hara calor: bebe mas agua.`;
 }
 
 function resolveFormatConfig(localeOrOptions) {
@@ -214,11 +247,19 @@ function getWeatherCardElements(root = document) {
     temperature: root.querySelector(WEATHER_CARD_SELECTORS.temperature),
     date: root.querySelector(WEATHER_CARD_SELECTORS.date),
     time: root.querySelector(WEATHER_CARD_SELECTORS.time),
+    advice: root.querySelector(WEATHER_CARD_SELECTORS.advice),
   };
 }
 
 function hasWeatherCardElements(elements) {
-  return Object.values(elements).every(Boolean);
+  return (
+    Boolean(elements.card) &&
+    Boolean(elements.city) &&
+    Boolean(elements.status) &&
+    Boolean(elements.temperature) &&
+    Boolean(elements.date) &&
+    Boolean(elements.time)
+  );
 }
 
 export function mountWeatherCard(targetElement, position = "afterbegin") {
@@ -334,6 +375,13 @@ export function createWeatherDomManager(root = document) {
     elements.status.textContent =
       snapshot.weatherDescription ?? WEATHER_CARD_TEXT.defaultStatus;
     elements.temperature.textContent = formatTemperature(snapshot.temperatureCelsius);
+
+    if (elements.advice) {
+      elements.advice.textContent = getWeatherAdviceText(
+        snapshot.forecastMaxTemperatureCelsius
+      );
+    }
+
     renderLocalDateTime();
   }
 
@@ -366,6 +414,10 @@ export function createWeatherDomManager(root = document) {
     elements.temperature.textContent = WEATHER_CARD_TEXT.defaultTemperature;
     elements.date.textContent = WEATHER_CARD_TEXT.defaultDate;
     elements.time.textContent = WEATHER_CARD_TEXT.defaultTime;
+
+    if (elements.advice) {
+      elements.advice.textContent = WEATHER_CARD_TEXT.defaultAdvice;
+    }
   }
 
   return {

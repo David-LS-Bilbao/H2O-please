@@ -45,6 +45,7 @@ Responsabilidades:
 - construir las URLs de peticion
 - llamar a OpenWeather si hay API key
 - usar Open-Meteo como fallback si OpenWeather falla o si no hay key
+- resolver la maxima diaria prevista desde Open-Meteo
 - consultar BigDataCloud para obtener una ciudad legible
 - normalizar errores HTTP y de geolocalizacion
 
@@ -59,6 +60,7 @@ Aqui se decide:
 - como traducir codigos de Open-Meteo a texto legible
 - como resolver el nombre final de la ciudad
 - como dejar un unico formato comun aunque cambie el proveedor
+- como anadir la maxima diaria prevista al snapshot comun
 
 Su salida principal es un `snapshot`.
 
@@ -81,6 +83,7 @@ Hace varias cosas relacionadas entre si:
 - formatea temperatura, fecha y hora
 - decide si el estado visual es de dia o de noche
 - calcula el icono textual de estado
+- genera un consejo corto de hidratacion segun la maxima prevista
 - actualiza el reloj local cada segundo
 - pinta datos, warnings y errores
 
@@ -115,10 +118,11 @@ Cuando el dashboard o la preview cargan la tarjeta del clima, el flujo es este:
 5. Pide la ubicacion del usuario al navegador.
 6. Intenta consultar OpenWeather si hay API key.
 7. Si no hay key o OpenWeather falla, usa Open-Meteo.
-8. Intenta enriquecer la ubicacion con una ciudad legible mediante reverse geocoding.
-9. Convierte la respuesta externa a un snapshot comun.
-10. Guarda el snapshot valido en cache.
-11. Actualiza la card y el reloj local.
+8. Resuelve la maxima diaria prevista desde Open-Meteo.
+9. Intenta enriquecer la ubicacion con una ciudad legible mediante reverse geocoding.
+10. Convierte la respuesta externa a un snapshot comun.
+11. Guarda el snapshot valido en cache.
+12. Actualiza la card, el consejo compacto y el reloj local.
 
 ## Que es un snapshot
 
@@ -127,6 +131,7 @@ El snapshot es el objeto limpio que usa la interfaz.
 No es la respuesta completa de una API externa. Es una version resumida y consistente con solo lo que la app necesita:
 
 - `temperatureCelsius`
+- `forecastMaxTemperatureCelsius`
 - `weatherDescription`
 - `city`
 - `latitude`
@@ -155,6 +160,7 @@ Se usa como fallback o como proveedor principal cuando no hay API key.
 Ventaja:
 
 - permite que la app de prueba siga funcionando sin configuracion extra
+- aporta la maxima diaria prevista usada por el consejo de hidratacion
 
 ### `BigDataCloud`
 
@@ -235,3 +241,7 @@ Eso evita mezclar en una sola funcion:
 ## Resumen corto
 
 La feature del clima obtiene la ubicacion del usuario, consulta el proveedor disponible, adapta la respuesta a un snapshot comun y deja ese dato listo para pintar en una card reutilizable.
+
+Como mejora pequena de presentacion y contexto, la card muestra tambien la maxima
+prevista del dia y genera un mensaje breve de hidratacion adaptado a ese rango de
+temperatura.

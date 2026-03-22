@@ -8,6 +8,7 @@ import {
 
 const DEFAULT_LOCATION_LANGUAGE = "es";
 const OPEN_METEO_CURRENT_FIELDS = "temperature_2m,weather_code,is_day";
+const OPEN_METEO_DAILY_FIELDS = "temperature_2m_max";
 const OPEN_METEO_FORECAST_DAYS = "1";
 const GEOLOCATION_SECURE_CONTEXT_MESSAGE =
   "La ubicacion solo funciona en un contexto seguro. Abre la app en http://localhost:5500 o por HTTPS.";
@@ -50,6 +51,7 @@ function buildOpenMeteoForecastUrl({
   url.searchParams.set("latitude", latitude);
   url.searchParams.set("longitude", longitude);
   url.searchParams.set("current", OPEN_METEO_CURRENT_FIELDS);
+  url.searchParams.set("daily", OPEN_METEO_DAILY_FIELDS);
   url.searchParams.set("temperature_unit", temperatureUnit);
   url.searchParams.set("timezone", "auto");
   url.searchParams.set("forecast_days", OPEN_METEO_FORECAST_DAYS);
@@ -182,6 +184,29 @@ async function fetchWeatherForecast(options) {
   };
 }
 
+function mapDailyTemperatureForecast(weatherData) {
+  const forecastMaxTemperatureCelsius = weatherData?.daily?.temperature_2m_max?.[0];
+
+  if (typeof forecastMaxTemperatureCelsius !== "number") {
+    throw new Error("La API no devolvio una maxima diaria valida.");
+  }
+
+  return {
+    forecastMaxTemperatureCelsius,
+  };
+}
+
+// La maxima diaria se resuelve desde Open-Meteo porque no requiere API key y
+// evita cambiar el proveedor principal del clima actual.
+async function fetchDailyTemperatureForecast(options) {
+  const data = await fetchJson(
+    buildOpenMeteoForecastUrl(options),
+    "No se pudo obtener la maxima diaria prevista."
+  );
+
+  return mapDailyTemperatureForecast(data);
+}
+
 function mapLocationDetails(locationData) {
   const informativeLocation = Array.isArray(locationData?.localityInfo?.informative)
     ? getFirstNonEmptyLocationValue(
@@ -281,6 +306,7 @@ function getUserLocation(options = {}) {
 }
 
 export {
+  fetchDailyTemperatureForecast,
   fetchLocationDetails,
   fetchWeatherForecast,
   getUserLocation,

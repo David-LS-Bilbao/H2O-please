@@ -1,4 +1,5 @@
 import {
+  fetchDailyTemperatureForecast,
   fetchLocationDetails,
   fetchWeatherForecast,
   getUserLocation,
@@ -83,6 +84,7 @@ function mapOpenWeatherSnapshot(weatherData, location) {
     temperatureCelsius,
     weatherDescription:
       weatherData.weather?.[0]?.description ?? DEFAULT_WEATHER_DESCRIPTION,
+    forecastMaxTemperatureCelsius: null,
     city: getResolvedLocationLabel(location, weatherData.name),
     latitude: location.latitude,
     longitude: location.longitude,
@@ -98,6 +100,14 @@ function getOpenMeteoWeatherDescription(weatherCode) {
   return OPEN_METEO_WEATHER_DESCRIPTIONS[weatherCode] ?? DEFAULT_WEATHER_DESCRIPTION;
 }
 
+function getOpenMeteoForecastMaxTemperature(weatherData) {
+  const forecastMaxTemperatureCelsius = weatherData?.daily?.temperature_2m_max?.[0];
+
+  return typeof forecastMaxTemperatureCelsius === "number"
+    ? forecastMaxTemperatureCelsius
+    : null;
+}
+
 function mapOpenMeteoSnapshot(weatherData, location) {
   const temperatureCelsius = weatherData.current?.temperature_2m;
 
@@ -110,6 +120,7 @@ function mapOpenMeteoSnapshot(weatherData, location) {
     weatherDescription: getOpenMeteoWeatherDescription(
       weatherData.current?.weather_code
     ),
+    forecastMaxTemperatureCelsius: getOpenMeteoForecastMaxTemperature(weatherData),
     city: getFallbackCityLabel(location),
     latitude: location.latitude,
     longitude: location.longitude,
@@ -134,6 +145,23 @@ function mapWeatherSnapshot(weatherPayload, location) {
   return mapOpenWeatherSnapshot(weatherPayload?.data ?? weatherPayload, location);
 }
 
+async function getForecastMaxTemperature(weatherPayload, location) {
+  if (weatherPayload?.provider === "open-meteo") {
+    return getOpenMeteoForecastMaxTemperature(weatherPayload.data);
+  }
+
+  try {
+    const dailyForecast = await fetchDailyTemperatureForecast(location);
+    return dailyForecast.forecastMaxTemperatureCelsius;
+  } catch (error) {
+    console.warn(
+      "No se pudo obtener la maxima diaria prevista. La card mantiene el clima actual.",
+      error
+    );
+    return null;
+  }
+}
+
 // Orquestacion principal de la feature:
 // 1. obtiene coordenadas
 // 2. consulta el clima
@@ -142,6 +170,10 @@ function mapWeatherSnapshot(weatherPayload, location) {
 async function getLocalWeatherSnapshot() {
   const location = await getUserLocation();
   const weatherData = await fetchWeatherForecast(location);
+  const forecastMaxTemperatureCelsius = await getForecastMaxTemperature(
+    weatherData,
+    location
+  );
   let enrichedLocation = location;
 
   try {
@@ -157,7 +189,10 @@ async function getLocalWeatherSnapshot() {
     );
   }
 
-  return mapWeatherSnapshot(weatherData, enrichedLocation);
+  return {
+    ...mapWeatherSnapshot(weatherData, enrichedLocation),
+    forecastMaxTemperatureCelsius,
+  };
 }
 
 export {

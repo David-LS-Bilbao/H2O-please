@@ -827,6 +827,23 @@ body[data-page="dashboard"] #weather-output.weather-api {
         opacity: 0.96;
     }
 
+    .weather-card__advice {
+        display: -webkit-box;
+        margin-top: 0.42rem;
+        overflow: hidden;
+        padding: 0.42rem 0.58rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 0.82rem;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        color: #f4fbff;
+        font-size: 0.63rem;
+        font-family: var(--primary-font-medium);
+        line-height: 1.24;
+        letter-spacing: 0.01em;
+    }
+
     /* Pill de estado con acabado glass y mejor contraste. */
     .weather-card__status {
         display: inline-flex;
@@ -955,6 +972,13 @@ body[data-page="dashboard"] #weather-output.weather-api {
 
     .dashboard-weather-card .weather-card__meta-item {
         font-size: 0.66rem;
+    }
+
+    .dashboard-weather-card .weather-card__advice {
+        margin-top: 0.34rem;
+        padding: 0.34rem 0.48rem;
+        font-size: 0.58rem;
+        line-height: 1.2;
     }
 }
 

@@ -710,6 +710,7 @@ flowchart LR
     K --> L[weatherCache]
     K --> M[weatherDomManager]
       </pre>
+      <p>Como mejora ligera incorporada al cierre del proyecto, este flujo añade también la resolución de la temperatura máxima prevista del día. Ese dato se integra en el snapshot común y permite que la weather card genere un consejo breve de hidratación sin alterar la lógica principal de consumo de agua.</p>
 
       <h3>5.5 Consideraciones sobre el flujo de datos</h3>
       <p>La aplicación sigue un flujo de datos relativamente directo: el usuario interactúa con formularios o controles del dashboard, la lógica de aplicación valida y transforma la acción, el modelo o los servicios actualizan el estado, el estado se persiste en <code>localStorage</code> y la interfaz se vuelve a renderizar.</p>
@@ -741,6 +742,7 @@ flowchart LR
 
       <h3>6.3 Integración visual de la weather card</h3>
       <p>La weather card no se plantea como una pantalla independiente dentro del flujo principal, sino como un componente contextual integrado en el dashboard. Esta decisión es coherente con el alcance del proyecto: el clima no es el centro del producto, sino un complemento que enriquece la experiencia.</p>
+      <p>En la versión final revisada, la tarjeta incorpora además un mensaje compacto de hidratación en función de la temperatura máxima prevista. Esta ampliación se diseñó como una mejora visual y contextual, manteniendo el bloque dentro de la propia card y limitando su altura para no penalizar la experiencia en pantallas móviles.</p>
 
       <h3>6.4 Criterios visuales observables en la versión final</h3>
       <ul>
@@ -853,6 +855,7 @@ flowchart LR
       <p><strong>Problema:</strong> una feature dependiente de APIs externas puede fallar por permisos, red, ausencia de API key o indisponibilidad del proveedor.</p>
       <p><strong>Solución aplicada:</strong> se diseñó una integración con proveedor principal, fallback, caché local y snapshot normalizado para la interfaz.</p>
       <p><strong>Resultado:</strong> la weather card aporta valor funcional sin convertir el dashboard en una pantalla frágil o dependiente de un único servicio.</p>
+      <p><strong>Extensión aplicada:</strong> sobre esa base ya resiliente se añadió una recomendación breve de hidratación basada en la temperatura máxima prevista del día. La ampliación reutiliza el mismo snapshot meteorológico, evita modificar la lógica central del consumo y mantiene un coste de integración bajo.</p>
 
       <h3>8.6 Crecimiento del coordinador principal</h3>
       <p><strong>Problema:</strong> la lógica central del dashboard tendía a concentrar demasiadas responsabilidades.</p>
