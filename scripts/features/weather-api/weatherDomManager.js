@@ -25,7 +25,7 @@ const WEATHER_CARD_TEXT = {
   defaultTemperature: "-- °C",
   defaultDate: "--/--/----",
   defaultTime: "--:--:--",
-  defaultAdvice: "Max. -- °C. Hidratate bien hoy.",
+  defaultAdvice: "Max. -- °C. Hidrátate bien hoy.",
   stalePrefix: "Ultimo dato guardado.",
   staleFallbackMessage: "No se pudo actualizar el clima.",
 };
@@ -93,18 +93,18 @@ function getWeatherAdviceText(forecastMaxTemperatureCelsius) {
   );
 
   if (forecastMaxTemperatureCelsius < 5) {
-    return `Max. ${formattedMaxTemperature}. Frio: abrigate e hidratate.`;
+    return `Max. ${formattedMaxTemperature}. Frío: abrígate e hidrátate.`;
   }
 
   if (forecastMaxTemperatureCelsius < 15) {
-    return `Max. ${formattedMaxTemperature}. Fresco: abrigate e hidratate.`;
+    return `Max. ${formattedMaxTemperature}. Fresco: abrígate e hidrátate.`;
   }
 
   if (forecastMaxTemperatureCelsius <= 25) {
-    return `Max. ${formattedMaxTemperature}. Hidratate con normalidad.`;
+    return `Max. ${formattedMaxTemperature}. Hidrátate con normalidad.`;
   }
 
-  return `Max. ${formattedMaxTemperature}. Hara calor: bebe mas agua.`;
+  return `Max. ${formattedMaxTemperature}. Hará calor: bebe más agua.`;
 }
 
 function resolveFormatConfig(localeOrOptions) {
