@@ -8,6 +8,8 @@ function canUseLocalStorage() {
   );
 }
 
+// Persistimos el snapshot ya normalizado para poder reutilizarlo sin volver a
+// transformar respuestas crudas de proveedores externos.
 function saveLocalWeatherSnapshot(snapshot) {
   if (!canUseLocalStorage()) {
     return;
@@ -16,6 +18,8 @@ function saveLocalWeatherSnapshot(snapshot) {
   localStorage.setItem(LOCAL_WEATHER_STORAGE_KEY, JSON.stringify(snapshot));
 }
 
+// Si el cache esta corrupto, devolvemos null y dejamos que la feature vuelva a
+// pedir datos en vez de romper el render del dashboard.
 function getStoredLocalWeatherSnapshot() {
   if (!canUseLocalStorage()) {
     return null;
@@ -35,17 +39,8 @@ function getStoredLocalWeatherSnapshot() {
   }
 }
 
-function clearStoredLocalWeatherSnapshot() {
-  if (!canUseLocalStorage()) {
-    return;
-  }
-
-  localStorage.removeItem(LOCAL_WEATHER_STORAGE_KEY);
-}
-
 export {
   LOCAL_WEATHER_STORAGE_KEY,
   getStoredLocalWeatherSnapshot,
   saveLocalWeatherSnapshot,
-  clearStoredLocalWeatherSnapshot,
 };

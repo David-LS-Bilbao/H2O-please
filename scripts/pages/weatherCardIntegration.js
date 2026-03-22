@@ -6,6 +6,8 @@ import {
   saveLocalWeatherSnapshot,
 } from "../features/weather-api/index.js";
 
+// Solo reutilizamos el cache cuando el problema es de red o proveedor. Si
+// falla la geolocalizacion, preferimos mostrar el error real al usuario.
 function shouldUseStoredSnapshotFallback(error) {
   const normalizedMessage =
     typeof error?.message === "string" ? error.message.toLowerCase() : "";
@@ -20,6 +22,8 @@ function shouldUseStoredSnapshotFallback(error) {
   );
 }
 
+// La integracion del dashboard sigue un arranque optimista:
+// pinta cache primero y luego intenta refrescar sin bloquear la vista.
 async function syncWeatherCard(weatherDomManager, contextLabel) {
   try {
     const snapshot = await getLocalWeatherSnapshot();

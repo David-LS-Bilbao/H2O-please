@@ -12,6 +12,12 @@ class UserConsumption {
     this.lastDate = data.lastDate || null;
     this.age = Number.isFinite(data.age) ? data.age : null;
     this.weight = Number.isFinite(data.weight) ? data.weight : null;
+    this.darkModeEnabled = data?.darkModeEnabled ?? false;
+  }
+
+  calculateTarget() {
+    this.consumptionTarget =
+      Number.isFinite(this.weight) && this.weight > 0 ? this.weight * 35 : 2300;
   }
 
   addWater(amount) {
@@ -20,10 +26,6 @@ class UserConsumption {
     this.lastTimeConsumed = new Date();
     this.waterConsumed += amount;
     this.nextAlarm = nowUnix + 1800;
-  }
-
-  removeWater(amount) {
-    this.waterConsumed = Math.max(0, this.waterConsumed - amount);
   }
 }
 

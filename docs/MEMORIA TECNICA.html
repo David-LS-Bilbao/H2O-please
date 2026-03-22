@@ -1,0 +1,926 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>H2O Please - Memoria Técnica</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 22mm 18mm 22mm 18mm;
+    }
+
+    :root {
+      --text: #1f2937;
+      --muted: #4b5563;
+      --line: #d1d5db;
+      --soft: #f3f4f6;
+      --soft-2: #f9fafb;
+      --title: #111827;
+      --accent: #1f4f7a;
+      --code-bg: #f6f8fa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 11pt;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: #ffffff;
+      font-family: "Georgia", "Times New Roman", serif;
+      line-height: 1.55;
+    }
+
+    .document {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    .cover {
+      min-height: 230mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      page-break-after: always;
+      border: 1px solid var(--line);
+      padding: 28mm 22mm;
+    }
+
+    .cover h1 {
+      margin: 0 0 10mm;
+      font-size: 28pt;
+      line-height: 1.15;
+      color: var(--title);
+      text-align: center;
+      letter-spacing: 0.2px;
+    }
+
+    .cover h2 {
+      margin: 0 0 18mm;
+      font-size: 16pt;
+      font-weight: 600;
+      color: var(--accent);
+      text-align: center;
+    }
+
+    .cover .meta {
+      width: 100%;
+      margin-top: 10mm;
+      border-collapse: collapse;
+      font-size: 11pt;
+    }
+
+    .cover .meta td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+    }
+
+    .cover .meta td:first-child {
+      width: 34%;
+      font-weight: 700;
+      background: var(--soft);
+    }
+
+    h1, h2, h3, h4 {
+      font-family: "Arial", "Helvetica Neue", sans-serif;
+      color: var(--title);
+      line-height: 1.25;
+      page-break-after: avoid;
+    }
+
+    h1 {
+      font-size: 20pt;
+      margin: 0 0 10pt;
+    }
+
+    h2 {
+      margin-top: 26pt;
+      margin-bottom: 10pt;
+      font-size: 15pt;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 5pt;
+    }
+
+    h3 {
+      margin-top: 18pt;
+      margin-bottom: 8pt;
+      font-size: 12.5pt;
+    }
+
+    h4 {
+      margin-top: 14pt;
+      margin-bottom: 6pt;
+      font-size: 11.5pt;
+    }
+
+    p {
+      margin: 0 0 10pt;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 0 0 12pt 20pt;
+      padding: 0;
+    }
+
+    li {
+      margin: 0 0 5pt;
+    }
+
+    .index-box,
+    .note-box,
+    .annex-box {
+      background: var(--soft-2);
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      margin: 12pt 0 16pt;
+    }
+
+    .note-box strong,
+    .annex-box strong {
+      color: var(--title);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12pt 0 16pt;
+      font-size: 10.5pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: var(--soft);
+      font-family: "Arial", "Helvetica Neue", sans-serif;
+      font-weight: 700;
+    }
+
+    code {
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 0.92em;
+      background: var(--code-bg);
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      overflow-x: auto;
+      font-size: 9.8pt;
+      line-height: 1.45;
+      margin: 12pt 0 16pt;
+      page-break-inside: avoid;
+    }
+
+    pre code {
+      background: transparent;
+      padding: 0;
+    }
+
+    .mermaid {
+      margin: 14pt auto 18pt;
+      padding: 10px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      text-align: center;
+      page-break-inside: avoid;
+    }
+
+    .section {
+      page-break-inside: avoid;
+    }
+
+    .small {
+      font-size: 10pt;
+      color: var(--muted);
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    .references ul {
+      margin-left: 18pt;
+    }
+
+    @media screen {
+      body {
+        background: #eef2f7;
+        padding: 24px 0;
+      }
+
+      .document {
+        background: #fff;
+        padding: 24mm 18mm;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      }
+
+      .cover {
+        min-height: auto;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+
+      .document {
+        max-width: none;
+        box-shadow: none;
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="document">
+    <section class="cover">
+      <h1>H2O Please</h1>
+      <h2>Memoria Técnica</h2>
+
+      <table class="meta" aria-label="Datos de portada">
+        <tr>
+          <td>Versión</td>
+          <td>Versión final</td>
+        </tr>
+        <tr>
+          <td>Fecha</td>
+          <td>21 de marzo de 2026</td>
+        </tr>
+        <tr>
+          <td>Tipo de proyecto</td>
+          <td>Aplicación web frontend desarrollada con HTML, CSS y JavaScript vanilla</td>
+        </tr>
+        <tr>
+          <td>Ámbito</td>
+          <td>Seguimiento diario de hidratación con persistencia local y weather card contextual</td>
+        </tr>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>Índice</h2>
+      <div class="index-box">
+        <ol>
+          <li>Introducción</li>
+          <li>Objetivos y alcance</li>
+          <li>Tecnologías y APIs utilizadas</li>
+          <li>Arquitectura del sistema</li>
+          <li>Modelo de clases y flujo de datos</li>
+          <li>Diseño y decisiones de UX/UI</li>
+          <li>Gestión del trabajo del equipo</li>
+          <li>Desafíos técnicos y soluciones aplicadas</li>
+          <li>Conclusiones</li>
+          <li>Anexos y referencias internas</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>1. Introducción</h2>
+      <p><strong>H2O Please</strong> es una aplicación web frontend orientada al seguimiento diario de la hidratación. Su finalidad es ofrecer una herramienta sencilla, visualmente clara y fácil de utilizar para registrar el agua consumida, consultar el progreso respecto a un objetivo diario, revisar el historial del día y gestionar información básica del perfil del usuario.</p>
+      <p>El proyecto ha sido desarrollado como una aplicación estática ejecutada íntegramente en cliente, sin backend ni base de datos remota. La persistencia de datos se resuelve mediante <code>localStorage</code>, lo que permite mantener el estado del usuario y de la aplicación sin depender de infraestructura adicional. Como complemento funcional, el dashboard incorpora una tarjeta meteorológica que utiliza APIs externas para mostrar información contextual del clima local.</p>
+      <p>Esta memoria técnica presenta el estado real del proyecto, describe su arquitectura, documenta las decisiones de diseño adoptadas, expone el enfoque de integración seguido por el equipo y recoge los principales retos técnicos resueltos durante el desarrollo y la consolidación final del producto.</p>
+    </section>
+
+    <section class="section">
+      <h2>2. Objetivos y alcance</h2>
+
+      <h3>2.1 Objetivo general</h3>
+      <p>El objetivo principal del proyecto ha sido construir una aplicación web de frontend capaz de facilitar el seguimiento diario de la hidratación del usuario mediante una experiencia de uso simple, comprensible y funcional.</p>
+
+      <h3>2.2 Objetivos específicos</h3>
+      <ul>
+        <li>Permitir el registro local de usuarios mediante un sistema básico de login y registro.</li>
+        <li>Registrar manualmente la cantidad de agua consumida a lo largo del día.</li>
+        <li>Mostrar el progreso del usuario frente a una meta diaria de hidratación.</li>
+        <li>Mantener un historial de tomas con posibilidad de eliminación individual.</li>
+        <li>Gestionar datos básicos del perfil, especialmente edad y peso.</li>
+        <li>Recalcular el objetivo diario a partir del peso del usuario.</li>
+        <li>Persistir la información de uso localmente sin backend.</li>
+        <li>Incorporar un modo oscuro persistente por usuario.</li>
+        <li>Integrar una weather card en el dashboard como información contextual adicional.</li>
+        <li>Mantener una estructura de código modular y comprensible en JavaScript vanilla.</li>
+      </ul>
+
+      <h3>2.3 Alcance de la versión final</h3>
+      <ul>
+        <li>Login y registro local con <code>username</code> y <code>password</code>.</li>
+        <li>Inicio de sesión automático si existe una sesión activa.</li>
+        <li>Dashboard con navegación entre las vistas <code>HOY</code>, <code>HISTORIAL</code> y <code>YO</code>.</li>
+        <li>Alta manual de consumo de agua.</li>
+        <li>Historial diario de tomas con borrado individual.</li>
+        <li>Persistencia del estado del usuario en <code>localStorage</code>.</li>
+        <li>Recalculo del objetivo diario a partir del peso.</li>
+        <li>Edición de edad y peso desde la vista de perfil.</li>
+        <li>Persistencia del modo oscuro.</li>
+        <li>Integración de una weather card en el dashboard.</li>
+        <li>Página independiente de preview para la tarjeta meteorológica.</li>
+      </ul>
+
+      <h3>2.4 Elementos fuera de alcance</h3>
+      <ul>
+        <li>Backend o servicios de servidor.</li>
+        <li>Base de datos remota.</li>
+        <li>Autenticación segura para un entorno de producción.</li>
+        <li>Sincronización entre dispositivos.</li>
+        <li>Pruebas automatizadas.</li>
+        <li>Pipeline de integración o despliegue continuo.</li>
+        <li>Gestión avanzada de usuarios o permisos.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>3. Tecnologías y APIs utilizadas</h2>
+
+      <h3>3.1 Stack principal</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Tecnología</th>
+            <th>Uso principal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>HTML5</td>
+            <td>Estructura de páginas y semántica base</td>
+          </tr>
+          <tr>
+            <td>CSS3</td>
+            <td>Maquetación, estilos y responsive básico</td>
+          </tr>
+          <tr>
+            <td>JavaScript vanilla con módulos ES</td>
+            <td>Lógica funcional y organización modular</td>
+          </tr>
+          <tr>
+            <td><code>localStorage</code></td>
+            <td>Persistencia local del estado</td>
+          </tr>
+          <tr>
+            <td>Fetch API</td>
+            <td>Consumo de APIs externas</td>
+          </tr>
+          <tr>
+            <td>Geolocation API</td>
+            <td>Obtención de la ubicación del usuario</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>3.2 APIs externas integradas</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>API / Servicio</th>
+            <th>Función dentro del proyecto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>OpenWeather API</td>
+            <td>Proveedor meteorológico principal cuando existe API key</td>
+          </tr>
+          <tr>
+            <td>Open-Meteo API</td>
+            <td>Proveedor fallback o alternativa por defecto</td>
+          </tr>
+          <tr>
+            <td>BigDataCloud Reverse Geocoding API</td>
+            <td>Conversión de coordenadas en una etiqueta de ciudad legible</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>3.3 Consideraciones técnicas</h3>
+      <ol>
+        <li><strong>Simplicidad de ejecución:</strong> el proyecto puede abrirse y servirse localmente sin instalación de dependencias.</li>
+        <li><strong>Trazabilidad académica:</strong> la lógica queda expuesta de forma explícita y legible, sin abstracciones excesivas.</li>
+        <li><strong>Adecuación al alcance:</strong> al tratarse de una aplicación frontend pequeña, el uso de JavaScript vanilla y <code>localStorage</code> resulta suficiente para cubrir el MVP.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2>4. Arquitectura del sistema</h2>
+
+      <h3>4.1 Visión general</h3>
+      <p>La aplicación sigue una arquitectura modular en frontend. Aunque no se utiliza ningún framework, sí existe una separación clara de responsabilidades entre páginas, lógica de aplicación, persistencia local, renderizado del DOM y consumo de servicios externos.</p>
+      <p>Los puntos de entrada principales son los siguientes:</p>
+      <ul>
+        <li><code>index.html</code> + <code>scripts/index.js</code>: acceso, login y registro.</li>
+        <li><code>dashboard.html</code> + <code>scripts/dashboard.js</code>: panel principal de la aplicación.</li>
+        <li><code>weather-preview.html</code> + <code>scripts/pages/weatherPreviewPage.js</code>: vista aislada de prueba para revisar la weather card; existe como recurso técnico, pero no tiene acceso directo desde la interfaz principal de la aplicación.</li>
+      </ul>
+
+      <h3>4.2 Estructura general de módulos</h3>
+      <pre class="mermaid">
+flowchart TD
+    subgraph Acceso
+        A[index.html]
+        B[scripts/index.js]
+        C[authService.js]
+    end
+
+    subgraph Núcleo de aplicación
+        D[dashboard.html]
+        E[scripts/dashboard.js]
+        F[App.js]
+        G[DOMManager.js]
+        H[Navigation.js]
+        I[Views.js]
+        J[storage.js]
+        K[UserConsumption.js]
+        L[localStorage]
+    end
+
+    subgraph Clima
+        M[dashboardWeatherIntegration.js]
+        N[weatherCardIntegration.js]
+        O[weather-api/index.js]
+        P[weatherService.js]
+        Q[weatherApiClient.js]
+        R[weatherCache.js]
+        S[weatherDomManager.js]
+        T[OpenWeather / Open-Meteo / BigDataCloud]
+    end
+
+    A --> B
+    B --> C
+    C --> J
+    J --> L
+
+    D --> E
+    E --> F
+    F --> G
+    F --> H
+    F --> I
+    F --> J
+    J --> K
+    J --> L
+
+    E --> M
+    M --> N
+    N --> O
+    O --> P
+    O --> R
+    O --> S
+    P --> Q
+    Q --> T
+    R --> L
+      </pre>
+
+      <h3>4.3 Estructura real del proyecto</h3>
+      <pre><code>H2O-please/
+├─ assets/
+│  ├─ fonts/
+│  └─ images/
+├─ docs/
+│  ├─ DOCUMENTACION.html
+│  ├─ Estructure.md
+│  ├─ Feature_api_clima.md
+│  ├─ GitHub_guia_flujo.md
+│  ├─ H2O_Please_guia_git_ollama_docs_equipo.md
+│  └─ resumen_integracion_h2o_please_v2.md
+├─ scripts/
+│  ├─ config/
+│  │  ├─ weatherRuntimeConfig.example.js
+│  │  └─ weatherRuntimeConfig.local.js
+│  ├─ core/
+│  │  ├─ App.js
+│  │  ├─ DOMManager.js
+│  │  ├─ Navigation.js
+│  │  ├─ Views.js
+│  │  ├─ storage.js
+│  │  └─ utils.js
+│  ├─ features/
+│  │  └─ weather-api/
+│  │     ├─ README_API.md
+│  │     ├─ index.js
+│  │     ├─ weatherApiClient.js
+│  │     ├─ weatherCache.js
+│  │     ├─ weatherConfig.js
+│  │     ├─ weatherDomManager.js
+│  │     └─ weatherService.js
+│  ├─ models/
+│  │  └─ UserConsumption.js
+│  ├─ pages/
+│  │  ├─ dashboardWeatherIntegration.js
+│  │  ├─ weatherCardIntegration.js
+│  │  └─ weatherPreviewPage.js
+│  ├─ services/
+│  │  └─ authService.js
+│  ├─ darkmode.js
+│  ├─ dashboard.js
+│  └─ index.js
+├─ styles/
+│  ├─ styles.css
+│  └─ weather-preview.css
+├─ dashboard.html
+├─ index.html
+├─ weather-preview.html
+└─ README.md</code></pre>
+
+      <h3>4.4 Responsabilidad de los módulos principales</h3>
+
+      <h4><code>UserConsumption</code></h4>
+      <p>Es el modelo de dominio principal. Representa el estado persistente del usuario y centraliza operaciones asociadas al consumo de agua. Entre sus responsabilidades destacan almacenar la información principal del usuario, mantener el historial de tomas, recalcular el objetivo diario en función del peso y actualizar consumo, tiempos y alarmas asociadas al registro de agua.</p>
+
+      <h4><code>App</code></h4>
+      <p>Actúa como coordinador general del dashboard. Se encarga de cargar el usuario activo, comprobar si ha comenzado un nuevo día, inicializar la interfaz, escuchar eventos de interacción, actualizar la interfaz principal y delegar el renderizado de vistas secundarias.</p>
+
+      <h4><code>DOMManager</code></h4>
+      <p>Centraliza el acceso a nodos del DOM y el render inicial del dashboard. Esta decisión reduce búsquedas repetidas y mejora la legibilidad de la lógica de interfaz.</p>
+
+      <h4><code>Navigation</code></h4>
+      <p>Aísla la navegación entre <code>HOY</code>, <code>HISTORIAL</code> y <code>YO</code>, reduciendo el acoplamiento entre la lógica del dashboard y la gestión visual de secciones.</p>
+
+      <h4><code>Views</code></h4>
+      <p>Agrupa el renderizado de vistas secundarias, especialmente historial y perfil, con el objetivo de descargar a <code>App.js</code> de parte de la lógica de presentación.</p>
+
+      <h4><code>storage</code></h4>
+      <p>Gestiona la persistencia local en <code>localStorage</code> y actúa como capa intermedia entre la aplicación y el almacenamiento del navegador.</p>
+
+      <h4><code>authService</code></h4>
+      <p>Se encarga del flujo local de autenticación y registro, incluyendo compatibilidad con estados previos del proyecto.</p>
+
+      <h3>4.5 Persistencia y sesión</h3>
+      <p>Toda la persistencia de la aplicación se realiza en <code>localStorage</code>. Esta decisión permite que el proyecto funcione sin backend, aunque introduce limitaciones claras de seguridad y portabilidad.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Clave</th>
+            <th>Finalidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>currentUser</code></td>
+            <td>Usuario con sesión activa</td>
+          </tr>
+          <tr>
+            <td><code>userConsumption:&lt;username&gt;</code></td>
+            <td>Estado persistido del usuario</td>
+          </tr>
+          <tr>
+            <td><code>H2O_PLEASE_WEATHER_API_KEY</code></td>
+            <td>API key opcional para OpenWeather</td>
+          </tr>
+          <tr>
+            <td><code>localWeatherSnapshot</code></td>
+            <td>Último snapshot meteorológico válido</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note-box">
+        <strong>Nota técnica:</strong> la persistencia local es adecuada para una aplicación académica de demostración, pero no debe interpretarse como una solución válida para autenticación de producción.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>5. Modelo de clases y flujo de datos</h2>
+
+      <h3>5.1 Modelo de clases y módulos principales</h3>
+      <p>Aunque la aplicación no emplea una arquitectura orientada a objetos compleja, sí existe una organización clara del núcleo funcional en clases y módulos especializados.</p>
+
+      <pre class="mermaid">
+classDiagram
+    class UserConsumption {
+      +username
+      +password
+      +waterConsumed
+      +consumptionTarget
+      +history
+      +lastDate
+      +age
+      +weight
+      +darkModeEnabled
+      +calculateTarget()
+      +addWater(amount)
+    }
+
+    class App {
+      +user
+      +init()
+      +verificarNuevoDia()
+      +attachListeners()
+      +renderizarHistorial()
+      +renderizarPerfil()
+      +updateUI()
+    }
+
+    class DOMManager {
+      +cacheElements()
+      +renderInitialUI(user)
+    }
+
+    class Navigation {
+      +init()
+      +onViewChange(viewName)
+      +showView(viewName)
+    }
+
+    class Views {
+      +renderizarHistorial()
+      +renderizarPerfil()
+    }
+
+    class Storage {
+      +saveUser(user)
+      +loadUser(username)
+      +loadCurrentUser()
+    }
+
+    class AuthService {
+      +login(username,password)
+      +register(username,password)
+    }
+
+    App --> DOMManager
+    App --> Navigation
+    App --> Views
+    App --> Storage
+    App --> UserConsumption
+    AuthService --> Storage
+    Storage --> UserConsumption
+      </pre>
+
+      <h3>5.2 Flujo de autenticación</h3>
+      <pre class="mermaid">
+flowchart LR
+    A[Usuario completa auth-form] --> B[index.js]
+    B --> C{Modo login o register}
+    C -->|Login| D[authService.login]
+    C -->|Registro| E[authService.register]
+    D --> F[storage.loadUser]
+    E --> G[storage.saveUser]
+    D --> H[Guardar currentUser]
+    E --> H
+    H --> I[Redirección a dashboard.html]
+      </pre>
+
+      <h3>5.3 Flujo de registro de agua</h3>
+      <pre class="mermaid">
+flowchart LR
+    A[Usuario envía drink-form] --> B[App.attachListeners]
+    B --> C[Validación de cantidad]
+    C --> D[UserConsumption.addWater]
+    D --> E[Actualización de history]
+    E --> F[storage.saveUser]
+    F --> G[App.updateUI]
+      </pre>
+
+      <h3>5.4 Flujo de la feature de clima</h3>
+      <pre class="mermaid">
+flowchart LR
+    A[Carga del dashboard] --> B[dashboardWeatherIntegration]
+    B --> C[weatherCardIntegration]
+    C --> D[Lectura de snapshot en caché]
+    C --> E[weatherService.getLocalWeatherSnapshot]
+    E --> F[weatherApiClient]
+    F --> G[Geolocation API]
+    F --> H[OpenWeather]
+    F --> I[Open-Meteo]
+    F --> J[BigDataCloud]
+    E --> K[Normalización a snapshot]
+    K --> L[weatherCache]
+    K --> M[weatherDomManager]
+      </pre>
+      <p>Como mejora ligera incorporada al cierre del proyecto, este flujo añade también la resolución de la temperatura máxima prevista del día. Ese dato se integra en el snapshot común y permite que la weather card genere un consejo breve de hidratación sin alterar la lógica principal de consumo de agua.</p>
+
+      <h3>5.5 Consideraciones sobre el flujo de datos</h3>
+      <p>La aplicación sigue un flujo de datos relativamente directo: el usuario interactúa con formularios o controles del dashboard, la lógica de aplicación valida y transforma la acción, el modelo o los servicios actualizan el estado, el estado se persiste en <code>localStorage</code> y la interfaz se vuelve a renderizar.</p>
+      <p>En la feature de clima se añade un paso adicional: la obtención de datos externos, su adaptación a un snapshot común y su almacenamiento en caché para evitar que fallos puntuales degraden la experiencia de usuario.</p>
+    </section>
+
+    <section class="section">
+      <h2>6. Diseño y decisiones de UX/UI</h2>
+
+      <h3>6.1 Criterio general de diseño</h3>
+      <p>La interfaz final prioriza rapidez de uso, claridad visual y una experiencia consistente en pantallas reducidas. La base visual consolidada del dashboard se mantiene como referencia principal de integración, mientras que las mejoras posteriores se aplican con un criterio conservador para no romper el equilibrio alcanzado entre estructura, identidad visual y funcionalidad.</p>
+
+      <h3>6.2 Decisiones de experiencia de usuario</h3>
+
+      <h4>Navegación en tres vistas</h4>
+      <p>La división del dashboard en <code>HOY</code>, <code>HISTORIAL</code> y <code>YO</code> responde a una organización por intención de uso: <code>HOY</code> concentra la acción principal y la información de mayor frecuencia; <code>HISTORIAL</code> ofrece trazabilidad diaria del consumo; y <code>YO</code> agrupa la información de perfil y configuración básica.</p>
+
+      <h4>Formulario de acceso unificado</h4>
+      <p>La pantalla de acceso utiliza un único formulario con cambio de modo entre inicio de sesión y creación de cuenta. Esta decisión mejora la continuidad del flujo, evita duplicaciones de interfaz y reduce la complejidad visual.</p>
+
+      <h4>Priorización de la acción principal</h4>
+      <p>La vista <code>HOY</code> se diseña alrededor de la acción más relevante del producto: registrar consumo de agua con rapidez. Por ello se priorizan visualmente el objetivo diario, el total acumulado, el formulario de registro, el progreso alcanzado y la información meteorológica contextual.</p>
+
+      <h4>Persistencia de preferencias</h4>
+      <p>El modo oscuro se guarda por usuario, lo que favorece la continuidad de uso y refuerza la percepción de una aplicación con estado persistente.</p>
+
+      <h4>Vuelta al dashboard tras guardar perfil</h4>
+      <p>Después de actualizar el perfil, la interfaz regresa automáticamente a la vista <code>HOY</code>. Esta decisión reduce pasos innecesarios y devuelve el foco a la funcionalidad principal de la aplicación.</p>
+
+      <h3>6.3 Integración visual de la weather card</h3>
+      <p>La weather card no se plantea como una pantalla independiente dentro del flujo principal, sino como un componente contextual integrado en el dashboard. Esta decisión es coherente con el alcance del proyecto: el clima no es el centro del producto, sino un complemento que enriquece la experiencia.</p>
+      <p>En la versión final revisada, la tarjeta incorpora además un mensaje compacto de hidratación en función de la temperatura máxima prevista. Esta ampliación se diseñó como una mejora visual y contextual, manteniendo el bloque dentro de la propia card y limitando su altura para no penalizar la experiencia en pantallas móviles.</p>
+
+      <h3>6.4 Criterios visuales observables en la versión final</h3>
+      <ul>
+        <li>coherencia visual entre login y dashboard</li>
+        <li>estructura compacta próxima a una experiencia de app móvil</li>
+        <li>navegación inferior con iconografía clara</li>
+        <li>contraste suficiente entre áreas funcionales</li>
+        <li>integración prudente de nuevas funcionalidades sin rediseño global</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>7. Gestión del trabajo del equipo</h2>
+
+      <h3>7.1 Organización del trabajo</h3>
+      <p>El proyecto se ha organizado mediante Git y GitHub, con una estrategia basada en ramas de trabajo y una rama común de integración. La estructura funcional de ramas identificada en la documentación interna responde al siguiente esquema:</p>
+      <ul>
+        <li><code>main</code>: rama estable o de cierre</li>
+        <li><code>dev</code>: rama común de integración</li>
+        <li><code>feat/...</code>: ramas específicas por funcionalidad</li>
+        <li><code>docs/...</code>: ramas y materiales de documentación</li>
+      </ul>
+      <p>Este enfoque permitió desarrollar funcionalidades en paralelo y controlar la integración por fases.</p>
+
+      <h3>7.2 Estrategia de integración</h3>
+      <p>La documentación interna del proyecto muestra que la consolidación final no se realizó mediante merges ciegos de ramas completas, sino a través de una integración selectiva, priorizando una base visual estable y rescatando únicamente la lógica funcional útil cuando existía riesgo de romper el dashboard.</p>
+      <p>El criterio de integración seguido puede resumirse en tres principios:</p>
+      <ol>
+        <li>mantener una fuente de verdad visual clara</li>
+        <li>integrar funcionalidad útil con cambios mínimos</li>
+        <li>evitar arrastrar estilos o refactors globales de alto riesgo en fases tardías</li>
+      </ol>
+
+      <h3>7.3 Aportaciones funcionales identificadas</h3>
+      <div class="note-box">
+        <strong>Importante:</strong> la atribución funcional recogida a continuación se reconstruye a partir de ramas, commits y documentos internos del repositorio. Si la entrega académica exige evidencia externa adicional, esta tabla debe considerarse pendiente de validación documental complementaria.
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Miembro</th>
+            <th>Aportación principal identificada</th>
+            <th>Resultado visible en la versión final</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Luis</td>
+            <td>Base visual, identidad y estructura del dashboard</td>
+            <td>Layout principal, branding, estructura visual y estilos base</td>
+          </tr>
+          <tr>
+            <td>Marcos</td>
+            <td>Navegación y vistas funcionales del dashboard</td>
+            <td>Secciones <code>HOY</code>, <code>HISTORIAL</code> y <code>YO</code>; historial y perfil base</td>
+          </tr>
+          <tr>
+            <td>Jonathan</td>
+            <td>Implementación y mejoras funcionales de auth, persistencia y reorganización del dashboard y de los archivos <code>.js</code>, así como de la organización y carpetas</td>
+            <td>Login y registro con password, ajustes funcionales de perfil y modularización adicional</td>
+          </tr>
+          <tr>
+            <td>David</td>
+            <td>Integración meteorológica, consolidación documental e integración del proyecto en GitHub</td>
+            <td>Weather card, caché y fallback meteorológico, validación e integración técnica de GitHub</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>7.4 Hitos de integración técnica</h3>
+      <ol>
+        <li>definición del MVP y organización inicial en ramas</li>
+        <li>consolidación de una base visual estable del dashboard</li>
+        <li>integración de navegación y vistas funcionales</li>
+        <li>incorporación selectiva de mejoras de autenticación y persistencia</li>
+        <li>integración de la feature de clima con enfoque mínimo y reusable</li>
+        <li>refinamiento final y validación manual del comportamiento global</li>
+      </ol>
+
+      <h3>7.5 Limitaciones de trazabilidad</h3>
+      <p>La memoria se apoya principalmente en documentación interna del repositorio, historial Git y resúmenes de integración. No consta en el material proporcionado una exportación de Trello ni otra evidencia externa equivalente de gestión del trabajo.</p>
+      <p>En consecuencia, la trazabilidad funcional puede justificarse con documentación interna, mientras que la trazabilidad de gestión externa queda <strong>pendiente de validación</strong> si la rúbrica exige capturas o registros formales adicionales.</p>
+    </section>
+
+    <section class="section">
+      <h2>8. Desafíos técnicos y soluciones aplicadas</h2>
+
+      <h3>8.1 Integración de ramas divergentes</h3>
+      <p><strong>Problema:</strong> el proyecto evolucionó en varias ramas con cambios funcionales y visuales mezclados, lo que elevaba el riesgo de inconsistencias tras los merges.</p>
+      <p><strong>Solución aplicada:</strong> se tomó una base visual clara como referencia y se integraron otras aportaciones de forma selectiva y quirúrgica, priorizando lógica útil y evitando arrastrar estilos o refactors globales innecesarios.</p>
+      <p><strong>Resultado:</strong> se mantuvo una versión final coherente y estable sin comprometer la identidad visual consolidada.</p>
+
+      <h3>8.2 Persistencia sin backend</h3>
+      <p><strong>Problema:</strong> la aplicación debía conservar sesión, perfil y consumo sin infraestructura de servidor.</p>
+      <p><strong>Solución aplicada:</strong> se diseñó una persistencia local apoyada en <code>localStorage</code>, con una capa específica de almacenamiento y reconstrucción del estado del usuario.</p>
+      <p><strong>Resultado:</strong> se obtuvo un MVP funcional y fácil de ejecutar, adecuado para el alcance académico del proyecto.</p>
+
+      <h3>8.3 Compatibilidad con usuarios de fases previas</h3>
+      <p><strong>Problema:</strong> la evolución del proyecto introdujo password en momentos posteriores, lo que podía generar incompatibilidades con usuarios creados en estados anteriores.</p>
+      <p><strong>Solución aplicada:</strong> la lógica de autenticación incorpora compatibilidad con estados heredados, evitando romper la continuidad funcional.</p>
+      <p><strong>Resultado:</strong> se preservó la usabilidad del sistema tras la evolución del modelo de autenticación local.</p>
+
+      <h3>8.4 Reinicio diario del consumo</h3>
+      <p><strong>Problema:</strong> el consumo debía reiniciarse al comenzar un nuevo día sin apoyo de backend ni tareas programadas.</p>
+      <p><strong>Solución aplicada:</strong> la aplicación compara la fecha actual con la última fecha registrada al cargar el dashboard y reinicia el estado diario cuando corresponde.</p>
+      <p><strong>Resultado:</strong> se garantiza un comportamiento diario coherente con una implementación local sencilla.</p>
+
+      <h3>8.5 Integración del clima con resiliencia básica</h3>
+      <p><strong>Problema:</strong> una feature dependiente de APIs externas puede fallar por permisos, red, ausencia de API key o indisponibilidad del proveedor.</p>
+      <p><strong>Solución aplicada:</strong> se diseñó una integración con proveedor principal, fallback, caché local y snapshot normalizado para la interfaz.</p>
+      <p><strong>Resultado:</strong> la weather card aporta valor funcional sin convertir el dashboard en una pantalla frágil o dependiente de un único servicio.</p>
+      <p><strong>Extensión aplicada:</strong> sobre esa base ya resiliente se añadió una recomendación breve de hidratación basada en la temperatura máxima prevista del día. La ampliación reutiliza el mismo snapshot meteorológico, evita modificar la lógica central del consumo y mantiene un coste de integración bajo.</p>
+
+      <h3>8.6 Crecimiento del coordinador principal</h3>
+      <p><strong>Problema:</strong> la lógica central del dashboard tendía a concentrar demasiadas responsabilidades.</p>
+      <p><strong>Solución aplicada:</strong> se extrajeron módulos específicos para navegación, vistas y utilidades, descargando a <code>App.js</code> de parte del renderizado y la gestión de secciones.</p>
+      <p><strong>Resultado:</strong> la estructura final resulta más mantenible y más legible desde el punto de vista académico.</p>
+
+      <h3>8.7 Regresiones menores tras integración</h3>
+      <p><strong>Problema:</strong> en la fase final de integración aparecieron pequeñas regresiones de flujo y comportamiento.</p>
+      <p><strong>Solución aplicada:</strong> se realizaron validaciones manuales sobre ramas de pruebas y se aplicaron correcciones mínimas, reversibles y focalizadas.</p>
+      <p><strong>Resultado:</strong> se estabilizó el comportamiento esperado sin necesidad de rediseñar la aplicación.</p>
+    </section>
+
+    <section class="section">
+      <h2>9. Conclusiones</h2>
+      <p><strong>H2O Please</strong> alcanza un estado final coherente como MVP frontend orientado al seguimiento diario de la hidratación. La aplicación cumple su objetivo funcional principal, ofrece una experiencia de uso clara, incorpora persistencia local suficiente para el alcance del proyecto y demuestra una organización modular razonable en JavaScript vanilla.</p>
+      <p>Desde una perspectiva técnica, el proyecto destaca por varios aspectos: resuelve un flujo completo de uso sin backend, integra autenticación local, persistencia, perfil, historial y dashboard, añade una feature externa de clima con una resiliencia adecuada para el nivel del proyecto y evidencia un esfuerzo real de integración entre ramas y aportaciones del equipo.</p>
+      <p>El aprendizaje principal no reside únicamente en la implementación de funcionalidades, sino en la consolidación progresiva de trabajo paralelo sin degradar la coherencia del producto final. La adopción de una base visual de referencia, la integración selectiva y la modularización funcional han sido factores decisivos para obtener una versión estable y entregable.</p>
+      <p>Como líneas de mejora futuras, serían razonables las siguientes:</p>
+      <ul>
+        <li>incorporar validaciones y accesibilidad más completas</li>
+        <li>añadir pruebas automatizadas</li>
+        <li>separar con mayor claridad documentación funcional y técnica</li>
+        <li>evolucionar la autenticación hacia un backend real si el proyecto creciera</li>
+        <li>reforzar la trazabilidad de gestión con anexos externos si la evaluación lo requiere</li>
+      </ul>
+      <p>En conjunto, el proyecto presenta una base sólida para una entrega académica, siempre que la documentación final se acompañe, en su caso, de los anexos de validación que exija la rúbrica.</p>
+    </section>
+
+    <section class="section references">
+      <h2>10. Anexos y referencias internas</h2>
+
+      <h3>10.1 Documentación interna utilizada</h3>
+      <ul>
+        <li><code>README.md</code></li>
+        <li><code>docs/resumen_integracion_h2o_please_v2.md</code></li>
+        <li><code>scripts/features/weather-api/README_API.md</code></li>
+        <li><code>docs/GitHub_guia_flujo.md</code></li>
+        <li><code>docs/DOCUMENTACION.html</code></li>
+      </ul>
+
+      <p class="small">Este archivo está preparado para abrirse en navegador e imprimirse en formato A4 mediante la opción “Imprimir &gt; Guardar como PDF”.</p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      securityLevel: "loose",
+      theme: "base",
+      themeVariables: {
+        primaryColor: "#f8fafc",
+        primaryTextColor: "#111827",
+        primaryBorderColor: "#64748b",
+        lineColor: "#475569",
+        secondaryColor: "#eef2f7",
+        tertiaryColor: "#ffffff",
+        fontFamily: "Arial, Helvetica Neue, Helvetica, sans-serif"
+      },
+      flowchart: {
+        curve: "basis",
+        useMaxWidth: true,
+        htmlLabels: true
+      }
+    });
+  </script>
+</body>
+</html>

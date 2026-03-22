@@ -33,17 +33,64 @@
 
 /* ==================== VARIABLES ==================== */
 :root {
-    --primary-color: #0476ae;
-    --primary-light-color: #58B5E3;
-    --primary-dark-color: #034a6d;
+    --primary-color: #1B7090;
+    --primary-light-color: #4f89a0;
+    --primary-dark-color: #194f6b;
     --secondary-color: #ffd166;
     --secondary-light-color: #ffe08a;
     --neutral-color: #757575;
+    --negative-color: #972c24;
     --background-color: #fdfdfd;
+    --progress-background-color: #eeeeee;
     --primary-font-regular: 'Poppins-Regular', sans-serif;
     --primary-font-light: 'Poppins-Light', sans-serif;
     --primary-font-medium: 'Poppins-Medium', sans-serif;
     --primary-font-bold: 'Poppins-Bold', sans-serif;
+}
+
+.dark-theme {
+    --primary-dark-color: #a6e5fe;
+    --secondary-light-color: #0f3c52;
+    --negative-color: #cb453b;
+    --background-color: #222222;
+    --progress-background-color: #333333;
+    --neutral-color: #bababa;
+
+    svg {
+        path:nth-of-type(1) {
+            --primary-dark-color: #59cef8;
+        }
+
+        path:nth-of-type(2) {
+            --primary-light-color: #a6e5fe;
+        }
+    }
+
+    h2 {
+        --primary-color: #3398bd;
+    }
+
+    #countdown {
+        --primary-dark-color: #ffe08a;
+    }
+
+    #drink-form label {
+        --primary-light-color: #78cff2;
+    }
+
+    #view-me button {
+        &:nth-of-type(1) {
+            --primary-color: #a6e5fe;
+        }
+
+        &:nth-of-type(2) {
+            --primary-color: #ffe08a;
+        }
+    }
+
+    footer {
+        --primary-color: #8fcce4;
+    }
 }
 
 /* ==================== GENERAL STYLES ==================== */
@@ -55,105 +102,104 @@ html,
 body {
     margin: 0;
     padding: 0;
-    font-family: var(--primary-font-regular);
-    background: var(--background-color);
+}
+
+html {
+    display: flex;
+    justify-content: center;
+    background: #aaaaaa;
 }
 
 body {
-    height: 100dvh;
-    max-height: 100dvh;
     display: grid;
     grid-template-rows: auto 1fr auto;
-}
-
-body[data-page="login"] {
-    grid-template-rows: 1fr;
-    place-items: center;
-    padding: 1rem;
-}
-
-body[data-page="login"] .login-layout {
-    width: min(100%, 24rem);
-    display: grid;
-    gap: 0.9rem;
-    padding: 1.25rem;
-    border: solid 0.1rem #58B5E333;
-    border-radius: 1.8rem;
-    background: rgba(253, 253, 253, 0.98);
-    box-shadow:
-        0 1rem 2.2rem rgba(88, 181, 227, 0.14),
-        inset 0 1px 0 rgba(255, 255, 255, 0.85);
-}
-
-body[data-page="login"] .login-layout form {
-    display: grid;
-    gap: 0.75rem;
-}
-
-body[data-page="login"] .login-layout input {
-    width: 100%;
-    padding: 1rem 1.1rem;
-    border: solid 0.1rem rgba(88, 181, 227, 0.28);
-    border-radius: 999px;
-    font-family: var(--primary-font-medium);
-    font-size: 1rem;
-    color: var(--primary-dark-color);
-    background: white;
-    outline: none;
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-body[data-page="login"] .login-layout input::placeholder {
-    color: var(--neutral-color);
-}
-
-body[data-page="login"] .login-layout input:focus {
-    border-color: rgba(4, 118, 174, 0.4);
-    box-shadow: 0 0 0 0.2rem rgba(88, 181, 227, 0.14);
-}
-
-body[data-page="login"] .login-layout button {
-    width: 100%;
-    padding: 1rem 1.1rem;
-    border: 0;
-    border-radius: 999px;
-    font-family: var(--primary-font-bold);
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-body[data-page="login"] #login-form button {
-    color: white;
-    background: var(--primary-color);
-    box-shadow: 0 0.8rem 1.6rem rgba(4, 118, 174, 0.18);
-}
-
-body[data-page="login"] #register-form button {
-    color: var(--primary-dark-color);
-    background: var(--secondary-light-color);
-    box-shadow: 0 0.8rem 1.6rem rgba(255, 209, 102, 0.2);
-}
-
-body[data-page="login"] #auth-message {
-    min-height: 1.35rem;
-    margin: 0;
-    padding: 0 0.25rem;
-    font-family: var(--primary-font-medium);
-    font-size: 0.9rem;
-    line-height: 1.4;
-    text-align: center;
-    color: var(--primary-dark-color);
+    min-height: 100dvh;
+    width: 480px;
+    max-width: 100%;
+    /* Se fuerza la barra de scroll para que no descentre el body al cambiar de vista */
+    overflow-y: scroll;
+    font-family: var(--primary-font-regular);
+    background: var(--background-color);
+    transition: all 0.3s;
 }
 
 header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     position: sticky;
     top: 0;
     padding: 0.5rem 1rem;
+    background: var(--background-color);
+    z-index: 1;
 
-    img {
+    svg {
         height: 2.2rem;
+
+        path:nth-of-type(1) {
+            fill: var(--primary-dark-color);
+        }
+
+        path:nth-of-type(2) {
+            fill: var(--primary-light-color);
+        }
+    }
+
+    #toggleButton {
+        position: relative;
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        outline: none;
+        cursor: pointer;
+        height: 1.3rem;
+        width: 3rem;
+        margin-right: 1.5rem;
+        box-shadow: 0.2rem 0.2rem 0.1rem #277B9A11;
+        border: 0.05rem solid #277B9A66;
+        border-radius: 2rem;
+
+        &:before {
+            position: absolute;
+            content: "";
+            width: 1rem;
+            height: 1rem;
+            top: 50%;
+            left: 0.2rem;
+            transform: translateY(-50%) translateX(0%);
+            border-radius: 50%;
+            background: var(--primary-color);
+            transition: transform 0.3s;
+        }
+
+        &:after {
+            position: absolute;
+            content: "";
+            background-image: url(../assets/images/bombilla-apagada.svg);
+            background-size: cover;
+            width: 1.6rem;
+            height: 1.6rem;
+            top: calc(50% - 0.1rem);
+            transform: translateY(-50%);
+            left: calc(100% + 0.3rem);
+            white-space: nowrap;
+            color: var(--primary-light-color);
+            pointer-events: none;
+        }
+    }
+
+    #toggleButton:checked {
+        background: var(--primary-color);
+        border: none;
+
+        &:before {
+            transform: translateY(-50%) translateX(1.6rem);
+            background-color: #fdfdfd;
+        }
+
+        &:after {
+            background-image: url(../assets/images/bombilla-encendida.svg);
+        }
     }
 }
 
@@ -191,7 +237,8 @@ footer {
                 fill: var(--primary-color);
             }
 
-            p {
+            span {
+                margin: 1rem 0;
                 font-weight: 700;
                 color: var(--primary-color);
             }
@@ -199,7 +246,117 @@ footer {
     }
 }
 
-/* ==================== MAIN WRAPPER ==================== */
+
+/* ==================== USER REGISTER & LOGIN ==================== */
+
+body[data-page="login"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .login-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.9rem;
+        width: 100%;
+        max-width: 400px;
+        padding: 1.25rem;
+
+        svg {
+            transform: scale(1.4);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: var(--neutral-color);
+            font-family: var(--primary-font-light);
+            font-weight: 300;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            text-align: center;
+            letter-spacing: 0.1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem 1.1rem;
+            margin: 1rem 0;
+            border: 0;
+            border-radius: 10rem;
+            font-family: var(--primary-font-bold);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+    }
+
+    .auth-tabs {
+        display: flex;
+
+        button {
+
+            &:first-child {
+                border-radius: 1.618rem 0 0 1.618rem;
+            }
+
+            &:last-child {
+                border-radius: 0 1.618rem 1.618rem 0;
+            }
+        }
+
+        .active {
+            color: var(--primary-dark-color);
+            background: var(--secondary-light-color);
+            transition: all 1s ease;
+        }
+    }
+
+    #auth-form {
+        input {
+            width: 100%;
+            padding: 0.6rem 1.1rem;
+            margin-bottom: 1rem;
+            border: 0.1rem solid var(--primary-light-color);
+            border-radius: 10rem;
+            font-family: var(--primary-font-medium);
+            color: var(--primary-dark-color);
+            background: var(--background-color);
+            outline: none;
+            transition: all 0.3s ease;
+
+            &:focus {
+                border: 0.1rem solid var(--primary-dark-color);
+                box-shadow: 0 0 0.3rem var(--primary-dark-color);
+            }
+        }
+
+        button {
+            color: var(--background-color);
+            background: var(--primary-color);
+        }
+    }
+
+    #auth-message {
+        width: 100%;
+        min-height: 3.5rem;
+        margin: 0;
+        padding: 1rem 2rem;
+        border-radius: 3rem;
+        color: var(--background-color);
+        font-family: var(--primary-font-medium);
+        font-size: 0.9rem;
+        text-align: center;
+        background: transparent;
+        transition: all 0.5s ease;
+
+        &:not(:empty) {
+            background: var(--negative-color);
+        }
+    }
+}
+
+/* ==================== DASHBOARD MAIN WRAPPER ==================== */
+
 main.app-layout {
     display: flex;
 
@@ -223,14 +380,18 @@ main.app-layout {
             direction: rtl;
 
             &::-webkit-progress-bar {
-                background-color: #eee;
+                background-color: var(--progress-background-color);
                 border-radius: 1rem;
             }
 
             &::-webkit-progress-value {
-                background-color: var(--primary-color);
+                background-color: var(--primary-dark-color);
                 border-radius: 1rem;
-                transition: 0.5s ease;
+                transition: 1s ease;
+            }
+
+            &::-moz-progress-bar {
+                background: var(--primary-dark-color);
             }
         }
     }
@@ -270,7 +431,7 @@ main.app-layout {
             font-size: 3.7rem;
             font-family: var(--primary-font-bold);
             margin: 0;
-            color: var(--primary-color);
+            color: var(--primary-dark-color);
         }
 
         #countdown {
@@ -291,9 +452,9 @@ main.app-layout {
             gap: 0.5rem;
             margin: auto 0.5rem 0.5rem 0.5rem;
             padding-bottom: 0.5rem;
-            border: solid 0.1rem #58B5E333;
+            border: solid 0.1rem #277B9A11;
             border-radius: 2rem;
-            box-shadow: 0.3rem 0.3rem 0.8rem #58B5E355;
+            box-shadow: 0.3rem 0.3rem 0.8rem #277B9A33;
 
             label {
                 position: relative;
@@ -314,9 +475,10 @@ main.app-layout {
             }
 
             input {
-                width: 20%;
+                width: 40%;
                 border: 0;
                 text-align: right;
+                background: var(--background-color);
 
                 &::placeholder {
                     color: var(--neutral-color);
@@ -324,168 +486,192 @@ main.app-layout {
             }
 
             span {
-                &:nth-of-type(1) {
-                    width: 20%;
-                    text-align: right;
-                }
-
-                &:nth-of-type(2) {
-                    width: 20%;
-                    text-align: left;
-                }
-            }
-
-            button {
-                width: 4.5rem;
-                margin-left: auto;
-                margin-right: 0.5rem;
-                aspect-ratio: 1 / 1;
-                border: none;
-                border-radius: 50%;
-                background-color: var(--primary-color);
-                cursor: pointer;
-
-                img {
-                    width: 3.5rem;
-                }
-
-                &#remove-btn {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    font-family: var(--primary-font-bold);
-                    font-size: 2.4rem;
-                    line-height: 1;
-                }
+                width: 20%;
+                text-align: left;
             }
         }
 
-        .weather-api {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 7rem;
-            color: white;
-            font-size: 1.2rem;
-            font-family: var(--primary-font-light);
-            letter-spacing: 0.2rem;
-            background-color: #58b5e3;
-            border-radius: 2rem;
+        button {
+            width: 4rem;
+            margin-left: auto;
+            margin-right: 0.5rem;
+            aspect-ratio: 1 / 1;
+            border: none;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            cursor: pointer;
+
+            img {
+                width: 3rem;
+            }
         }
     }
 }
 
-#view-today {
-    width: 100%;
+/* ==================== DASHBOARD HISTORY & ME VIEWS ==================== */
+
+#view-history {
+    padding: 0 3rem;
+
+    h2 {
+        display: block;
+        margin: 1rem 0;
+        font-family: var(--primary-font-bold);
+        color: var(--primary-color);
+    }
+
+    #history-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+
+        p {
+            color: var(--neutral-color);
+        }
+
+        span {
+            &:nth-of-type(1) {
+                color: var(--primary-dark-color) !important;
+            }
+
+            &:nth-of-type(2) {
+                color: var(--neutral-color);
+                margin-left: 1rem;
+            }
+        }
+    }
+
+    .trash-button {
+        width: 2rem;
+        height: 2rem;
+        border: none;
+        background: none;
+        fill: var(--primary-dark-color);
+        stroke: 2pt;
+        transform: scale(1.2);
+        cursor: pointer
+    }
 }
 
-#view-history,
 #view-me {
-    align-items: stretch;
+    height: calc(100dvh - 8.9rem);
+
+    h2 {
+        display: block;
+        margin: 0 0 1rem 0;
+        font-family: var(--primary-font-bold);
+        color: var(--primary-color);
+    }
+
+    #profile-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 1.5rem;
+        gap: 0.6rem;
+        margin: 1rem auto 0;
+        box-sizing: border-box;
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+
+        p {
+            margin: 0;
+            color: var(--neutral-color);
+        }
+    }
+
+    .edit-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        input {
+            width: 100%;
+            padding: 0.65rem 0.75rem;
+            border: solid 0.1rem #58B5E333;
+            border-radius: 10rem;
+            background: var(--background-color);
+
+            &[type="number"] {
+                color: var(--neutral-color);
+            }
+        }
+
+        label {
+            color: var(--neutral-color);
+        }
+    }
+
+    button {
+        width: 100%;
+        height: 3.5rem;
+        padding: 0.65rem 0.75rem;
+        margin-bottom: 0.5rem;
+        border: 0;
+        border-radius: 10rem;
+        font-size: 1rem;
+        font-family: var(--primary-font-bold);
+        cursor: pointer;
+
+        &.save-btn {
+            color: var(--background-color);
+            background: var(--primary-color);
+        }
+
+        &.logout-btn {
+            color: var(--primary-color);
+            background: var(--secondary-light-color);
+        }
+    }
 }
 
-#view-history h2,
-#view-me h2 {
+
+/* ==================== WEATHER CARD ==================== */
+
+body[data-page="dashboard"] #weather-output .dashboard-weather-card {
+    width: 100%;
+    max-width: 31rem;
+    padding: 1.2rem 0;
+}
+
+/* Se fuerza la ciudad visible dentro de la card porque el dashboard oculta los h2 generales. */
+body[data-page="dashboard"] #weather-output .dashboard-weather-card h2 {
     display: block;
-    margin: 0 0 1rem 0;
+    max-width: none;
+    font-size: clamp(0.96rem, 2.35vw, 1.14rem);
     font-family: var(--primary-font-bold);
-    color: var(--primary-color);
+    line-height: 1.1;
+    color: #f9fdff;
 }
 
-#history-container {
+body[data-page="dashboard"] #weather-output.weather-api {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
     width: 100%;
-    gap: 0.5rem;
+    height: auto;
+    min-height: 0;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+    letter-spacing: normal;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
 }
 
-/* YO se encapsula para evitar la herencia flex global del dashboard y mantener una estructura simple compatible con Marcos. */
-#view-me #profile-container.profile-card {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 20rem;
-    gap: 0.6rem;
-    margin: 0 auto;
-    box-sizing: border-box;
+/* El contenido queda por encima de las capas decorativas. */
+.dashboard-weather-card>* {
+    position: relative;
+    z-index: 1;
 }
 
-#view-me .user-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-}
-
-#view-me .user-info p {
-    margin: 0;
-}
-
-#view-me .edit-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-#view-me .edit-group label {
-    font-size: 0.95rem;
-}
-
-#view-me .edit-group input,
-#view-me .save-btn,
-#view-me .logout-btn {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-#view-me .edit-group input {
-    padding: 0.65rem 0.75rem;
-    border: solid 0.1rem #58B5E333;
-    border-radius: 0.35rem;
-    background: white;
-}
-
-#view-me .save-btn,
-#view-me .logout-btn {
-    padding: 0.65rem 0.75rem;
-    border: solid 0.1rem var(--primary-color);
-    border-radius: 0.35rem;
-    cursor: pointer;
-}
-
-#view-me .save-btn {
-    color: white;
-    background: var(--primary-color);
-}
-
-#view-me .logout-btn {
-    color: var(--primary-dark-color);
-    background: white;
-}
-
-#view-me .profile-separator {
-    width: 100%;
-    margin: 0;
-    border: 0;
-    border-top: 1px solid #eee;
-}
-
-@media (max-width: 480px) {
-    main.app-layout section form button {
-        width: 4.05rem;
-    }
-
-    main.app-layout section form button img {
-        width: 3.15rem;
-    }
-
-    main.app-layout section form button#remove-btn {
-        font-size: 2.16rem;
-    }
-}
-
-/* Weather card refresh revisable: el redisenio se limita al dashboard y mantiene el montaje actual en #weather-output. */
+/* El rediseño se limita al dashboard y mantiene el montaje actual en #weather-output. */
 .dashboard-weather-card {
     position: relative;
     display: block;
@@ -506,9 +692,224 @@ main.app-layout {
     box-shadow:
         0 0.45rem 1rem rgba(7, 77, 96, 0.16),
         inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+    /* Capas decorativas para una sensacion mas premium sin assets externos. */
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    &::before {
+        inset: auto -12% -44% 58%;
+        height: 48%;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0 18%, transparent 56%);
+        filter: blur(12px);
+        opacity: 0.5;
+    }
+
+    &::after {
+        top: -1.35rem;
+        right: -0.9rem;
+        width: 4.85rem;
+        height: 4.85rem;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 248, 200, 0.78) 0 16%, rgba(255, 226, 138, 0.18) 36%, transparent 66%);
+        opacity: 0.78;
+    }
+
+    h2,
+    p {
+        margin: 0;
+    }
+
+    /* Cabecera con jerarquia clara entre ciudad y estado. */
+    .weather-card__top,
+    .weather-card__header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.45rem;
+        align-items: center;
+    }
+
+    .weather-card__heading {
+        display: grid;
+        gap: 0;
+        min-width: 0;
+    }
+
+    .weather-card__eyebrow {
+        font-size: 0.58rem;
+        font-family: var(--primary-font-medium);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        opacity: 0.72;
+    }
+
+    /* Composicion principal tipo app movil con temperatura destacada y panel auxiliar. */
+    .weather-card__main,
+    .weather-card__content {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.5rem;
+        align-items: stretch;
+        margin-top: 0.5rem;
+    }
+
+    .weather-card__temperature-block {
+        display: grid;
+        align-content: center;
+        gap: 0;
+        min-width: 0;
+        padding: 0.56rem 0.72rem;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 0.95rem;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
+        backdrop-filter: blur(12px);
+    }
+
+    .weather-card__temperature-label {
+        font-size: 0.56rem;
+        font-family: var(--primary-font-medium);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        opacity: 0.72;
+    }
+
+    .weather-card__temperature {
+        font-size: clamp(1.85rem, 6vw, 2.45rem);
+        font-family: var(--primary-font-bold);
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+        text-shadow: 0 0.14rem 0.45rem rgba(4, 74, 109, 0.14);
+    }
+
+    .weather-card__meta,
+    .weather-card__datetime {
+        display: grid;
+        gap: 0.32rem;
+        min-width: 8.65rem;
+        padding: 0.54rem 0.65rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 0.95rem;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+        backdrop-filter: blur(10px);
+    }
+
+    .weather-card__meta-row {
+        display: grid;
+        gap: 0;
+    }
+
+    .weather-card__meta-row+.weather-card__meta-row {
+        padding-top: 0.28rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    /* Labels discretas y valores con mejor jerarquia. */
+    .weather-card__meta-label {
+        font-size: 0.52rem;
+        font-family: var(--primary-font-medium);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        opacity: 0.68;
+    }
+
+    .weather-card__meta-item {
+        font-size: 0.7rem;
+        font-family: var(--primary-font-medium);
+        line-height: 1.15;
+        text-align: left;
+        white-space: nowrap;
+        opacity: 0.96;
+    }
+
+    .weather-card__advice {
+        display: -webkit-box;
+        margin-top: 0.42rem;
+        overflow: hidden;
+        padding: 0.42rem 0.58rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 0.82rem;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        color: #f4fbff;
+        font-size: 0.63rem;
+        font-family: var(--primary-font-medium);
+        line-height: 1.24;
+        letter-spacing: 0.01em;
+    }
+
+    /* Pill de estado con acabado glass y mejor contraste. */
+    .weather-card__status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        max-width: 11.75rem;
+        padding: 0.24rem 0.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.09));
+        backdrop-filter: blur(10px);
+        font-size: 0.64rem;
+        font-family: var(--primary-font-medium);
+        line-height: 1.18;
+        text-align: right;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+
+        /* Iconografia semantica sin nuevos assets. */
+        &::before {
+            content: "•";
+            flex: 0 0 auto;
+            color: #ffe18c;
+        }
+    }
+
+    .weather-card__status[data-icon="sun"]::before {
+        content: "☼";
+    }
+
+    .weather-card__status[data-icon="moon"]::before {
+        content: "☾";
+        color: #dcecff;
+    }
+
+    .weather-card__status[data-icon="cloud"]::before {
+        content: "☁";
+        color: #f2fbff;
+    }
+
+    .weather-card__status[data-icon="rain"]::before {
+        content: "☂";
+        color: #d2f2ff;
+    }
+
+    .weather-card__status[data-icon="storm"]::before {
+        content: "ϟ";
+        color: #ffe6a3;
+    }
+
+    .weather-card__status[data-icon="snow"]::before {
+        content: "✦";
+        color: #f2fbff;
+    }
+
+    .weather-card__status[data-icon="mist"]::before {
+        content: "≋";
+        color: #edf9ff;
+    }
+
+    .weather-card__status[data-icon="error"]::before {
+        content: "!";
+        color: #ffe2a3;
+    }
 }
 
-/* Weather card refresh revisable: el modo noche cambia tono sin tocar la estructura del dashboard. */
+/* El modo noche cambia tono sin tocar la estructura del dashboard. */
 .dashboard-weather-card[data-period="night"] {
     background:
         radial-gradient(circle at 18% 20%, rgba(213, 227, 255, 0.14), transparent 24%),
@@ -516,244 +917,25 @@ main.app-layout {
         linear-gradient(150deg, #0a3553 0%, #0f5877 50%, #1a7c9f 100%);
 }
 
-/* Weather card refresh revisable: capas decorativas para una sensacion mas premium sin assets externos. */
-.dashboard-weather-card::before,
-.dashboard-weather-card::after {
-    content: "";
-    position: absolute;
-    pointer-events: none;
-    z-index: 0;
-}
 
-.dashboard-weather-card::before {
-    inset: auto -12% -44% 58%;
-    height: 48%;
-    border-radius: 999px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0 18%, transparent 56%);
-    filter: blur(12px);
-    opacity: 0.5;
-}
-
-.dashboard-weather-card::after {
-    top: -1.35rem;
-    right: -0.9rem;
-    width: 4.85rem;
-    height: 4.85rem;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 248, 200, 0.78) 0 16%, rgba(255, 226, 138, 0.18) 36%, transparent 66%);
-    opacity: 0.78;
-}
-
-/* Weather card refresh revisable: el contenido queda por encima de las capas decorativas. */
-.dashboard-weather-card > * {
-    position: relative;
-    z-index: 1;
-}
-
-.dashboard-weather-card h2,
-.dashboard-weather-card p {
-    margin: 0;
-}
-
-/* Weather card refresh revisable: cabecera con jerarquia clara entre ciudad y estado. */
-.dashboard-weather-card .weather-card__top,
-.dashboard-weather-card .weather-card__header {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.45rem;
-    align-items: center;
-}
-
-.dashboard-weather-card .weather-card__heading {
-    display: grid;
-    gap: 0;
-    min-width: 0;
-}
-
-.dashboard-weather-card .weather-card__eyebrow {
-    font-size: 0.58rem;
-    font-family: var(--primary-font-medium);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    opacity: 0.72;
-}
-
-/* Weather card refresh revisable: se fuerza la ciudad visible dentro de la card porque el dashboard oculta los h2 generales. */
-body[data-page="dashboard"] #weather-output .dashboard-weather-card h2 {
-    display: block;
-    max-width: none;
-    font-size: clamp(0.96rem, 2.35vw, 1.14rem);
-    font-family: var(--primary-font-bold);
-    line-height: 1.1;
-    color: #f9fdff;
-}
-
-/* Weather card refresh revisable: pill de estado con acabado glass y mejor contraste. */
-.dashboard-weather-card .weather-card__status {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    max-width: 11.75rem;
-    padding: 0.24rem 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 999px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.09));
-    backdrop-filter: blur(10px);
-    font-size: 0.64rem;
-    font-family: var(--primary-font-medium);
-    line-height: 1.18;
-    text-align: right;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
-}
-
-/* Weather card refresh revisable: iconografia semantica sin nuevos assets. */
-.dashboard-weather-card .weather-card__status::before {
-    content: "•";
-    flex: 0 0 auto;
-    color: #ffe18c;
-}
-
-.dashboard-weather-card .weather-card__status[data-icon="sun"]::before {
-    content: "☼";
-}
-
-.dashboard-weather-card .weather-card__status[data-icon="moon"]::before {
-    content: "☾";
-    color: #dcecff;
-}
-
-.dashboard-weather-card .weather-card__status[data-icon="cloud"]::before {
-    content: "☁";
-    color: #f2fbff;
-}
-
-.dashboard-weather-card .weather-card__status[data-icon="rain"]::before {
-    content: "☂";
-    color: #d2f2ff;
-}
-
-.dashboard-weather-card .weather-card__status[data-icon="storm"]::before {
-    content: "ϟ";
-    color: #ffe6a3;
-}
-
-.dashboard-weather-card .weather-card__status[data-icon="snow"]::before {
-    content: "✦";
-    color: #f2fbff;
-}
-
-.dashboard-weather-card .weather-card__status[data-icon="mist"]::before {
-    content: "≋";
-    color: #edf9ff;
-}
-
-.dashboard-weather-card .weather-card__status[data-icon="error"]::before {
-    content: "!";
-    color: #ffe2a3;
-}
-
-/* Weather card refresh revisable: composicion principal tipo app movil con temperatura destacada y panel auxiliar. */
-.dashboard-weather-card .weather-card__main,
-.dashboard-weather-card .weather-card__content {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.5rem;
-    align-items: stretch;
-    margin-top: 0.5rem;
-}
-
-.dashboard-weather-card .weather-card__temperature-block {
-    display: grid;
-    align-content: center;
-    gap: 0;
-    min-width: 0;
-    padding: 0.56rem 0.72rem;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 0.95rem;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
-    backdrop-filter: blur(12px);
-}
-
-.dashboard-weather-card .weather-card__temperature-label {
-    font-size: 0.56rem;
-    font-family: var(--primary-font-medium);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    opacity: 0.72;
-}
-
-.dashboard-weather-card .weather-card__temperature {
-    font-size: clamp(1.85rem, 6vw, 2.45rem);
-    font-family: var(--primary-font-bold);
-    line-height: 0.95;
-    letter-spacing: -0.04em;
-    text-shadow: 0 0.14rem 0.45rem rgba(4, 74, 109, 0.14);
-}
-
-.dashboard-weather-card .weather-card__meta,
-.dashboard-weather-card .weather-card__datetime {
-    display: grid;
-    gap: 0.32rem;
-    min-width: 8.65rem;
-    padding: 0.54rem 0.65rem;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 0.95rem;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
-    backdrop-filter: blur(10px);
-}
-
-.dashboard-weather-card .weather-card__meta-row {
-    display: grid;
-    gap: 0;
-}
-
-.dashboard-weather-card .weather-card__meta-row + .weather-card__meta-row {
-    padding-top: 0.28rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-/* Weather card refresh revisable: labels discretas y valores con mejor jerarquia. */
-.dashboard-weather-card .weather-card__meta-label {
-    font-size: 0.52rem;
-    font-family: var(--primary-font-medium);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    opacity: 0.68;
-}
-
-.dashboard-weather-card .weather-card__meta-item {
-    font-size: 0.7rem;
-    font-family: var(--primary-font-medium);
-    line-height: 1.15;
-    text-align: left;
-    white-space: nowrap;
-    opacity: 0.96;
-}
-
-body[data-page="dashboard"] #weather-output.weather-api {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    width: 100%;
-    height: auto;
-    min-height: 0;
-    padding: 0;
-    color: inherit;
-    font-size: inherit;
-    letter-spacing: normal;
-    background: transparent;
-    border-radius: 0;
-    box-shadow: none;
-}
-
-body[data-page="dashboard"] #weather-output .dashboard-weather-card {
-    width: 100%;
-    max-width: 31rem;
-}
+/* ==================== MEDIA QUERIES ==================== */
 
 @media (max-width: 480px) {
+    main.app-layout section form button {
+        width: 4.05rem;
+    }
+
+    main.app-layout section form button img {
+        width: 3.15rem;
+    }
+
+    main.app-layout section form button#remove-btn {
+        font-size: 2.16rem;
+    }
+
+    /* --- Weather Card --- */
+
     .dashboard-weather-card {
-        max-width: none;
         padding: 0.68rem 0.78rem;
         border-radius: 1rem;
     }
@@ -791,9 +973,17 @@ body[data-page="dashboard"] #weather-output .dashboard-weather-card {
     .dashboard-weather-card .weather-card__meta-item {
         font-size: 0.66rem;
     }
+
+    .dashboard-weather-card .weather-card__advice {
+        margin-top: 0.34rem;
+        padding: 0.34rem 0.48rem;
+        font-size: 0.58rem;
+        line-height: 1.2;
+    }
 }
 
 @media (max-width: 360px) {
+
     .dashboard-weather-card .weather-card__top,
     .dashboard-weather-card .weather-card__header {
         grid-template-columns: 1fr;

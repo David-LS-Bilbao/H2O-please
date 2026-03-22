@@ -2,62 +2,75 @@ import { loadCurrentUser } from "./core/storage.js";
 import { login, register } from "./services/authService.js";
 
 function initLoginPage() {
-  // Integracion  revisable: autologin en index manteniendo el flujo de redireccion actual del proyecto.
-  const currentUser = loadCurrentUser();
+  const currentUser = loadCurrentUser(); //autologin
   if (currentUser) {
     window.location.href = "dashboard.html";
     return;
   }
 
-  const loginForm = document.querySelector("#login-form");
-  const registerForm = document.querySelector("#register-form");
-  const authMessage = document.querySelector("#auth-message");
+  const authForm = document.querySelector("#auth-form");
+  const tabs = document.querySelectorAll(".auth-tab");
+  const submitBtn = document.querySelector("#auth-submit-btn");
 
-  function renderAuthMessage(message = "") {
-    if (!authMessage) {
-      return;
-    }
+  let mode = "login"; // default mode
 
-    authMessage.textContent = message;
+  const message = document.createElement("p");
+  message.id = "auth-message";
+  message.setAttribute("role", "status");
+  message.setAttribute("aria-live", "polite");
+  document.querySelector("main").appendChild(message);
+
+  function renderAuthMessage(text = "") {
+    message.textContent = text;
   }
 
-  if (loginForm) {
-    loginForm.addEventListener("submit", (e) => {
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      mode = tab.dataset.mode; // modes: login / register
+
+      tabs.forEach((t) => {
+        const isActive = t === tab;
+        t.classList.toggle("active", isActive);
+        t.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+
+      if (mode === "login") {
+        submitBtn.textContent = "Entrar";
+        document.querySelector("#password").setAttribute("autocomplete", "current-password");
+      } else {
+        submitBtn.textContent = "Registrarse";
+        document.querySelector("#password").setAttribute("autocomplete", "new-password");
+      }
+
+      renderAuthMessage("");
+    });
+  });
+
+  if (authForm) {
+    authForm.addEventListener("submit", (e) => {
       e.preventDefault();
 
-      // Integracion  revisable: se recuperan usuario y password usando el contenedor de mensajes ya integrado en dev.
       const username = document.querySelector("#username").value.trim();
       const password = document.querySelector("#password").value.trim();
       if (!username || !password) return;
 
       renderAuthMessage("");
-      const ok = login(username, password);
-      if (ok) {
-        window.location.href = "dashboard.html";
-        return;
+
+      if (mode === "login") {
+        const ok = login(username, password);
+        if (ok) {
+          window.location.href = "dashboard.html";
+          return;
+        }
+        renderAuthMessage("Usuario y/o contraseña incorrectos");
+      } else {
+        const ok = register(username, password);
+        if (ok) {
+          window.location.href = "dashboard.html";
+          return;
+        }
+        renderAuthMessage("El nombre de usuario ya existe");
       }
-
-      renderAuthMessage("Usuario y/o contrasena incorrectos.");
-    });
-  }
-
-  if (registerForm) {
-    registerForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      // Integracion  revisable: se anade password al registro sin sustituir la mensajeria ya integrada.
-      const username = document.querySelector("#new-username").value.trim();
-      const password = document.querySelector("#new-password").value.trim();
-      if (!username || !password) return;
-
-      renderAuthMessage("");
-      const ok = register(username, password);
-      if (ok) {
-        window.location.href = "dashboard.html";
-        return;
-      }
-
-      renderAuthMessage("El usuario ya existe.");
     });
   }
 }
